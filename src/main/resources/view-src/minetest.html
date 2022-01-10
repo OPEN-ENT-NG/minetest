@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="">
 
 	<head>
 		<title>{{#i18n}}minetest.title{{/i18n}}</title>
@@ -8,14 +8,14 @@
 		<script src="/minetest/public/dist/application.js" type="text/javascript"></script>
 		
 		<script type="text/ng-template" id="empty"></script>
-		<script>
-
-		</script>
 	</head>
 
 	<body ng-controller="MainController as vm" class="minetest">
 		<portal>
 			<container template="main"></container>
+			<container template="lightbox"></container>
+			<container template="toggle"></container>
+			<container template="section"></container>
 		</portal>
 	</body>
 

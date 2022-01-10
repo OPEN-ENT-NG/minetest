@@ -1,0 +1,43 @@
+<section class="worlds" >
+    <div class="card horizontal-spacing-twice vertical-spacing row">
+        <div class="center-component">
+            <div class="twelve title-container">
+                <h2 class="six twelve-mobile">
+                    [[vm.currentWorld.title]]
+                </h2>
+                <div class="six button zero-mobile">
+                    <button ng-show="!vm.currentWorld.status" ng-click="vm.setStatusWorld(vm.currentWorld)">
+                        <i18n>minetest.world.open</i18n>
+
+                    </button>
+                    <button ng-show="vm.currentWorld.status" ng-click="vm.setStatusWorld(vm.currentWorld)">
+                        <i18n>minetest.world.close</i18n>
+                    </button>
+                </div>
+            </div>
+            <div>
+<!--                <div class="zero-desktop twelve-mobile url-container top-spacing-twice bottom-spacing-three">-->
+                <div class="top-spacing-three">
+                    <div class="twelve-mobile url-container">
+                        <div class="input-url seven-mobile cell">
+                            <i18n class="bold cell">minetest.link</i18n>
+                            <input type="text" ng-model="vm.currentWorld.link" i18n-placeholder="minetest.url.ent" readonly>
+                        </div>
+                        <a class="clipboard-link-field" data-clipboard-text="minetest.support-ent.fr">
+                            <i class="copy"></i>
+                            <i18n>minetest.copy.link</i18n>
+                        </a>
+                        <div class="input-url seven-mobile cell">
+                            <i18n class="bold cell">minetest.port</i18n>
+                            <input type="text" ng-model="vm.currentWorld.port" placeholder="2300" readonly>
+                        </div>
+                        <a class="clipboard-link-field" data-clipboard-text="2300">
+                            <i class="copy"></i>
+                            <i18n>minetest.copy.port</i18n>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

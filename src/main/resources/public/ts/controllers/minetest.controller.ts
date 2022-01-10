@@ -11,6 +11,8 @@ interface ViewModel {
 export const minetestController = ng.controller('MinetestController', ['$scope', 'route', function ($scope, route) {
     const vm: ViewModel = this;
 
+
+
     // init life's cycle hook
     vm.$onInit = () => {
         vm.text = "test var";
@@ -21,5 +23,7 @@ export const minetestController = ng.controller('MinetestController', ['$scope',
     vm.$onDestroy = () => {
 
     };
+
+
 
 }]);
