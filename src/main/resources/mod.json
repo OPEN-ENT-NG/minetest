@@ -1,0 +1,11 @@
+{
+	"main" : "fr.openent.minetest.Minetest",
+	"port" : 8055,
+	"app-name" : "Minetest",
+	"app-address" : "/minetest",
+	"app-icon" : "minetest-large",
+	"app-displayName" : "Minetest",
+	"mode": "dev",
+	"entcore.port" : 8090,
+	"auto-redeploy": false
+}
