@@ -6,6 +6,10 @@ public class Field {
         throw new IllegalStateException("Utility class");
     }
 
+    public static final String ID = "id";
+    public static final String _ID = "_id";
+    public static final String $IN = "$in";
+    public static final String ACCESS = "ACCESS";
     public static final String OWNER_ID = "owner_id";
     public static final String OWNER_NAME = "owner_name";
     public static final String CREATED_AT = "created_at";

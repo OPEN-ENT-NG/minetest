@@ -33,7 +33,7 @@ public class MinetestController extends ControllerHelper {
     public void view(HttpServerRequest request) {
         UserUtils.getUserInfos(eb, request, user -> {
             renderView(request);
-            eventStore.createAndStoreEvent("ACCESS", request);
+            eventStore.createAndStoreEvent(Field.ACCESS, request);
         });
     }
 
@@ -81,12 +81,12 @@ public class MinetestController extends ControllerHelper {
     @ApiDoc("Delete world")
     @SecuredAction(value = "", type = ActionType.AUTHENTICATED)
     public void deleteWorld(final HttpServerRequest request) {
-        if (!request.params().contains("id")) {
+        if (!request.params().contains(Field.ID)) {
             badRequest(request);
             return;
         }
         List<String> ids = new ArrayList<>(Collections.singletonList(
-                request.params().get("id")
+                request.params().get(Field.ID)
         ));
         UserUtils.getUserInfos(eb, request, user -> worldService.delete(user, ids)
                 .onSuccess(res -> renderJson(request, res))

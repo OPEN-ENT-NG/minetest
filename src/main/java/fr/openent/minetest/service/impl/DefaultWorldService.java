@@ -34,7 +34,6 @@ public class DefaultWorldService implements WorldService {
                 .put(Field.OWNER_ID, ownerId)
                 .put(Field.OWNER_NAME, ownerName);
 
-//        QueryBuilder query = QueryBuilder.start("")
         if(createdAt != null) {
             worldQuery.put(Field.CREATED_AT, createdAt);
         }
@@ -91,7 +90,7 @@ public class DefaultWorldService implements WorldService {
     public Future<JsonObject> update(UserInfos user, JsonObject body) {
         Promise<JsonObject> promise = Promise.promise();
 
-        JsonObject worldId = new JsonObject().put("_id", body.getValue("_id"));
+        JsonObject worldId = new JsonObject().put(Field._ID, body.getValue(Field._ID));
 
         mongoDb.update(this.collection, worldId, body, MongoDbResult.validResultHandler(result -> {
             if(result.isLeft()) {
@@ -110,7 +109,7 @@ public class DefaultWorldService implements WorldService {
     public Future<JsonObject> delete(UserInfos user, List<String> ids) {
         Promise<JsonObject> promise = Promise.promise();
         JsonObject query = new JsonObject()
-                .put("_id", new JsonObject().put("$in", ids));
+                .put(Field._ID, new JsonObject().put(Field.$IN, ids));
 
         mongoDb.delete(this.collection, query, MongoDbResult.validResultHandler(result -> {
             if(result.isLeft()) {
