@@ -31,15 +31,15 @@ public class DefaultWorldService implements WorldService {
         Promise<JsonArray> promise = Promise.promise();
 
         JsonObject worldQuery = new JsonObject()
-                .put(Field.OWNERID, ownerId)
-                .put(Field.OWNERNAME, ownerName);
+                .put(Field.OWNER_ID, ownerId)
+                .put(Field.OWNER_NAME, ownerName);
 
 //        QueryBuilder query = QueryBuilder.start("")
         if(createdAt != null) {
-            worldQuery.put(Field.CREATEDAT, createdAt);
+            worldQuery.put(Field.CREATED_AT, createdAt);
         }
         if(updatedAt != null) {
-            worldQuery.put(Field.UPDATEDAT, updatedAt);
+            worldQuery.put(Field.UPDATE_AT, updatedAt);
         }
         if(img != null) {
             worldQuery.put(Field.IMG, img);

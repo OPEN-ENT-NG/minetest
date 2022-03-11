@@ -41,10 +41,10 @@ public class MinetestController extends ControllerHelper {
     @ApiDoc("Retrieve worlds")
     @SecuredAction(value = "", type = ActionType.AUTHENTICATED)
     public void getWorlds(final HttpServerRequest request) {
-        String ownerId = request.getParam(Field.OWNERID);
-        String ownerName = request.getParam(Field.OWNERNAME);
-        String createdAt = request.getParam(Field.CREATEDAT);
-        String updatedAt = request.getParam(Field.UPDATEDAT);
+        String ownerId = request.getParam(Field.OWNER_ID);
+        String ownerName = request.getParam(Field.OWNER_NAME);
+        String createdAt = request.getParam(Field.CREATED_AT);
+        String updatedAt = request.getParam(Field.UPDATE_AT);
         String img = request.getParam(Field.IMG);
         String shared = request.getParam(Field.SHARED);
         String title = request.getParam(Field.TITLE);
