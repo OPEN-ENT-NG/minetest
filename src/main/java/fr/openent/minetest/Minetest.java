@@ -10,6 +10,7 @@ import org.entcore.common.storage.Storage;
 import org.entcore.common.storage.StorageFactory;
 
 public class Minetest extends BaseServer {
+	public static final String WORLD_COLLECTION = "world";
 
 	@Override
 	public void start() throws Exception {

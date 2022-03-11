@@ -1,0 +1,38 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://jsonschema.net",
+  "type": "object",
+  "properties": {
+    "created_at": {
+      "type": "string"
+    },
+    "updated_at": {
+      "type": "string"
+    },
+    "password": {
+      "type": "string"
+    },
+    "status": {
+      "type": "boolean"
+    },
+    "img": {
+      "type": "string"
+    },
+    "shared": {
+      "type": "boolean"
+    },
+    "title": {
+      "type": "string"
+    },
+    "selected": {
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "created_at",
+    "updated_at",
+    "title",
+    "password",
+    "status"
+  ]
+}

@@ -1,5 +1,7 @@
 package fr.openent.minetest.service;
 
+import fr.openent.minetest.Minetest;
+import fr.openent.minetest.service.impl.DefaultWorldService;
 import fr.wseduc.mongodb.MongoDb;
 import io.vertx.core.Vertx;
 import io.vertx.core.eventbus.EventBus;
@@ -29,5 +31,9 @@ public class ServiceFactory {
 
     public Vertx vertx() {
         return this.vertx;
+    }
+
+    public WorldService worldService() {
+        return new DefaultWorldService(Minetest.WORLD_COLLECTION, mongoDb);
     }
 }
