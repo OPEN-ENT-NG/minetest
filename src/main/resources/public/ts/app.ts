@@ -17,11 +17,6 @@ for (let service in services) {
 
 routes.define(function($routeProvider){
 	$routeProvider
-		// in your browser : ${host}/${yourApp}#/list
-		.when('/list', {
-			action: 'list',
-		})
-		// in your browser : default ${host}/${yourApp}
 		.otherwise({
 			action: 'defaultView'
 		});
