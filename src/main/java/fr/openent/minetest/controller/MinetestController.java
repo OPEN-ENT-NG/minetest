@@ -1,5 +1,6 @@
 package fr.openent.minetest.controller;
 
+import fr.openent.minetest.config.MinetestConfig;
 import fr.openent.minetest.core.constants.Field;
 import fr.openent.minetest.service.ServiceFactory;
 import fr.openent.minetest.service.WorldService;
@@ -8,6 +9,7 @@ import fr.wseduc.security.ActionType;
 import fr.wseduc.security.SecuredAction;
 import fr.wseduc.webutils.request.RequestUtils;
 import io.vertx.core.http.HttpServerRequest;
+import io.vertx.core.json.JsonObject;
 import org.entcore.common.controller.ControllerHelper;
 import org.entcore.common.events.EventStore;
 import org.entcore.common.events.EventStoreFactory;
@@ -21,10 +23,12 @@ public class MinetestController extends ControllerHelper {
     private final WorldService worldService;
 
     private final EventStore eventStore;
+    private final MinetestConfig minetestConfig;
 
     public MinetestController(ServiceFactory serviceFactory) {
         this.worldService = serviceFactory.worldService();
         this.eventStore = EventStoreFactory.getFactory().getEventStore(fr.openent.minetest.Minetest.class.getSimpleName());
+        this.minetestConfig = serviceFactory.minetestConfig();
     }
 
     @Get("")
@@ -32,7 +36,9 @@ public class MinetestController extends ControllerHelper {
     @SecuredAction("view")
     public void view(HttpServerRequest request) {
         UserUtils.getUserInfos(eb, request, user -> {
-            renderView(request);
+            JsonObject config = new JsonObject()
+                    .put(Field.MINETESTDOWNLOAD, this.minetestConfig.minetestDownload());
+            renderView(request, config);
             eventStore.createAndStoreEvent(Field.ACCESS, request);
         });
     }

@@ -3,6 +3,8 @@ import {IWorld, Worlds} from "../models";
 import {minetestService} from "../services";
 import {DateUtils} from "../utils/date.utils";
 
+declare let window: any;
+
 interface ViewModel {
 	$onInit(): any;
 	$onDestroy(): any;
@@ -72,6 +74,7 @@ export const mainController = ng.controller('MainController', ['$scope', 'route'
 	vm.$onInit = () => {
 		vm.user_id = model.me.userId;
 		vm.user_name = model.me.username;
+		console.log("minetest: ", window.minetestDownload);
 	};
 
 	vm.selected = false;
