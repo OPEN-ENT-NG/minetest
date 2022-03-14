@@ -1,61 +1,67 @@
-<div class="minetest-head">
-    <h1 class="minetest-head-title">
-        <i18n>minetest.title</i18n>
-    </h1>
+<div ng-controller="MinetestController as vm">
+    <div class="minetest-head">
+        <h1 class="minetest-head-title">
+            <i18n>minetest.title</i18n>
+        </h1>
 
-    <!-- button create world -->
-    <button data-ng-show="vm.worlds.all.length > 0" ng-click="vm.createWorldLightbox()">
-        <i18n>minetest.create.world</i18n>
-    </button>
-</div>
-
-<!-- Empty state -->
-<div class="empty-content" data-ng-show="vm.worlds.all.length === 0">
-    <img data-ng-src="/minetest/public/img/illustration_sans_monde.svg" class="two" alt="">
-    <div class="download-description">
-        <i18n>minetest.download.software.link.description</i18n>
-        <a href="https://www.minetest.net/downloads/" target=_blank><i18n>minetest.download.software.link</i18n></a>
+        <!-- button create world -->
+        <button data-ng-show="vm.worlds.all.length > 0" ng-click="vm.createWorldLightbox()">
+            <i18n>minetest.create.world</i18n>
+        </button>
     </div>
-    <div class="empty-state">
-        <i18n>minetest.world.empty.state</i18n>
-    </div>
-    <button class="empty-state-button" ng-click="vm.createWorldLightbox()"><i18n>minetest.create.world</i18n></button>
-</div>
 
-<div data-ng-show="vm.worlds.all.length > 0">
-    <!-- search bar -->
-    <div class="flex column">
+    <!-- Empty state -->
+    <div class="empty-content" data-ng-show="vm.worlds.all.length === 0">
+        <img data-ng-src="/minetest/public/img/illustration_sans_monde.svg" class="two" alt="">
+        <div class="download-description">
+            <i18n>minetest.download.software.link.description</i18n>
+            <a href="https://www.minetest.net/downloads/" target=_blank><i18n>minetest.download.software.link</i18n></a>
+        </div>
+        <div class="empty-state">
+            <i18n>minetest.world.empty.state</i18n>
+        </div>
+        <button class="empty-state-button" ng-click="vm.createWorldLightbox()"><i18n>minetest.create.world</i18n></button>
+    </div>
+
+    <div data-ng-show="vm.worlds.all.length > 0">
+        <!-- search bar -->
+        <div class="flex column">
         <span>
             <input type="text" class="cell" ng-model="search" i18n-placeholder="minetest.placeholder.search" autocomplete="off" />
         </span>
-    </div>
-    <!-- filter -->
-<!--    <div class="chips cell">-->
-<!--        <label class="chip" ng-repeat="filter in minetest.filters"-->
-<!--               ng-class="{selected: minetest.filter.types[filter]}"-->
-<!--               ng-click="vm.switchFilter(filter)"-->
-<!--        >-->
-<!--            <span class="no-style">[[lang.translate('minetest.filter.' + filter)]]</span>-->
-<!--        </label>-->
-<!--    </div>-->
+        </div>
+        <!-- filter -->
+        <!--    <div class="chips cell">-->
+        <!--        <label class="chip" ng-repeat="filter in minetest.filters"-->
+        <!--               ng-class="{selected: minetest.filter.types[filter]}"-->
+        <!--               ng-click="vm.switchFilter(filter)"-->
+        <!--        >-->
+        <!--            <span class="no-style">[[lang.translate('minetest.filter.' + filter)]]</span>-->
+        <!--        </label>-->
+        <!--    </div>-->
 
-    <!-- world's list -->
-    <div class="card-world widget-alerts">
-        <div class="twelve grid-block">
-            <div class="widget-alert padding-13 card-alert"
-                 ng-repeat="world in vm.worlds.all"
-                 ng-model="selected"
-                 ng-class="{selected: world.selected}"
-                 ng-click="vm.toggleWorld(world)">
-                <div class="twelve flex">
-                    <div class="bold">[[world.title]]</div>
-                </div>
-                <div class="twelve margin-top-5 subtitle">
-                    <div class="margin-right-5">[[world.owner_name]]</div>
-                    <div>[[world.created_at]]</div>
+        <!-- world's list -->
+        <div class="card-world widget-alerts">
+            <div class="twelve grid-block">
+                <div class="widget-alert padding-13 card-alert"
+                     ng-repeat="world in vm.worlds.all"
+                     ng-model="selected"
+                     ng-class="{selected: world.selected}"
+                     ng-click="vm.toggleWorld(world)">
+                    <div class="twelve flex">
+                        <div class="bold">[[world.title]]</div>
+                    </div>
+                    <div class="twelve margin-top-5 subtitle">
+                        <div class="margin-right-5">[[world.owner_name]]</div>
+                        <div>[[world.created_at]]</div>
+                    </div>
                 </div>
             </div>
         </div>
+
     </div>
 
+    <container template="lightbox"></container>
+    <container template="toggle"></container>
+    <container template="section"></container>
 </div>
