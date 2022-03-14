@@ -1,5 +1,6 @@
 package fr.openent.minetest;
 
+import fr.openent.minetest.config.MinetestConfig;
 import fr.openent.minetest.controller.MinetestController;
 import fr.openent.minetest.service.ServiceFactory;
 import fr.wseduc.mongodb.MongoDb;
@@ -17,9 +18,9 @@ public class Minetest extends BaseServer {
 		super.start();
 
 		Storage storage = new StorageFactory(vertx, config).getStorage();
+		MinetestConfig minetestConfig = new MinetestConfig(config);
 
-
-		ServiceFactory serviceFactory = new ServiceFactory(vertx, storage, Neo4j.getInstance(), Sql.getInstance(),
+		ServiceFactory serviceFactory = new ServiceFactory(vertx, storage, minetestConfig, Neo4j.getInstance(), Sql.getInstance(),
 				MongoDb.getInstance());
 
 		addController(new MinetestController(serviceFactory));

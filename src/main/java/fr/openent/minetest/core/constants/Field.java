@@ -18,4 +18,10 @@ public class Field {
     public static final String SHARED = "shared";
     public static final String TITLE = "title";
 
+    // Config
+    public static final String MINETEST_DOWNLOAD = "minetest-download";
+    public static final String MINETESTDOWNLOAD = "minetestDownload";
+    public static final String MINETEST_SERVER = "minetest-server";
+
+
 }
