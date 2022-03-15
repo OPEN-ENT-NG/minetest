@@ -91,9 +91,7 @@ public class MinetestController extends ControllerHelper {
             badRequest(request);
             return;
         }
-        List<String> ids = new ArrayList<>(Collections.singletonList(
-                request.params().get(Field.ID)
-        ));
+        List<String> ids = request.params().getAll(Field.ID);
         UserUtils.getUserInfos(eb, request, user -> worldService.delete(user, ids)
                 .onSuccess(res -> renderJson(request, res))
                 .onFailure(err -> renderError(request)));
