@@ -6,24 +6,20 @@ import {DateUtils} from "../../utils/date.utils";
 import {minetestService} from "../../services";
 
 interface IViewModel {
-    createWorldLightbox();
-    closeCreationLightbox();
-    uploadFile();
+    openCreateLightbox();
+    closeCreateLightbox();
     createWorld();
+    uploadFile();
 
     lightbox: any;
     world: IWorld;
-
-    // props
-    // onCreateWorld();
 }
 
 class Controller implements ng.IController, IViewModel {
     lightbox: any;
     world: IWorld;
 
-    constructor(private $scope: IScope
-                /*  inject service etc..just as we do in controller */)
+    constructor(private $scope: IScope)
     {
         this.lightbox = {
             create: false,
@@ -39,11 +35,11 @@ class Controller implements ng.IController, IViewModel {
     $onDestroy() {
     }
 
-    createWorldLightbox(): void {
+    openCreateLightbox(): void {
         this.lightbox.create = true;
     }
 
-    closeCreationLightbox(): void {
+    closeCreateLightbox(): void {
         this.lightbox.create = false;
     }
 
@@ -62,7 +58,7 @@ class Controller implements ng.IController, IViewModel {
         let response = await minetestService.create(this.world);
         if (response) {
             toasts.confirm('minetest.world.create.confirm');
-            this.closeCreationLightbox();
+            this.closeCreateLightbox();
             this.$scope.$eval(this.$scope['vm']['onCreateWorld']());
             this.$scope.$apply();
         } else {

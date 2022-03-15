@@ -1,10 +1,10 @@
 <div class="createWorld">
     <!-- button create world -->
-    <button ng-click="vm.createWorldLightbox()">
+    <button ng-click="vm.openCreateLightbox()">
         <i18n>minetest.create.world</i18n>
     </button>
 
-    <lightbox class="minetest-lightbox" show="vm.lightbox.create" on-close="vm.closeCreationLightbox()">
+    <lightbox class="minetest-lightbox" show="vm.lightbox.create" on-close="vm.closeCreateLightbox()">
 
         <!-- Title -->
         <section class="minetest-lightbox-head">
@@ -38,13 +38,6 @@
                 <span class="minetest-lightbox-content-form-description"><i18n>minetest.creation.world.description</i18n></span>
 
                 <div class="minetest-lightbox-content-form-input-checkbox">
-                    <!--                <label class="checkbox">-->
-                    <!--                    <input type="checkbox" class="six cell" ng-model="vm.display.allowPassword">-->
-                    <!--                    <span class="minetest-lightbox-content-form-input-checkbox-title">-->
-                    <!--                        <i18n>minetest.allow.access.world.password</i18n>-->
-                    <!--                    </span>-->
-                    <!--                </label>-->
-                    <!--                <div ng-show="vm.display.allowPassword" class="minetest-lightbox-content-form-input-checkbox-password">-->
                     <div class="minetest-lightbox-content-form-input-checkbox-password">
                         <div class="minetest-lightbox-content-form-input-text">
                             <span class="minetest-lightbox-content-form-input-text-title"><i18n>minetext.password</i18n></span>

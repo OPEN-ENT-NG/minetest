@@ -27,13 +27,6 @@ class Controller implements ng.IController {
         this.currentWorld = {} as IWorld;
         this.selectedWorld = [];
 
-        // this.lightbox = {
-        //     create: false,
-        //     sharing: false,
-        //     invitation: false,
-        //     delete: false,
-        // };
-
         this.filter = {
             creation_date: null,
             up_date: null,
@@ -66,34 +59,6 @@ class Controller implements ng.IController {
         template.close('lightbox');
         this.lightbox.delete = false;
     }
-
-    // async createWorld(): Promise<void> {
-    //     this.world = {
-    //         owner_id: this.user_id,
-    //         owner_name: this.user_name,
-    //         created_at: DateUtils.format(moment().startOf('minute'), "DD/MM/YYYY HH:mm"),
-    //         updated_at: DateUtils.format(moment().startOf('minute'), "DD/MM/YYYY HH:mm"),
-    //         password: this.world.password,
-    //         status: false,
-    //         title: this.world.title,
-    //         selected: false
-    //     }
-    //
-    //     let response = await minetestService.create(this.world);
-    //     if (response) {
-    //         toasts.confirm('minetest.world.create.confirm');
-    //         this.closeCreationLightbox();
-    //         await this.getWorld();
-    //         this.$scope.$apply();
-    //     } else {
-    //         toasts.warning('minetest.world.create.error');
-    //     }
-    // }
-
-    // createWorldLightbox(): void {
-    //     template.open('lightbox', 'world-creation');
-    //     this.lightbox.create = true;
-    // }
 
     async deleteWorld(): Promise<void> {
         let selectedWorldIs = Array<String>();
@@ -178,8 +143,9 @@ class Controller implements ng.IController {
     }
 
     // TODO IS USED TO CALLBACK
-    test() {
-        console.log("c'est bon");
+    async refreshWorldList() {
+        await this.getWorld();
+        this.$scope.$apply();
     }
 
 }
