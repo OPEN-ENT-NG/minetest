@@ -1,5 +1,6 @@
-import {model, moment, ng} from "entcore";
+import {model, moment, ng, toasts} from "entcore";
 import {RootsConst} from "../../core/constants/roots.const";
+import {IScope} from "angular";
 import {IWorld} from "../../models";
 import {DateUtils} from "../../utils/date.utils";
 import {minetestService} from "../../services";
@@ -17,13 +18,10 @@ class Controller implements ng.IController, IViewModel {
     lightbox: any;
     world: IWorld;
 
-    constructor()
+    constructor(private $scope: IScope)
     {
         this.lightbox = {
             create: false,
-            sharing: false,
-            invitation: false,
-            delete: false,
         };
     }
 
@@ -55,7 +53,14 @@ class Controller implements ng.IController, IViewModel {
             selected: false,
             address: "minetest.support-ent.fr"
         }
-        await minetestService.create(this.world);
+        let response = await minetestService.create(this.world);
+        if (response) {
+            toasts.confirm('minetest.world.create.confirm');
+            this.closeCreateLightbox();
+            this.$scope.$eval(this.$scope['vm']['onCreateWorld']());
+        } else {
+            toasts.warning('minetest.world.create.error');
+        }
     }
 
 }

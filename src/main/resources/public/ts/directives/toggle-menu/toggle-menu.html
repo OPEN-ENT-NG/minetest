@@ -2,12 +2,10 @@
     <div class="toggle">
         <div class="row">
             <!-- properties -->
-            <button data-ng-click="vm.displayProperties()">
-                <i18n>minetest.properties</i18n>
-            </button>
+            <properties-world world="vm.world"></properties-world>
 
             <!-- delete -->
-            <delete-world on-delete-world="vm.onDeleteWorld()" world="vm.currentWorld" worlds="vm.worlds"></delete-world>
+            <delete-world world="vm.world" on-delete-world="vm.onDeleteWorld()"></delete-world>
         </div>
     </div>
 </section>

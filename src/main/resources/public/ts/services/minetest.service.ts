@@ -45,18 +45,6 @@ export const minetestService: IMinetestService = {
         return http.put(`/minetest/worlds`, worldBody);
     },
 
-    //TODO keep logic for later (multidelete)
-    // delete: (worlds: Array<String>): Promise<AxiosResponse> => {
-    //     let idParams: string = '';
-    //     if (worlds.length > 0) {
-    //         worlds.forEach((_id: string) => {
-    //             idParams += `&id=${_id}`;
-    //         });
-    //     }
-    //
-    //     return http.delete(`/minetest/worlds?${idParams}`);
-    // }
-
     delete: (world: IWorld): Promise<AxiosResponse> => {
 
         //TODO keep logic for later (multidelete)
