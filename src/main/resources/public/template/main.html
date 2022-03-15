@@ -1,13 +1,17 @@
 <div ng-controller="MinetestController as vm">
+
     <div class="minetest-head">
         <h1 class="minetest-head-title">
             <i18n>minetest.title</i18n>
         </h1>
 
+<!--        &lt;!&ndash; button create world &ndash;&gt;-->
+<!--        <button data-ng-show="vm.worlds.all.length > 0" ng-click="vm.createWorldLightbox()">-->
+<!--            <i18n>minetest.create.world</i18n>-->
+<!--        </button>-->
+
         <!-- button create world -->
-        <button data-ng-show="vm.worlds.all.length > 0" ng-click="vm.createWorldLightbox()">
-            <i18n>minetest.create.world</i18n>
-        </button>
+        <create-world data-ng-show="vm.worlds.all.length > 0" on-create-world="vm.test()"></create-world>
     </div>
 
     <!-- Empty state -->
@@ -20,7 +24,9 @@
         <div class="empty-state">
             <i18n>minetest.world.empty.state</i18n>
         </div>
-        <button class="empty-state-button" ng-click="vm.createWorldLightbox()"><i18n>minetest.create.world</i18n></button>
+<!--        <button class="empty-state-button" ng-click="vm.createWorldLightbox()"><i18n>minetest.create.world</i18n></button>-->
+        <create-world class="empty-state-button" on-create-world="vm.test()"></create-world>
+
     </div>
 
     <div data-ng-show="vm.worlds.all.length > 0">
@@ -58,7 +64,6 @@
                 </div>
             </div>
         </div>
-
     </div>
 
     <container template="lightbox"></container>

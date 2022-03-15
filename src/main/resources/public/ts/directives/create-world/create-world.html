@@ -1,0 +1,61 @@
+<div class="createWorld">
+    <!-- button create world -->
+    <button ng-click="vm.createWorldLightbox()">
+        <i18n>minetest.create.world</i18n>
+    </button>
+
+    <lightbox class="minetest-lightbox" show="vm.lightbox.create" on-close="vm.closeCreationLightbox()">
+
+        <!-- Title -->
+        <section class="minetest-lightbox-head">
+            <h3>
+                <i18n>minetest.create.world</i18n>
+            </h3>
+        </section>
+
+        <div class="minetest-lightbox-content">
+            <!-- Image -->
+            <section class="minetest-lightbox-content-upload">
+                <div class="minetest-lightbox-content-upload-box">
+                    <input type="file"
+                           id="file" name="file"
+                           onchange="angular.element(this).scope().vm.uploadFile()"
+                           accept="image/*">
+                    <label for="file">
+                        <i18n data-ng-show="!vm.world.img">minetest.add.image</i18n>
+                        <span data-ng-show="vm.world.img">[[vm.world.file]]</span>
+                    </label>
+                </div>
+            </section>
+
+            <!-- Content -->
+            <section class="minetest-lightbox-content-form">
+                <div class="minetest-lightbox-content-form-input-text">
+                    <span class="minetest-lightbox-content-form-input-text-title"><i18n>minetest.world.title</i18n></span>
+                    <input type="text" class="six cell" ng-model="vm.world.title" />
+                </div>
+
+                <span class="minetest-lightbox-content-form-description"><i18n>minetest.creation.world.description</i18n></span>
+
+                <div class="minetest-lightbox-content-form-input-checkbox">
+                    <!--                <label class="checkbox">-->
+                    <!--                    <input type="checkbox" class="six cell" ng-model="vm.display.allowPassword">-->
+                    <!--                    <span class="minetest-lightbox-content-form-input-checkbox-title">-->
+                    <!--                        <i18n>minetest.allow.access.world.password</i18n>-->
+                    <!--                    </span>-->
+                    <!--                </label>-->
+                    <!--                <div ng-show="vm.display.allowPassword" class="minetest-lightbox-content-form-input-checkbox-password">-->
+                    <div class="minetest-lightbox-content-form-input-checkbox-password">
+                        <div class="minetest-lightbox-content-form-input-text">
+                            <span class="minetest-lightbox-content-form-input-text-title"><i18n>minetext.password</i18n></span>
+                            <input type="text" class="six cell" ng-model="vm.world.password" />
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+        <!-- Button/submit -->
+        <button class="minetest-lightbox-button right-magnet" ng-click="vm.createWorld()"><i18n>minetest.create</i18n></button>
+
+    </lightbox>
+</div>
