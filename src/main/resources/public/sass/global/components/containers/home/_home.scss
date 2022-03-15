@@ -111,6 +111,35 @@
   }
 }
 
+//.grid {
+//  display: grid;
+//  grid-template-columns: repeat(3, 1fr);
+//  grid-gap: 25px;
+//
+//  .flex-card {
+//    height: 130px;
+//    display: flex;
+//    .icon {
+//      width: 30%;
+//      .img-container {
+//        border-radius: 4px;
+//        img, .img {
+//          width: 25px;
+//          height: 25px;
+//          margin: 10px;
+//          fill: white;
+//        }
+//      }
+//    }
+//    .title {
+//      width: 60%;
+//    }
+//    .dots-menu {
+//      width: 10%;
+//    }
+//  }
+//}
+
 .minetest-lightbox {
 
   &-content {
