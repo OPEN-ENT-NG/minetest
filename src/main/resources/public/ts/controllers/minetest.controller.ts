@@ -1,7 +1,6 @@
 import {model, moment, ng, template, toasts} from 'entcore';
 import {IWorld, Worlds} from "../models";
 import {minetestService} from "../services";
-import {DateUtils} from "../utils/date.utils";
 import {IScope} from "angular";
 
 class Controller implements ng.IController {
@@ -19,8 +18,6 @@ class Controller implements ng.IController {
 
     constructor(private $scope: IScope) {
         this.$scope['vm'] = this;
-
-
     }
 
     $onInit(): any {
@@ -29,13 +26,6 @@ class Controller implements ng.IController {
         this.selected = false;
         this.currentWorld = {} as IWorld;
         this.selectedWorld = [];
-
-        this.lightbox = {
-            create: false,
-            sharing: false,
-            invitation: false,
-            delete: false,
-        };
 
         this.filter = {
             creation_date: null,
@@ -68,34 +58,6 @@ class Controller implements ng.IController {
     closeDeleteLightbox(): void {
         template.close('lightbox');
         this.lightbox.delete = false;
-    }
-
-    async createWorld(): Promise<void> {
-        this.world = {
-            owner_id: this.user_id,
-            owner_name: this.user_name,
-            created_at: DateUtils.format(moment().startOf('minute'), "DD/MM/YYYY HH:mm"),
-            updated_at: DateUtils.format(moment().startOf('minute'), "DD/MM/YYYY HH:mm"),
-            password: this.world.password,
-            status: false,
-            title: this.world.title,
-            selected: false
-        }
-
-        let response = await minetestService.create(this.world);
-        if (response) {
-            toasts.confirm('minetest.world.create.confirm');
-            this.closeCreationLightbox();
-            await this.getWorld();
-            this.$scope.$apply();
-        } else {
-            toasts.warning('minetest.world.create.error');
-        }
-    }
-
-    createWorldLightbox(): void {
-        template.open('lightbox', 'world-creation');
-        this.lightbox.create = true;
     }
 
     async deleteWorld(): Promise<void> {
@@ -178,6 +140,12 @@ class Controller implements ng.IController {
         } else {
             toasts.warning('minetest.world.create.error');
         }
+    }
+
+    // TODO IS USED TO CALLBACK
+    async refreshWorldList() {
+        await this.getWorld();
+        this.$scope.$apply();
     }
 
 }
