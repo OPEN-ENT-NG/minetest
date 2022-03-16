@@ -1,0 +1,25 @@
+<section class="toggle-buttons hide" data-ng-class="{ 'display': (vm.getNbSelectedWorld() > 0) }">
+    <div class="toggle">
+        <div class="row">
+            <!-- properties -->
+            <button data-ng-if="vm.oneWorldSelected()" data-ng-click="vm.displayProperties()">
+                <i18n>minetest.properties</i18n>
+            </button>
+
+            <!-- invite -->
+            <button data-ng-if="vm.oneWorldSelected()" data-ng-click="vm.invite()">
+                <i18n>minetest.invite</i18n>
+            </button>
+
+            <!-- follow -->
+            <button data-ng-if="vm.oneWorldSelected()" data-ng-click="vm.follow()">
+                <i18n>minetest.follow</i18n>
+            </button>
+
+            <!-- delete -->
+            <button data-ng-click="vm.deleteWorldLightbox()">
+                <i18n>minetest.delete</i18n>
+            </button>
+        </div>
+    </div>
+</section>

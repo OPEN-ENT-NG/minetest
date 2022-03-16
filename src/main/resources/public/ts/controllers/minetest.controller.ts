@@ -87,20 +87,8 @@ class Controller implements ng.IController {
         this.lightbox.delete = true;
     }
 
-    getNbSelectedWorld(): number {
-        let selectedWorld: number = 0;
-        this.worlds.all.forEach((world: IWorld) => {
-            if (world.selected) selectedWorld++;
-        });
-        return selectedWorld;
-    }
-
     async getWorld(): Promise<void> {
         this.worlds.all = await minetestService.get(this.user_id, this.user_name);
-    }
-
-    oneWorldSelected(): boolean {
-        return this.getNbSelectedWorld() == 1;
     }
 
     async setStatusWorld(currentWorld: IWorld): Promise<void> {
@@ -110,14 +98,15 @@ class Controller implements ng.IController {
     toggleWorld(world): void {
         world.selected = !world.selected;
         this.selected = !this.selected;
-        template.open('toggle', 'toggle-bar');
-        if(this.oneWorldSelected()) {
-            this.currentWorld = world;
-            template.open('section', 'current-world');
-        }
-        else {
-            template.close('section');
-        }
+        // template.open('toggle', 'toggle-bar');
+        // todo must change logic ?
+        // if(this.oneWorldSelected()) {
+        //     this.currentWorld = world;
+        //     template.open('section', 'current-world');
+        // }
+        // else {
+        //     template.close('section');
+        // }
     }
 
     async updateWorld(): Promise<void> {
