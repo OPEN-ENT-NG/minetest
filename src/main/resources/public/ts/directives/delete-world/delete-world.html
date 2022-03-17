@@ -1,0 +1,65 @@
+<div class="minetestDelete">
+
+    <!-- button delete world -->
+    <button data-ng-click="vm.openDeleteWorldLightbox()">
+        <i18n>minetest.delete</i18n>
+    </button>
+
+    <!-- popup modal to delete world -->
+    <lightbox show="vm.lightbox.delete" on-close="vm.closeDeleteLightbox()">
+        <!-- title -->
+        <h2>
+            <i18n>minetest.world.delete.selected</i18n>
+        </h2>
+
+        <div class="row groups-list">
+            <div>
+                <div class="responsive-table ng-scope">
+
+                    <div class="row">
+                        <table>
+                            <!-- Headers -->
+                            <thead>
+                            <tr>
+                                <th><i18n>minetest.title.world</i18n></th>
+                                <th><i18n>minetest.creator</i18n></th>
+                                <th><i18n>minetest.last.modification</i18n></th>
+                                <th></th>
+                            </tr>
+                            </thead>
+
+                            <!-- Contents -->
+                            <tbody>
+                            <tr ng-repeat="world in vm.getSelectedWorlds()">
+                                <td>
+                                    <label>
+                                        <span>[[world.title]]</span>
+                                    </label>
+                                </td>
+                                <td>
+                                    <label>
+                                        <span>[[world.owner_name]]</span>
+                                    </label>
+                                </td>
+                                <td>
+                                    <label>
+                                        <span><i18n>minetest.modify</i18n> [[world.updated_at]]</span>
+                                    </label>
+                                </td>
+                            </tr>
+                            </tbody>
+
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- button action delete -->
+        <div class="right-magnet">
+            <button class="cell cancel" ng-click="vm.closeDeleteLightbox()"><i18n>Annuler</i18n></button>
+            <button class="cell" ng-click="vm.deleteWorld()"><i18n>Valider</i18n></button>
+        </div>
+    </lightbox>
+</div>

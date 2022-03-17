@@ -7,10 +7,8 @@ class Controller implements ng.IController {
     currentWorld: IWorld;
     display: { allowPassword: boolean };
     filter: { creation_date: Date; up_date: Date; guests: any; shared: boolean; title: string };
-    lightbox: { create: boolean; sharing: boolean; invitation: boolean; delete: boolean };
     selected: boolean;
     selectedWorld: Array<IWorld>;
-    text: string;
     user_id: string;
     user_name: string;
     world: IWorld;
@@ -50,74 +48,31 @@ class Controller implements ng.IController {
         this.$scope.$apply();
     }
 
-    closeCreationLightbox(): void {
-        template.close('lightbox');
-        this.lightbox.create = false;
-    }
-
-    closeDeleteLightbox(): void {
-        template.close('lightbox');
-        this.lightbox.delete = false;
-    }
-
-    async deleteWorld(): Promise<void> {
-        let selectedWorldIs = Array<String>();
-        this.selectedWorld.forEach(world => {
-            if (world.selected) selectedWorldIs.push(world._id);
-        })
-        let response = await minetestService.delete(selectedWorldIs);
-        if (response) {
-            toasts.confirm('minetest.world.delete.confirm');
-            this.closeDeleteLightbox();
-            template.close('section');
-            await this.getWorld();
-            this.$scope.$apply();
-        } else {
-            toasts.warning('minetest.world.delete.error');
-        }
-    }
-
-    async deleteWorldLightbox(): Promise<void> {
-        let selectedWorlds = new Array<IWorld>();
-        this.worlds.all.forEach(world => {
-            if (world.selected) selectedWorlds.push(world)
-        });
-        this.selectedWorld = selectedWorlds;
-        template.open('lightbox', 'world-delete');
-        this.lightbox.delete = true;
-    }
-
-    getNbSelectedWorld(): number {
-        let selectedWorld: number = 0;
-        this.worlds.all.forEach((world: IWorld) => {
-            if (world.selected) selectedWorld++;
-        });
-        return selectedWorld;
-    }
-
     async getWorld(): Promise<void> {
         this.worlds.all = await minetestService.get(this.user_id, this.user_name);
     }
 
-    oneWorldSelected(): boolean {
-        return this.getNbSelectedWorld() == 1;
-    }
-
-    async setStatusWorld(currentWorld: IWorld): Promise<void> {
-        this.currentWorld.status = !currentWorld.status;
-    }
+    // async setStatusWorld(currentWorld: IWorld): Promise<void> {
+    //     this.currentWorld.status = !currentWorld.status;
+    // }
 
     toggleWorld(world): void {
         world.selected = !world.selected;
-        this.selected = !this.selected;
-        template.open('toggle', 'toggle-bar');
-        if(this.oneWorldSelected()) {
-            this.currentWorld = world;
-            template.open('section', 'current-world');
+        if (world.selected) {
+            this.selectedWorld.push(world);
+        } else {
+            this.selectedWorld = this.selectedWorld.filter((w: IWorld) => w !== world);
         }
-        else {
-            template.close('section');
-        }
+        // template.open('toggle', 'toggle-bar');
+        // todo must change logic ? to test and valid
+        this.currentWorld = this.selectedWorld[this.selectedWorld.length - 1];
+        // if(this.oneWorldSelected()) {
+        //     this.currentWorld = world;
+        //     template.open('section', 'current-world');
+        // }
+        // else {
+        //     template.close('section');
+        // }
     }
 
     async updateWorld(): Promise<void> {

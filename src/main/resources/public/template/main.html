@@ -54,7 +54,9 @@
         </div>
     </div>
 
-    <container template="lightbox"></container>
-    <container template="toggle"></container>
-    <container template="section"></container>
+    <!-- toggle menu on click card -->
+    <toggle-menu on-delete-world="vm.refreshWorldList()" worlds="vm.worlds"></toggle-menu>
+
+    <!-- display current world -->
+    <current-world world="vm.currentWorld"></current-world>
 </div>
