@@ -17,9 +17,7 @@
             </button>
 
             <!-- delete -->
-            <button data-ng-click="vm.deleteWorldLightbox()">
-                <i18n>minetest.delete</i18n>
-            </button>
+            <delete-world on-delete-world="vm.onDeleteWorld()" worlds="vm.worlds"></delete-world>
         </div>
     </div>
 </section>

@@ -50,43 +50,6 @@ class Controller implements ng.IController {
         this.$scope.$apply();
     }
 
-    closeCreationLightbox(): void {
-        template.close('lightbox');
-        this.lightbox.create = false;
-    }
-
-    closeDeleteLightbox(): void {
-        template.close('lightbox');
-        this.lightbox.delete = false;
-    }
-
-    async deleteWorld(): Promise<void> {
-        let selectedWorldIs = Array<String>();
-        this.selectedWorld.forEach(world => {
-            if (world.selected) selectedWorldIs.push(world._id);
-        })
-        let response = await minetestService.delete(selectedWorldIs);
-        if (response) {
-            toasts.confirm('minetest.world.delete.confirm');
-            this.closeDeleteLightbox();
-            template.close('section');
-            await this.getWorld();
-            this.$scope.$apply();
-        } else {
-            toasts.warning('minetest.world.delete.error');
-        }
-    }
-
-    async deleteWorldLightbox(): Promise<void> {
-        let selectedWorlds = new Array<IWorld>();
-        this.worlds.all.forEach(world => {
-            if (world.selected) selectedWorlds.push(world)
-        });
-        this.selectedWorld = selectedWorlds;
-        template.open('lightbox', 'world-delete');
-        this.lightbox.delete = true;
-    }
-
     async getWorld(): Promise<void> {
         this.worlds.all = await minetestService.get(this.user_id, this.user_name);
     }

@@ -1,9 +1,7 @@
-import {model, moment, ng, toasts} from "entcore";
+import {ng} from "entcore";
 import {RootsConst} from "../../core/constants/roots.const";
 import {IScope} from "angular";
 import {IWorld, Worlds} from "../../models";
-import {DateUtils} from "../../utils/date.utils";
-import {minetestService} from "../../services";
 
 interface IViewModel {
     getNbSelectedWorld(): number;
@@ -45,6 +43,7 @@ function directive() {
         restrict: 'E',
         templateUrl: `${RootsConst.directive}toggle-menu/toggle-menu.html`,
         scope: {
+            onDeleteWorld: '&',
             worlds: '='
         },
         controllerAs: 'vm',
