@@ -7,10 +7,8 @@ class Controller implements ng.IController {
     currentWorld: IWorld;
     display: { allowPassword: boolean };
     filter: { creation_date: Date; up_date: Date; guests: any; shared: boolean; title: string };
-    lightbox: { create: boolean; sharing: boolean; invitation: boolean; delete: boolean };
     selected: boolean;
     selectedWorld: Array<IWorld>;
-    text: string;
     user_id: string;
     user_name: string;
     world: IWorld;
@@ -54,15 +52,20 @@ class Controller implements ng.IController {
         this.worlds.all = await minetestService.get(this.user_id, this.user_name);
     }
 
-    async setStatusWorld(currentWorld: IWorld): Promise<void> {
-        this.currentWorld.status = !currentWorld.status;
-    }
+    // async setStatusWorld(currentWorld: IWorld): Promise<void> {
+    //     this.currentWorld.status = !currentWorld.status;
+    // }
 
     toggleWorld(world): void {
         world.selected = !world.selected;
-        this.selected = !this.selected;
+        if (world.selected) {
+            this.selectedWorld.push(world);
+        } else {
+            this.selectedWorld = this.selectedWorld.filter((w: IWorld) => w !== world);
+        }
         // template.open('toggle', 'toggle-bar');
-        // todo must change logic ?
+        // todo must change logic ? to test and valid
+        this.currentWorld = this.selectedWorld[this.selectedWorld.length - 1];
         // if(this.oneWorldSelected()) {
         //     this.currentWorld = world;
         //     template.open('section', 'current-world');
