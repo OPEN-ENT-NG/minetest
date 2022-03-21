@@ -90,6 +90,7 @@ public class DefaultWorldService implements WorldService {
     /**
      * Create World
      *
+     * @param user User Object containing user id
      * @param body JsonObject containing the data for the world
      */
     @Override

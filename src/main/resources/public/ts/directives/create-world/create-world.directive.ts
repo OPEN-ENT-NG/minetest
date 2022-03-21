@@ -1,5 +1,6 @@
-import {model, moment, ng} from "entcore";
+import {model, moment, ng, toasts} from "entcore";
 import {RootsConst} from "../../core/constants/roots.const";
+import {IScope} from "angular";
 import {IWorld} from "../../models";
 import {DateUtils} from "../../utils/date.utils";
 import {minetestService} from "../../services";
@@ -17,7 +18,7 @@ class Controller implements ng.IController, IViewModel {
     lightbox: any;
     world: IWorld;
 
-    constructor()
+    constructor(private $scope: IScope)
     {
         this.lightbox = {
             create: false,
