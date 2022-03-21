@@ -12,7 +12,7 @@ export interface IWorld {
     password: string;
     status?: boolean;
 
-    img?: string,
+    img?: File,
     shared?: boolean,
     title: string,
 

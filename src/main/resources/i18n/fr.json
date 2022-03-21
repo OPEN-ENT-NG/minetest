@@ -1,5 +1,6 @@
 {
   "minetest.allow.access.world.password": "Permettre l'accès du monde via un mot de passe",
+  "minetest.add.image": "Ajouter une image",
   "minetest.copy.link": "Copier le lien",
   "minetest.copy.port": "Copier le port",
   "minetest.create": "Créer",

@@ -21,11 +21,11 @@ public interface WorldService {
     /**
      * Create World
      *
-     * @param user {@link UserInfos}
+//     * @param user {@link UserInfos}
      * @param body Data to store
      * @return Future {@link Future<JsonObject>} containing new world
      */
-    Future<JsonObject> create(UserInfos user, JsonObject body);
+    Future<JsonObject> create(JsonObject body, String fileId, String metadata);
 
     /**
      * Update World

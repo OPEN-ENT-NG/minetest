@@ -17,6 +17,8 @@ public class Field {
     public static final String IMG = "img";
     public static final String SHARED = "shared";
     public static final String TITLE = "title";
+    public static final String WORLD = "world";
+
 
     // Config
     public static final String MINETEST_DOWNLOAD = "minetest-download";

@@ -66,12 +66,18 @@ public class DefaultWorldService implements WorldService {
     /**
      * Create World
      *
-     * @param user User Object containing user id
      * @param body JsonObject containing the data for the world
      */
     @Override
-    public Future<JsonObject> create(UserInfos user, JsonObject body) {
+    public Future<JsonObject> create(JsonObject body, String fileId, String metadata) {
         Promise<JsonObject> promise = Promise.promise();
+
+        if(fileId != null) {
+            body.put("fileId", fileId);
+        }
+        if(metadata != null) {
+            body.put("metadata", metadata);
+        }
 
         mongoDb.insert(this.collection, body, MongoDbResult.validResultHandler(result -> {
             if(result.isLeft()) {
