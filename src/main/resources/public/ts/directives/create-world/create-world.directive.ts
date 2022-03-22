@@ -61,14 +61,6 @@ class Controller implements ng.IController, IViewModel {
         else {
             await minetestService.create(this.world);
         }
-        // if (response) {
-        //     toasts.confirm('minetest.world.create.confirm');
-        //     this.closeCreateLightbox();
-        //     this.$scope.$eval(this.$scope['vm']['onCreateWorld']());
-        //     this.$scope.$apply();
-        // } else {
-        //     toasts.warning('minetest.world.create.error');
-        // }
     }
 
     uploadImg(): void {
