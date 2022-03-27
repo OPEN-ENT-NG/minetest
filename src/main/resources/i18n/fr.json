@@ -20,7 +20,7 @@
   "minetest.info.download.software.link": "Téléchargez le logiciel Minetest à partir de ce lien : ",
   "minetest.invite": "Inviter",
   "minetest.last.modification": "Dernière modification",
-  "minetest.url.address": "Adresse URL",
+  "minetest.link": "Adresse URL",
   "minetest.modify": "Modifié le",
   "minetest.OK": "OK",
   "minetext.password": "Mot de passe",
@@ -42,5 +42,5 @@
   "minetest.world.open": "Ouvrir le monde",
   "minetest.world.properties": "Propriétés",
   "minetest.world.title": "Nom du monde",
-  "minetest.world.update": "Modifier",
+  "minetest.world.update": "Modifier"
 }
