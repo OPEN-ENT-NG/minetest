@@ -6,6 +6,7 @@ export interface IWorld {
     _id?: string;
     owner_id: string;
     owner_name: string,
+    owner_login: string,
 
     created_at: Date;
     updated_at: Date;
@@ -16,7 +17,8 @@ export interface IWorld {
     shared?: boolean,
     title: string,
 
-    selected?: boolean
+    selected?: boolean,
+    address: string
 }
 
 export class Worlds {

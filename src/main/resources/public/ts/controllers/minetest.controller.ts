@@ -2,6 +2,7 @@ import {model, moment, ng, template, toasts} from 'entcore';
 import {IWorld, Worlds} from "../models";
 import {minetestService} from "../services";
 import {IScope} from "angular";
+import {currentWorld} from "../directives";
 
 class Controller implements ng.IController {
     currentWorld: IWorld;
@@ -11,6 +12,7 @@ class Controller implements ng.IController {
     selectedWorld: Array<IWorld>;
     user_id: string;
     user_name: string;
+    user_login: string;
     world: IWorld;
     worlds: Worlds;
 
@@ -21,6 +23,7 @@ class Controller implements ng.IController {
     $onInit(): any {
         this.user_id = model.me.userId;
         this.user_name = model.me.username;
+        this.user_login = model.me.login;
         this.selected = false;
         this.currentWorld = {} as IWorld;
         this.selectedWorld = [];
@@ -50,22 +53,30 @@ class Controller implements ng.IController {
 
     async getWorld(): Promise<void> {
         this.worlds.all = await minetestService.get(this.user_id, this.user_name);
+        this.setCurrentWorld();
     }
 
-    // async setStatusWorld(currentWorld: IWorld): Promise<void> {
-    //     this.currentWorld.status = !currentWorld.status;
-    // }
+    setCurrentWorld(): void {
+        this.currentWorld = this.worlds.all[0];
+    }
 
     toggleWorld(world): void {
-        world.selected = !world.selected;
-        if (world.selected) {
-            this.selectedWorld.push(world);
-        } else {
-            this.selectedWorld = this.selectedWorld.filter((w: IWorld) => w !== world);
+        this.currentWorld = world;
+        this.selectedWorld = this.worlds.all.filter((w: IWorld) => w == this.currentWorld);
+        if(this.selectedWorld) {
+            this.currentWorld.selected = !this.currentWorld.selected;
         }
-        // template.open('toggle', 'toggle-bar');
+
+        // world.selected = !world.selected;
+        // this.selectedWorld = world;
+        // if (world.selected) {
+        //     this.selectedWorld.forEach(world => world.selected == false)
+        // }
+        // this.selectedWorld = this.selectedWorld.filter((w: IWorld) => w !== world);
+
         // todo must change logic ? to test and valid
-        this.currentWorld = this.selectedWorld[this.selectedWorld.length - 1];
+        // this.currentWorld = this.selectedWorld[this.selectedWorld.length - 1];
+        // this.currentWorld = world;
         // if(this.oneWorldSelected()) {
         //     this.currentWorld = world;
         //     template.open('section', 'current-world');
@@ -80,6 +91,7 @@ class Controller implements ng.IController {
             id: this.world._id,
             owner_id: this.world.owner_id,
             owner_name: this.world.owner_name,
+            owner_login: this.world.owner_login,
             created_at: this.world.created_at,
             updated_at: moment().startOf('day')._d,
             password: this.world.password,
@@ -87,7 +99,8 @@ class Controller implements ng.IController {
             title: this.world.title,
             selected: false,
             img: this.world.img,
-            shared: this.world.shared
+            shared: this.world.shared,
+            address: this.world.address,
         }
         let response = await minetestService.update(world);
         if (response) {

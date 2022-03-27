@@ -47,19 +47,22 @@ class Controller implements ng.IController, IViewModel {
         this.world = {
             owner_id:  model.me.userId,
             owner_name: model.me.username,
+            owner_login: model.me.login,
             created_at: DateUtils.format(moment().startOf('minute'), "DD/MM/YYYY HH:mm"),
             updated_at: DateUtils.format(moment().startOf('minute'), "DD/MM/YYYY HH:mm"),
             password: this.world.password,
             status: false,
             img: this.world.img,
             title: this.world.title,
-            selected: false
+            selected: false,
+            address: "minetest.support-ent.fr"
         }
         if(this.world.img) {
             await minetestService.createWithAttachment(this.world);
         }
         else {
             await minetestService.create(this.world);
+            this.closeCreateLightbox();
         }
     }
 

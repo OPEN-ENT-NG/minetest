@@ -1,7 +1,8 @@
-import {ng} from "entcore";
+import {moment, ng, notify, toasts} from "entcore";
 import {RootsConst} from "../../core/constants/roots.const";
 import {IScope} from "angular";
 import {IWorld} from "../../models";
+import * as Clipboard from 'clipboard';
 
 interface IViewModel {
     setStatusWorld(currentWorld: IWorld): void;
@@ -20,6 +21,14 @@ class Controller implements ng.IController, IViewModel {
     }
 
     $onInit() {
+        let clipboard = new Clipboard('.clipboard-link-field');
+        clipboard.on('success', function(e) {
+            e.clearSelection();
+            notify.info('copy.link.success');
+        });
+        clipboard.on('error', function(e) {
+            notify.error('copy.link.error');
+        });
     }
 
     $onDestroy() {
@@ -40,7 +49,8 @@ function directive() {
         restrict: 'E',
         templateUrl: `${RootsConst.directive}current-world/current-world.html`,
         scope: {
-            world: '='
+            world: '=',
+            onCurrentWorld: '&'
         },
         controllerAs: 'vm',
         bindToController: true,

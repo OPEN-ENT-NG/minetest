@@ -5,7 +5,6 @@ import {IWorld, Worlds} from "../../models";
 
 interface IViewModel {
     getNbSelectedWorld(): number;
-    oneWorldSelected(): boolean;
 
     // props
     worlds: Worlds;
@@ -30,10 +29,6 @@ class Controller implements ng.IController, IViewModel {
             if (world.selected) selectedWorld++;
         });
         return selectedWorld;
-    }
-
-    oneWorldSelected(): boolean {
-        return this.getNbSelectedWorld() == 1;
     }
 
 }
