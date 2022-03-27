@@ -2,9 +2,7 @@
     <div class="toggle">
         <div class="row">
             <!-- properties -->
-            <button data-ng-click="vm.displayProperties()">
-                <i18n>minetest.properties</i18n>
-            </button>
+            <properties-world world="vm.world" worlds="vm.worlds"></properties-world>
 
             <!-- delete -->
             <delete-world on-delete-world="vm.onDeleteWorld()" world="vm.currentWorld" worlds="vm.worlds"></delete-world>
