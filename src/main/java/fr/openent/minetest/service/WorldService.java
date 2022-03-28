@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface WorldService {
     /**
-     * Get Worlds
+     * Get Worlds with filter
      *
      * @param createdAt Created date
      * @param updatedAt Updated date
@@ -17,6 +17,13 @@ public interface WorldService {
      */
     Future<JsonArray> get(String ownerId, String ownerName, String createdAt, String updatedAt, String img, String shared,
                           String name);
+
+    /**
+     * Get All Worlds
+     *
+     * @return FutureObject containing world {@link JsonObject}
+     */
+    Future<JsonArray> getAll();
 
     /**
      * Create World
