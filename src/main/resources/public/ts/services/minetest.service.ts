@@ -14,7 +14,7 @@ export interface IMinetestService {
 
     update(worldBody: IWorld): Promise<AxiosResponse>;
 
-    delete(worlds: Array<String>): Promise<AxiosResponse>;
+    delete(world: IWorld): Promise<AxiosResponse>;
 }
 
 export const minetestService: IMinetestService = {
@@ -45,15 +45,29 @@ export const minetestService: IMinetestService = {
         return http.put(`/minetest/worlds`, worldBody);
     },
 
-    delete: (worlds: Array<String>): Promise<AxiosResponse> => {
-        let idParams: string = '';
-        if (worlds.length > 0) {
-            worlds.forEach((_id: string) => {
-                idParams += `&id=${_id}`;
-            });
-        }
+    //TODO keep logic for later (multidelete)
+    // delete: (worlds: Array<String>): Promise<AxiosResponse> => {
+    //     let idParams: string = '';
+    //     if (worlds.length > 0) {
+    //         worlds.forEach((_id: string) => {
+    //             idParams += `&id=${_id}`;
+    //         });
+    //     }
+    //
+    //     return http.delete(`/minetest/worlds?${idParams}`);
+    // }
 
-        return http.delete(`/minetest/worlds?${idParams}`);
+    delete: (world: IWorld): Promise<AxiosResponse> => {
+
+        //TODO keep logic for later (multidelete)
+        // let idParams: string = '';
+        // if (worlds.length > 0) {
+        //     worlds.forEach((_id: string) => {
+        //         idParams += `&id=${_id}`;
+        //     });
+        // }
+
+        return http.delete(`/minetest/worlds?&id=${world._id}`);
     }
 };
 
