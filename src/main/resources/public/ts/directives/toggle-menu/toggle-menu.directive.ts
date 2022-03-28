@@ -4,32 +4,35 @@ import {IScope} from "angular";
 import {IWorld, Worlds} from "../../models";
 
 interface IViewModel {
-    getNbSelectedWorld(): number;
+    // getNbSelectedWorld(): number;
 
     // props
-    worlds: Worlds;
+    // worlds: Worlds;
+    world: IWorld;
 }
 
 class Controller implements ng.IController, IViewModel {
-    worlds: Worlds;
+    // worlds: Worlds;
+    world: IWorld;
 
     constructor(private $scope: IScope) {
 
     }
 
     $onInit() {
+        console.log("toggle" + " " + this.world)
     }
 
     $onDestroy() {
     }
 
-    getNbSelectedWorld(): number {
-        let selectedWorld: number = 0;
-        this.worlds.all.forEach((world: IWorld) => {
-            if (world.selected) selectedWorld++;
-        });
-        return selectedWorld;
-    }
+    // getNbSelectedWorld(): number {
+    //     let selectedWorld: number = 0;
+    //     this.worlds.all.forEach((world: IWorld) => {
+    //         if (world.selected) selectedWorld++;
+    //     });
+    //     return selectedWorld;
+    // }
 
 }
 
@@ -38,8 +41,8 @@ function directive() {
         restrict: 'E',
         templateUrl: `${RootsConst.directive}toggle-menu/toggle-menu.html`,
         scope: {
-            onDeleteWorld: '&',
-            worlds: '='
+            world: '=',
+            onDeleteWorld: '&'
         },
         controllerAs: 'vm',
         bindToController: true,

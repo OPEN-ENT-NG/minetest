@@ -29,6 +29,7 @@ class Controller implements ng.IController, IViewModel {
     }
 
     $onInit() {
+        console.log("properties" + " " + this.world)
     }
 
     $onDestroy() {

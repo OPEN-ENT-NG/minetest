@@ -8,18 +8,20 @@ interface IViewModel {
     openDeleteWorldLightbox(): void;
     closeDeleteLightbox(): void;
     deleteWorld(): Promise<void>;
-    getSelectedWorlds(): Array<IWorld>;
+    // getSelectedWorlds(): Array<IWorld>;
     lightbox: any;
 
     // props
-    worlds: Worlds;
+    world: IWorld;
+    // worlds: Worlds;
 }
 
 class Controller implements ng.IController, IViewModel {
     lightbox: any;
-    selectedWorld: Array<IWorld>;
+    // selectedWorld: Array<IWorld>;
 
-    worlds: Worlds;
+    world: IWorld;
+    // worlds: Worlds;
 
     constructor(private $scope: IScope)
     {
@@ -29,12 +31,13 @@ class Controller implements ng.IController, IViewModel {
     }
 
     $onInit() {
-        this.selectedWorld = this.worlds.all.filter((world: IWorld) => world.selected);
+        console.log("delete" + " " + this.world)
+        // this.selectedWorld = this.worlds.all.filter((world: IWorld) => world.selected);
     }
 
-    getSelectedWorlds(): Array<IWorld> {
-        return this.worlds.all.filter((world: IWorld) => world.selected);
-    }
+    // getSelectedWorlds(): Array<IWorld> {
+    //     return this.worlds.all.filter((world: IWorld) => world.selected);
+    // }
 
     $onDestroy() {
     }
@@ -44,15 +47,16 @@ class Controller implements ng.IController, IViewModel {
     }
 
     async deleteWorld(): Promise<void> {
-        let selectedWorldIs = Array<String>();
+        // let selectedWorldIs = Array<String>();
 
-        this.worlds.all
-            .filter((world: IWorld) => world.selected)
-            .forEach(world => {
-                if (world.selected) selectedWorldIs.push(world._id);
-            })
+        // this.worlds.all
+        //     .filter((world: IWorld) => world.selected)
+        //     .forEach(world => {
+        //         if (world.selected) selectedWorldIs.push(world._id);
+        //     })
 
-        let response = await minetestService.delete(selectedWorldIs);
+        // let response = await minetestService.delete(selectedWorldIs);
+        let response = await minetestService.delete(this.world);
         if (response) {
             toasts.confirm('minetest.world.delete.confirm');
             this.closeDeleteLightbox();
@@ -72,8 +76,8 @@ function directive() {
         restrict: 'E',
         templateUrl: `${RootsConst.directive}delete-world/delete-world.html`,
         scope: {
-            onDeleteWorld: '&',
-            worlds: '=',
+            world: '=',
+            onDeleteWorld: '&'
         },
         controllerAs: 'vm',
         bindToController: true,
