@@ -2,10 +2,10 @@
     <div class="toggle">
         <div class="row">
             <!-- properties -->
-            <properties-world world="vm.world" worlds="vm.worlds"></properties-world>
+            <properties-world world="vm.world"></properties-world>
 
             <!-- delete -->
-            <delete-world on-delete-world="vm.onDeleteWorld()" world="vm.currentWorld" worlds="vm.worlds"></delete-world>
+            <delete-world world="vm.world" on-delete-world="vm.onDeleteWorld()"></delete-world>
         </div>
     </div>
 </section>
