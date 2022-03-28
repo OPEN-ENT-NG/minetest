@@ -66,7 +66,12 @@
                      data-ng-model="selected">
                     <div class="icon">
                         <div class="img-container center-component">
-                            <img data-ng-src="/minetest/public/img/illustration_sans_monde.svg" alt="">
+                            <img data-ng-src="/minetest/public/img/illustration_sans_monde.svg"
+                                 data-ng-if="world.img === null || world.img === undefined"
+                                 alt="">
+                            <img data-ng-src="[[world.img]]"
+                                 data-ng-if="world.img !== null || world.img !== undefined"
+                                 alt="">
                         </div>
                     </div>
 <!--                    <div class="title align-start center-component flex-row vertical-spacing-twice">-->

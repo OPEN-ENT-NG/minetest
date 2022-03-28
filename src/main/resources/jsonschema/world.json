@@ -16,7 +16,7 @@
       "type": "boolean"
     },
     "img": {
-      "type": "object"
+      "type": "string"
     },
     "shared": {
       "type": "boolean"
