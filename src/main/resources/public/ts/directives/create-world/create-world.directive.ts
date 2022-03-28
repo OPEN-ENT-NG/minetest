@@ -22,9 +22,6 @@ class Controller implements ng.IController, IViewModel {
     {
         this.lightbox = {
             create: false,
-            sharing: false,
-            invitation: false,
-            delete: false,
         };
     }
 
@@ -56,7 +53,14 @@ class Controller implements ng.IController, IViewModel {
             selected: false,
             address: "minetest.support-ent.fr"
         }
-        await minetestService.create(this.world);
+        let response = await minetestService.create(this.world);
+        if (response) {
+            toasts.confirm('minetest.world.create.confirm');
+            this.closeCreateLightbox();
+            this.$scope.$eval(this.$scope['vm']['onCreateWorld']());
+        } else {
+            toasts.warning('minetest.world.create.error');
+        }
     }
 
 }
