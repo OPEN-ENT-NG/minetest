@@ -13,8 +13,8 @@ public class MinetestConfig {
     public MinetestConfig(JsonObject config) {
         this.minetestDownload = config.getString(Field.MINETEST_DOWNLOAD);
         this.minetestServer = config.getString(Field.MINETEST_SERVER);
-        this.minetestMinPort = Integer.parseInt(config.getString(Field.MINETEST_PORT_PLAGE).split("-")[0]);
-        this.minetestMaxPort = Integer.parseInt(config.getString(Field.MINETEST_PORT_PLAGE).split("-")[1]);
+        this.minetestMinPort = Integer.parseInt(config.getString(Field.MINETEST_PORT_RANGE).split("-")[0]);
+        this.minetestMaxPort = Integer.parseInt(config.getString(Field.MINETEST_PORT_RANGE).split("-")[1]);
     }
 
     public String minetestDownload() {
