@@ -36,10 +36,6 @@
   text-align: center;
 }
 
-$white: #fff;
-$orange: #FF8500;
-$blue: #c7edfc;
-
 .worlds {
   .title-container {
     display: flex;
@@ -75,7 +71,7 @@ $blue: #c7edfc;
         margin-right: 5px;
       }
       &:hover {
-        fill: $orange;
+        fill: $minetest-orange;
       }
     }
   }
@@ -91,8 +87,8 @@ $blue: #c7edfc;
     height: 130px;
     display: flex;
     &.active {
-      border-color: $orange;
-      background-color: $blue;
+      border-color: $minetest-orange;
+      background-color: $minetest-blue;
       @include run-transition(all);
     }
     .icon {
@@ -158,6 +154,6 @@ $blue: #c7edfc;
 
 .minetestDelete {
   .responsive-table table thead tr {
-    color: $white;
+    color: $minetest-white;
   }
 }

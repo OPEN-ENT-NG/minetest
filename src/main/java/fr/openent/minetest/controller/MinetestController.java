@@ -88,7 +88,7 @@ public class MinetestController extends ControllerHelper {
                 return;
             }
             String file_id = resultUpload.getString(Field._ID);
-            String metadata = resultUpload.getJsonObject("metadata").toString();
+            String metadata = resultUpload.getJsonObject(Field.METADATA).toString();
 
             worldService.create(body, file_id, metadata)
                             .onSuccess(res -> renderJson(request, body))
