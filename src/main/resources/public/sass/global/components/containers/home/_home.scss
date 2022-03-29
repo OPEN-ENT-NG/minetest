@@ -36,19 +36,68 @@
   text-align: center;
 }
 
-$white: #fff;
+.worlds {
+  .title-container {
+    display: flex;
+    align-items: center;
+    padding-top: 10px;
+    h2 {
+      font-size: 34px;
+    }
+    h6, a {
+      font-size: 13px;
+    }
+    .button {
+      display: flex;
+      justify-content: flex-end;
+    }
+  }
+  .url-container {
+    display: flex;
+
+    .input-url {
+      padding-right: 15px;
+
+      input {
+        width: 100%;
+      }
+    }
+    a {
+      display: flex;
+      transition: all 250ms ease;
+      align-items: center;
+      i.copy {
+        font-size: 20px;
+        margin-right: 5px;
+      }
+      &:hover {
+        fill: $minetest-orange;
+      }
+    }
+  }
+}
 
 .grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   grid-gap: 25px;
-  margin-top: 25px;
+  margin: 25px 0;
 
   .flex-card {
     height: 130px;
     display: flex;
+    &.active {
+      border-color: $minetest-orange;
+      background-color: $minetest-blue;
+      @include run-transition(all);
+    }
     .icon {
       width: 35%;
+      .img-container {
+        img, .img {
+          width: 35%;
+        }
+      }
     }
     .title {
       width: 65%;
@@ -100,5 +149,11 @@ $white: #fff;
         margin: 10px 25px;
       }
     }
+  }
+}
+
+.minetestDelete {
+  .responsive-table table thead tr {
+    color: $minetest-white;
   }
 }

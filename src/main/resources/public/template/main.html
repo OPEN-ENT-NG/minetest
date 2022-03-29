@@ -27,11 +27,11 @@
     <div class="cards-view twelve">
         <div class="row" ng-show="vm.worlds.all.length > 0">
             <!-- display current world -->
-            <current-world world="vm.currentWorld"></current-world>
+            <current-world world="vm.currentWorld" on-current-world="vm.updateWorld()"></current-world>
             <div class="grid">
                 <div class="flex-card card cell center-component f-row flex-row horizontal-spacing twelve-mobile"
-                     ng-click="vm.toggleWorld(world)"
-                     ng-class="vm.selectedRoom == room ? 'active' : ''"
+                     ng-click="vm.currentWorld = world"
+                     ng-class="vm.currentWorld == world ? 'active' : ''"
                      ng-repeat="world in vm.worlds.all"
                      data-ng-model="selected">
                     <div class="icon">

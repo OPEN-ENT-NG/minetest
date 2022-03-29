@@ -2,12 +2,10 @@ import {ng, template, model} from 'entcore';
 
 import {IScope} from "angular";
 
-declare let window: any;
-
 interface ViewModel {
 	user_id: string;
 	user_name: string;
-	getMomentFromDate: any;
+	user_login: string;
 }
 
 /**
@@ -19,7 +17,7 @@ interface ViewModel {
 class Controller implements ng.IController, ViewModel {
 	user_id: string;
 	user_name: string;
-	getMomentFromDate: any;
+	user_login: string;
 
 	constructor(private $scope: IScope,
 				private $route: any) {
@@ -35,6 +33,7 @@ class Controller implements ng.IController, ViewModel {
 	$onInit() {
 		this.user_id = model.me.userId;
  		this.user_name = model.me.username;
+		this.user_login = model.me.login;
 	}
 
 	$onDestroy() {

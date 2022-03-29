@@ -73,6 +73,7 @@ public class DefaultWorldService implements WorldService {
         JsonObject sortByPort = new JsonObject().put(Field.PORT, 1);
 
         mongoDb.find(this.collection, new JsonObject(), sortByPort, null, MongoDbResult.validResultsHandler(result -> {
+
             if(result.isLeft()) {
                 String message = String.format("[Minetest@%s::getAll] An error has occured while finding worlds list: %s",
                         this.getClass().getSimpleName(), result.left().getValue());

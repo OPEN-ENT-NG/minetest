@@ -24,26 +24,25 @@
                                 <th><i18n>minetest.title.world</i18n></th>
                                 <th><i18n>minetest.creator</i18n></th>
                                 <th><i18n>minetest.last.modification</i18n></th>
-                                <th></th>
                             </tr>
                             </thead>
 
                             <!-- Contents -->
                             <tbody>
-                            <tr ng-repeat="world in vm.getSelectedWorlds()">
+                            <tr>
                                 <td>
                                     <label>
-                                        <span>[[world.title]]</span>
+                                        <span>[[vm.world.title]]</span>
                                     </label>
                                 </td>
                                 <td>
                                     <label>
-                                        <span>[[world.owner_name]]</span>
+                                        <span>[[vm.world.owner_name]]</span>
                                     </label>
                                 </td>
                                 <td>
                                     <label>
-                                        <span><i18n>minetest.modify</i18n> [[world.updated_at]]</span>
+                                        <span><i18n>minetest.modify</i18n> [[vm.world.updated_at]]</span>
                                     </label>
                                 </td>
                             </tr>
@@ -57,9 +56,7 @@
         </div>
 
         <!-- button action delete -->
-        <div class="right-magnet">
-            <button class="cell cancel" ng-click="vm.closeDeleteLightbox()"><i18n>Annuler</i18n></button>
-            <button class="cell" ng-click="vm.deleteWorld()"><i18n>Valider</i18n></button>
-        </div>
+        <button class="minetest-lightbox-button right-magnet" ng-click="vm.closeDeleteLightbox()"><i18n>minetest.cancel</i18n></button>
+        <button class="minetest-lightbox-button right-magnet" ng-click="vm.deleteWorld()"><i18n>minetest.OK</i18n></button>
     </lightbox>
 </div>

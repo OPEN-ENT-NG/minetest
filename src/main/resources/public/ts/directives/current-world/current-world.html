@@ -1,37 +1,71 @@
-<section class="worlds" ng-if="vm.isWorldValid()">
+<div class="worlds">
     <div class="card horizontal-spacing-twice vertical-spacing row">
         <div class="center-component">
             <div class="twelve title-container">
-                <h2 class="six twelve-mobile">
+                <!-- title -->
+                <h2 class="two twelve-mobile">
                     [[vm.world.title]]
                 </h2>
+                <!-- information -->
+                <i class="infoicon"
+                   data-ng-click="vm.showInfoDownload()">
+                </i>
+                <h6 class="four twelve-mobile"><i18n>minetest.info.download.software.link</i18n></h6>
+                <a href="https://www.minetest.net/downloads/" target=_blank>
+                    <i18n>minetest.download.software.link</i18n>
+                </a>
+                <!-- open/close world -->
                 <div class="six button zero-mobile">
-                    <button ng-show="!vm.world.status" ng-click="vm.setStatusWorld(vm.world)">
-                        <i18n>minetest.world.open</i18n>
-
-                    </button>
-                    <button ng-show="vm.world.status" ng-click="vm.setStatusWorld(vm.world)">
-                        <i18n>minetest.world.close</i18n>
+                    <button ng-click="vm.setStatusWorld(vm.world)" on-current-world="vm.updateWorld()">
+                        <i18n ng-show="!vm.world.status">minetest.world.open</i18n>
+                        <i18n ng-show="vm.world.status">minetest.world.close</i18n>
                     </button>
                 </div>
             </div>
-            <div>
-                <!--                <div class="zero-desktop twelve-mobile url-container top-spacing-twice bottom-spacing-three">-->
+            <div class="zero-desktop twelve-mobile url-container top-spacing-twice bottom-spacing-three">
                 <div class="top-spacing-three">
                     <div class="twelve-mobile url-container">
                         <div class="input-url seven-mobile cell">
-                            <i18n class="bold cell">minetest.link</i18n>
+                            <i18n class="bold cell">minetest.url.address</i18n>
                             <input type="text" ng-model="vm.world.link" i18n-placeholder="minetest.url.ent" readonly>
                         </div>
-                        <a class="clipboard-link-field" data-clipboard-text="minetest.support-ent.fr">
+                        <a class="clipboard-link-field" data-clipboard-text="[[vm.world.address]]">
                             <i class="copy"></i>
                             <i18n>minetest.copy.link</i18n>
                         </a>
+                    </div>
+                    <div class="twelve-mobile url-container">
                         <div class="input-url seven-mobile cell">
                             <i18n class="bold cell">minetest.port</i18n>
-                            <input type="text" ng-model="vm.world.port" placeholder="2300" readonly>
+                            <input type="text" ng-model="vm.world.port" readonly>
                         </div>
-                        <a class="clipboard-link-field" data-clipboard-text="2300">
+                        <a class="clipboard-link-field" data-clipboard-text="[[vm.world.port]]">
+                            <i class="copy"></i>
+                            <i18n>minetest.copy.port</i18n>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="twelve">
+                <div class="top-spacing-three">
+                    <div class="twelve url-container zero-mobile">
+                        <i18n class="bold one cell">minetest.url.address</i18n>
+                        <div class="input-url nine cell">
+                            <input type="text" ng-model="vm.world.address" readonly>
+                        </div>
+                        <a class="clipboard-link-field" data-clipboard-text="[[vm.world.address]]">
+                            <i class="copy"></i>
+                            <i18n>minetest.copy.url.address</i18n>
+                        </a>
+                    </div>
+                </div>
+                <div>
+                    <div class="twelve url-container zero-mobile">
+                        <i18n class="bold one cell">minetest.port</i18n>
+                        <div class="input-url nine cell">
+                            <input type="text" ng-model="vm.world.port" readonly>
+                        </div>
+                        <a class="clipboard-link-field" data-clipboard-text="[[vm.world.port]]">
                             <i class="copy"></i>
                             <i18n>minetest.copy.port</i18n>
                         </a>
@@ -40,4 +74,5 @@
             </div>
         </div>
     </div>
-</section>
+</div>
+

@@ -73,6 +73,30 @@ public class MinetestController extends ControllerHelper {
                             .onFailure(err -> renderError(request))));
     }
 
+    @Post("/worlds/attachment")
+    @ApiDoc("Create world with an attachment")
+    @SecuredAction(value = "", type = ActionType.AUTHENTICATED)
+    public void postWorldWithFile(HttpServerRequest request) {
+        RequestUtils.bodyToJson(request, pathPrefix + Field.WORLD, body
+                -> UserUtils.getUserInfos(eb, request, user -> storage.writeUploadFile(request, resultUpload -> {
+                    if (!"ok".equals(resultUpload.getString("status"))) {
+                        String message = String.format("[Minetest@%s::createWorld]: " +
+                                "An error has occurred while creating world with an image: %s",
+                                this.getClass().getSimpleName());
+                log.error(message + " " + resultUpload.getString(Field.MESSAGE));
+                renderError(request);
+                return;
+            }
+            String file_id = resultUpload.getString(Field._ID);
+            String metadata = resultUpload.getJsonObject(Field.METADATA).toString();
+
+            worldService.create(body, file_id, metadata)
+                            .onSuccess(res -> renderJson(request, body))
+                            .onFailure(err -> renderError(request));
+
+        })));
+    }
+
     @Put("/worlds")
     @ApiDoc("Create world")
     @SecuredAction(value = "", type = ActionType.AUTHENTICATED)
