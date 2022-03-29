@@ -32,5 +32,9 @@
   "minetest.world.empty.state": "Vous n'avez pas encore créé de monde",
   "minetest.world.close": "Fermer le monde",
   "minetest.world.open": "Ouvrir le monde",
-  "minetest.world.title": "Nom du monde"
+  "minetest.world.properties": "Propriétés",
+  "minetest.world.title": "Nom du monde",
+  "minetest.world.update": "Modifier",
+  "copy.link.success": "Le lien est copié dans le presse-papier.",
+  "copy.link.error": "Une erreur est survenue lors de la copie du lien."
 }
