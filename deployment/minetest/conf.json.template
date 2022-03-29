@@ -16,6 +16,6 @@
         "entcore.port" : 8009,
         "minetest-download": "${minetestDownload}",
         "minetest-server": "${minetestServer}",
-        "minetest-port-plage": "${minetestPortPlage}"
+        "minetest-port-range": "${minetestPortRange}"
       }
     }

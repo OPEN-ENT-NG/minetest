@@ -70,7 +70,7 @@ public class DefaultWorldService implements WorldService {
     public Future<JsonArray> getAll() {
         Promise<JsonArray> promise = Promise.promise();
 
-        JsonObject sortByPort = new JsonObject().put("port", 1);
+        JsonObject sortByPort = new JsonObject().put(Field.PORT, 1);
 
         mongoDb.find(this.collection, new JsonObject(), sortByPort, null, MongoDbResult.validResultsHandler(result -> {
             if(result.isLeft()) {
@@ -108,19 +108,20 @@ public class DefaultWorldService implements WorldService {
         //get New Port
         getAll().onSuccess(res -> {
                     int newPort = getNewPort(res);
-                    body.put("port",newPort);
-            mongoDb.insert(this.collection, body, MongoDbResult.validResultHandler(result -> {
-                if(result.isLeft()) {
-                    String message = String.format("[Minetest@%s::createWorld]: An error has occurred while creating new world: %s",
-                            this.getClass().getSimpleName(), result.left().getValue());
-                    log.error(message, result.left().getValue());
-                    promise.fail(message);
-                    return;
-                }
-                promise.complete(result.right().getValue());
-            }));
+                    body.put(Field.PORT, newPort);
+                    mongoDb.insert(this.collection, body, MongoDbResult.validResultHandler(result -> {
+                        if(result.isLeft()) {
+                            String message = String.format("[Minetest@%s::createWorld]: An error has occurred while " +
+                                            "creating new world: %s",
+                                    this.getClass().getSimpleName(), result.left().getValue());
+                            log.error(message, result.left().getValue());
+                            promise.fail(message);
+                            return;
+                        }
+                        promise.complete(result.right().getValue());
+                    }));
         })
-        .onFailure(err -> promise.fail(err.getMessage()));
+                .onFailure(err -> promise.fail(err.getMessage()));
         return promise.future();
     }
 
