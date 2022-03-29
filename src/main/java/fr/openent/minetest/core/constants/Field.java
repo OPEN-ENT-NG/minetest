@@ -18,6 +18,11 @@ public class Field {
     public static final String SHARED = "shared";
     public static final String TITLE = "title";
     public static final String WORLD = "world";
+    public static final String PORT = "port";
+    public static final String FILEID = "fileId";
+    public static final String METADATA = "metadata";
+    public static final String LINK = "link";
+
 
 
     // Config

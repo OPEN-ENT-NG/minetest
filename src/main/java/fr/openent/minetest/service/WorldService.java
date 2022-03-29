@@ -28,8 +28,8 @@ public interface WorldService {
     /**
      * Create World
      *
-//     * @param user {@link UserInfos}
      * @param body Data to store
+     * @param fileId File identifier
      * @return Future {@link Future<JsonObject>} containing new world
      */
     Future<JsonObject> create(JsonObject body, String fileId, String metadata);
@@ -44,8 +44,8 @@ public interface WorldService {
     Future<JsonObject> update(UserInfos user, JsonObject body);
 
     /**
-     * @param user            User
-     * @param ids             List world id to delete
+     * @param user User
+     * @param ids  List world id to delete
      * @return returning data
      */
     Future<JsonObject> delete(UserInfos user, List<String> ids);

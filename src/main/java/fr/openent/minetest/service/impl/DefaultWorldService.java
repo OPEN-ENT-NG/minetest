@@ -96,14 +96,14 @@ public class DefaultWorldService implements WorldService {
         Promise<JsonObject> promise = Promise.promise();
 
         if(fileId != null) {
-            body.put("fileId", fileId);
+            body.put(Field.FILEID, fileId);
         }
         if(metadata != null) {
-            body.put("metadata", metadata);
+            body.put(Field.METADATA, metadata);
         }
 
         //add link to minetest server
-        body.put("link", minetestConfig.minetestServer());
+        body.put(Field.LINK, minetestConfig.minetestServer());
 
         //get New Port
         getAll().onSuccess(res -> {
@@ -126,12 +126,14 @@ public class DefaultWorldService implements WorldService {
 
     private int getNewPort(JsonArray res) {
         int newPort = minetestConfig.minetestMinPort();
-        for(Object world: res){
+
+        for(Object world: res) {
             JsonObject worldJson = (JsonObject) world;
-            int port = worldJson.getInteger("port");
-            if(port > newPort){
+            int port = worldJson.getInteger(Field.PORT);
+            if(port > newPort) {
                 break;
-            }else{
+            }
+            else {
                 newPort ++;
             }
         }

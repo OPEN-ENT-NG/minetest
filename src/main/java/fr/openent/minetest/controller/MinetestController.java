@@ -69,8 +69,8 @@ public class MinetestController extends ControllerHelper {
         RequestUtils.bodyToJson(request, pathPrefix + Field.WORLD, body
                 -> UserUtils.getUserInfos(eb, request, user
                 -> worldService.create(body,null, null)
-                .onSuccess(res -> renderJson(request, body))
-                .onFailure(err -> renderError(request))));
+                            .onSuccess(res -> renderJson(request, body))
+                            .onFailure(err -> renderError(request))));
     }
 
     @Put("/worlds")

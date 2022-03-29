@@ -24,36 +24,6 @@
 
     </div>
 
-<!--    <div data-ng-show="vm.worlds.all.length > 0">-->
-<!--        &lt;!&ndash; search bar &ndash;&gt;-->
-<!--        <div class="flex column">-->
-<!--            <span>-->
-<!--                <label>-->
-<!--                    <input type="text" class="cell" ng-model="search" i18n-placeholder="minetest.placeholder.search" autocomplete="off" />-->
-<!--                </label>-->
-<!--            </span>-->
-<!--        </div>-->
-
-<!--        &lt;!&ndash; world's list &ndash;&gt;-->
-<!--        <div class="card-world widget-alerts">-->
-<!--            <div class="twelve grid-block">-->
-<!--                <div class="widget-alert padding-13 card-alert"-->
-<!--                     ng-repeat="world in vm.worlds.all"-->
-<!--                     data-ng-model="selected"-->
-<!--                     ng-class="{selected: world.selected}"-->
-<!--                     data-ng-click="vm.toggleWorld(world)">-->
-<!--                    <div class="twelve flex">-->
-<!--                        <div class="bold">[[world.title]]</div>-->
-<!--                    </div>-->
-<!--                    <div class="twelve margin-top-5 subtitle">-->
-<!--                        <div class="margin-right-5">[[world.owner_name]]</div>-->
-<!--                        <div>[[world.created_at]]</div>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
-
     <div class="cards-view twelve">
         <div class="row" ng-show="vm.worlds.all.length > 0">
             <!-- display current world -->
@@ -74,9 +44,6 @@
                                  alt="">
                         </div>
                     </div>
-<!--                    <div class="title align-start center-component flex-row vertical-spacing-twice">-->
-<!--                        <h4>[[world.title]]</h4>-->
-<!--                    </div>-->
                     <div class="title align-start center-component flex-row vertical-spacing-twice">
                         <h4>[[world.title]]</h4>
                         <div class="owner"><h5>[[world.owner_name]]</h5></div>
