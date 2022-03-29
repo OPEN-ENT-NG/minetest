@@ -60,32 +60,6 @@ class Controller implements ng.IController {
         this.currentWorld = this.worlds.all[0];
     }
 
-    toggleWorld(world): void {
-        this.currentWorld = world;
-        this.selectedWorld = this.worlds.all.filter((w: IWorld) => w == this.currentWorld);
-        if(this.selectedWorld) {
-            this.currentWorld.selected = !this.currentWorld.selected;
-        }
-
-        // world.selected = !world.selected;
-        // this.selectedWorld = world;
-        // if (world.selected) {
-        //     this.selectedWorld.forEach(world => world.selected == false)
-        // }
-        // this.selectedWorld = this.selectedWorld.filter((w: IWorld) => w !== world);
-
-        // todo must change logic ? to test and valid
-        // this.currentWorld = this.selectedWorld[this.selectedWorld.length - 1];
-        // this.currentWorld = world;
-        // if(this.oneWorldSelected()) {
-        //     this.currentWorld = world;
-        //     template.open('section', 'current-world');
-        // }
-        // else {
-        //     template.close('section');
-        // }
-    }
-
     async updateWorld(): Promise<void> {
         let world = {
             id: this.world._id,

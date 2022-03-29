@@ -17,13 +17,8 @@
             <!-- Image -->
             <section class="minetest-lightbox-content-upload">
                 <div class="minetest-lightbox-content-upload-box">
-                    <input type="file"
-                           id="img" name="img"
-                           onchange="angular.element(this).scope().vm.uploadImg()"
-                           accept="image/*">
-                    <label for="img">
-                        <span data-ng-show="vm.world.img">[[vm.world.file]]</span>
-                    </label>
+                    <image-select id="img" class="initialFloat cell" default="/img/illustrations/image-default.svg"
+                                  ng-model="vm.world.img"/>
                 </div>
             </section>
 

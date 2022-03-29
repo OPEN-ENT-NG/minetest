@@ -18,12 +18,14 @@ public class Field {
     public static final String SHARED = "shared";
     public static final String TITLE = "title";
     public static final String WORLD = "world";
-
+    public static final String PORT = "port";
+    public static final String FILEID = "fileId";
+    public static final String METADATA = "metadata";
+    public static final String LINK = "link";
 
     // Config
     public static final String MINETEST_DOWNLOAD = "minetest-download";
     public static final String MINETESTDOWNLOAD = "minetestDownload";
     public static final String MINETEST_SERVER = "minetest-server";
-
-
+    public static final String MINETEST_PORT_RANGE = "minetest-port-range";
 }

@@ -1,6 +1,5 @@
 import {model, moment, ng} from "entcore";
 import {RootsConst} from "../../core/constants/roots.const";
-import {IScope} from "angular";
 import {IWorld} from "../../models";
 import {DateUtils} from "../../utils/date.utils";
 import {minetestService} from "../../services";
@@ -9,7 +8,6 @@ interface IViewModel {
     openCreateLightbox();
     closeCreateLightbox();
     createWorld();
-    uploadImg();
 
     lightbox: any;
     world: IWorld;
@@ -19,7 +17,7 @@ class Controller implements ng.IController, IViewModel {
     lightbox: any;
     world: IWorld;
 
-    constructor(private $scope: IScope)
+    constructor()
     {
         this.lightbox = {
             create: false,
@@ -57,21 +55,7 @@ class Controller implements ng.IController, IViewModel {
             selected: false,
             address: "minetest.support-ent.fr"
         }
-        if(this.world.img) {
-            await minetestService.createWithAttachment(this.world);
-        }
-        else {
-            await minetestService.create(this.world);
-            this.closeCreateLightbox();
-        }
-    }
-
-    uploadImg(): void {
-        const img: File = document.getElementById('img')['files'][0];
-        if (img) {
-            this.world.img = img;
-            this.$scope.$apply();
-        }
+        await minetestService.create(this.world);
     }
 
 }

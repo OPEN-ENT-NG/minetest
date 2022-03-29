@@ -19,6 +19,9 @@ export interface IWorld {
 
     selected?: boolean,
     address: string
+
+    port?: number;
+    link?: string;
 }
 
 export class Worlds {
