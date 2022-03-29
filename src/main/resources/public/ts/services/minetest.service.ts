@@ -10,6 +10,8 @@ export interface IMinetestService {
     // Settings
     create(worldBody: IWorld): Promise<AxiosResponse>;
 
+    createWithAttachment(worldBody: IWorld): Promise<AxiosResponse>;
+
     update(worldBody: IWorld): Promise<AxiosResponse>;
 
     delete(worlds: Array<String>): Promise<AxiosResponse>;
@@ -33,6 +35,10 @@ export const minetestService: IMinetestService = {
     // Settings
     create: (worldBody: IWorld): Promise<AxiosResponse> => {
         return http.post(`/minetest/worlds`, worldBody);
+    },
+
+    createWithAttachment: (worldBody: IWorld): Promise<AxiosResponse> => {
+        return http.post(`/minetest/worlds/attachment`, worldBody);
     },
 
     update: (worldBody: IWorld): Promise<AxiosResponse> => {

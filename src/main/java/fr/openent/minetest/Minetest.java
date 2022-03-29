@@ -23,7 +23,7 @@ public class Minetest extends BaseServer {
 		ServiceFactory serviceFactory = new ServiceFactory(vertx, storage, minetestConfig, Neo4j.getInstance(), Sql.getInstance(),
 				MongoDb.getInstance());
 
-		addController(new MinetestController(serviceFactory));
+		addController(new MinetestController(serviceFactory, storage));
 	}
 
 }

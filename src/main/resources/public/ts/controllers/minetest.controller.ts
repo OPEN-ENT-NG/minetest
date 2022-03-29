@@ -52,10 +52,6 @@ class Controller implements ng.IController {
         this.worlds.all = await minetestService.get(this.user_id, this.user_name);
     }
 
-    // async setStatusWorld(currentWorld: IWorld): Promise<void> {
-    //     this.currentWorld.status = !currentWorld.status;
-    // }
-
     toggleWorld(world): void {
         world.selected = !world.selected;
         if (world.selected) {
@@ -63,16 +59,8 @@ class Controller implements ng.IController {
         } else {
             this.selectedWorld = this.selectedWorld.filter((w: IWorld) => w !== world);
         }
-        // template.open('toggle', 'toggle-bar');
         // todo must change logic ? to test and valid
         this.currentWorld = this.selectedWorld[this.selectedWorld.length - 1];
-        // if(this.oneWorldSelected()) {
-        //     this.currentWorld = world;
-        //     template.open('section', 'current-world');
-        // }
-        // else {
-        //     template.close('section');
-        // }
     }
 
     async updateWorld(): Promise<void> {

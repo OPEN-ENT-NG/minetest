@@ -1,6 +1,5 @@
-import {model, moment, ng, toasts} from "entcore";
+import {model, moment, ng} from "entcore";
 import {RootsConst} from "../../core/constants/roots.const";
-import {IScope} from "angular";
 import {IWorld} from "../../models";
 import {DateUtils} from "../../utils/date.utils";
 import {minetestService} from "../../services";
@@ -9,7 +8,6 @@ interface IViewModel {
     openCreateLightbox();
     closeCreateLightbox();
     createWorld();
-    uploadFile();
 
     lightbox: any;
     world: IWorld;
@@ -19,7 +17,7 @@ class Controller implements ng.IController, IViewModel {
     lightbox: any;
     world: IWorld;
 
-    constructor(private $scope: IScope)
+    constructor()
     {
         this.lightbox = {
             create: false,
@@ -51,23 +49,11 @@ class Controller implements ng.IController, IViewModel {
             updated_at: DateUtils.format(moment().startOf('minute'), "DD/MM/YYYY HH:mm"),
             password: this.world.password,
             status: false,
+            img: this.world.img,
             title: this.world.title,
             selected: false
         }
-
-        let response = await minetestService.create(this.world);
-        if (response) {
-            toasts.confirm('minetest.world.create.confirm');
-            this.closeCreateLightbox();
-            this.$scope.$eval(this.$scope['vm']['onCreateWorld']());
-            this.$scope.$apply();
-        } else {
-            toasts.warning('minetest.world.create.error');
-        }
-    }
-
-    uploadFile(): void {
-
+        await minetestService.create(this.world);
     }
 
 }

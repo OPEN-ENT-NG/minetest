@@ -1,5 +1,6 @@
 package fr.openent.minetest.service.impl;
 
+import fr.openent.minetest.config.MinetestConfig;
 import fr.openent.minetest.core.constants.Field;
 import fr.openent.minetest.service.WorldService;
 import fr.wseduc.mongodb.MongoDb;
@@ -19,10 +20,12 @@ public class DefaultWorldService implements WorldService {
     private final MongoDb mongoDb;
     private final String collection;
     private final Logger log = LoggerFactory.getLogger(DefaultWorldService.class);
+    private final MinetestConfig minetestConfig;
 
-    public DefaultWorldService(String collection, MongoDb mongo) {
+    public DefaultWorldService(String collection, MongoDb mongo, MinetestConfig minetestConfig) {
         this.collection = collection;
         this.mongoDb = mongo;
+        this.minetestConfig = minetestConfig;
     }
 
     @Override
@@ -63,19 +66,15 @@ public class DefaultWorldService implements WorldService {
         return promise.future();
     }
 
-    /**
-     * Create World
-     *
-     * @param user User Object containing user id
-     * @param body JsonObject containing the data for the world
-     */
     @Override
-    public Future<JsonObject> create(UserInfos user, JsonObject body) {
-        Promise<JsonObject> promise = Promise.promise();
+    public Future<JsonArray> getAll() {
+        Promise<JsonArray> promise = Promise.promise();
 
-        mongoDb.insert(this.collection, body, MongoDbResult.validResultHandler(result -> {
+        JsonObject sortByPort = new JsonObject().put(Field.PORT, 1);
+
+        mongoDb.find(this.collection, new JsonObject(), sortByPort, null, MongoDbResult.validResultsHandler(result -> {
             if(result.isLeft()) {
-                String message = String.format("[Minetest@%s::createWorld]: An error has occurred while creating new world: %s",
+                String message = String.format("[Minetest@%s::getAll] An error has occured while finding worlds list: %s",
                         this.getClass().getSimpleName(), result.left().getValue());
                 log.error(message, result.left().getValue());
                 promise.fail(message);
@@ -84,6 +83,62 @@ public class DefaultWorldService implements WorldService {
             promise.complete(result.right().getValue());
         }));
         return promise.future();
+    }
+
+
+    /**
+     * Create World
+     *
+     * @param body JsonObject containing the data for the world
+     */
+    @Override
+    public Future<JsonObject> create(JsonObject body, String fileId, String metadata) {
+        Promise<JsonObject> promise = Promise.promise();
+
+        if(fileId != null) {
+            body.put(Field.FILEID, fileId);
+        }
+        if(metadata != null) {
+            body.put(Field.METADATA, metadata);
+        }
+
+        //add link to minetest server
+        body.put(Field.LINK, minetestConfig.minetestServer());
+
+        //get New Port
+        getAll().onSuccess(res -> {
+                    int newPort = getNewPort(res);
+                    body.put(Field.PORT, newPort);
+                    mongoDb.insert(this.collection, body, MongoDbResult.validResultHandler(result -> {
+                        if(result.isLeft()) {
+                            String message = String.format("[Minetest@%s::createWorld]: An error has occurred while " +
+                                            "creating new world: %s",
+                                    this.getClass().getSimpleName(), result.left().getValue());
+                            log.error(message, result.left().getValue());
+                            promise.fail(message);
+                            return;
+                        }
+                        promise.complete(result.right().getValue());
+                    }));
+        })
+                .onFailure(err -> promise.fail(err.getMessage()));
+        return promise.future();
+    }
+
+    private int getNewPort(JsonArray res) {
+        int newPort = minetestConfig.minetestMinPort();
+
+        for(Object world: res) {
+            JsonObject worldJson = (JsonObject) world;
+            int port = worldJson.getInteger(Field.PORT);
+            if(port > newPort) {
+                break;
+            }
+            else {
+                newPort ++;
+            }
+        }
+        return newPort;
     }
 
     @Override

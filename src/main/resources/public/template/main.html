@@ -24,30 +24,33 @@
 
     </div>
 
-    <div data-ng-show="vm.worlds.all.length > 0">
-        <!-- search bar -->
-        <div class="flex column">
-            <span>
-                <label>
-                    <input type="text" class="cell" ng-model="search" i18n-placeholder="minetest.placeholder.search" autocomplete="off" />
-                </label>
-            </span>
-        </div>
-
-        <!-- world's list -->
-        <div class="card-world widget-alerts">
-            <div class="twelve grid-block">
-                <div class="widget-alert padding-13 card-alert"
+    <div class="cards-view twelve">
+        <div class="row" ng-show="vm.worlds.all.length > 0">
+            <!-- display current world -->
+            <current-world world="vm.currentWorld"></current-world>
+            <div class="grid">
+                <div class="flex-card card cell center-component f-row flex-row horizontal-spacing twelve-mobile"
+                     ng-click="vm.toggleWorld(world)"
+                     ng-class="vm.selectedRoom == room ? 'active' : ''"
                      ng-repeat="world in vm.worlds.all"
-                     data-ng-model="selected"
-                     ng-class="{selected: world.selected}"
-                     data-ng-click="vm.toggleWorld(world)">
-                    <div class="twelve flex">
-                        <div class="bold">[[world.title]]</div>
+                     data-ng-model="selected">
+                    <div class="icon">
+                        <div class="img-container center-component">
+                            <img data-ng-src="/minetest/public/img/illustration_sans_monde.svg"
+                                 data-ng-if="world.img === null || world.img === undefined"
+                                 alt="">
+                            <img data-ng-src="[[world.img]]"
+                                 data-ng-if="world.img !== null || world.img !== undefined"
+                                 alt="">
+                        </div>
                     </div>
-                    <div class="twelve margin-top-5 subtitle">
-                        <div class="margin-right-5">[[world.owner_name]]</div>
-                        <div>[[world.created_at]]</div>
+                    <div class="title align-start center-component flex-row vertical-spacing-twice">
+                        <h4>[[world.title]]</h4>
+                        <div class="owner"><h5>[[world.owner_name]]</h5></div>
+                        <em>
+                            [[world.status]]
+                            <i18n>minetest.the</i18n> [[world.created_at]]
+                        </em>
                     </div>
                 </div>
             </div>
@@ -56,7 +59,4 @@
 
     <!-- toggle menu on click card -->
     <toggle-menu on-delete-world="vm.refreshWorldList()" worlds="vm.worlds"></toggle-menu>
-
-    <!-- display current world -->
-    <current-world world="vm.currentWorld"></current-world>
 </div>

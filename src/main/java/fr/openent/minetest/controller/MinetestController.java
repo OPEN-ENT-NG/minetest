@@ -13,10 +13,9 @@ import io.vertx.core.json.JsonObject;
 import org.entcore.common.controller.ControllerHelper;
 import org.entcore.common.events.EventStore;
 import org.entcore.common.events.EventStoreFactory;
+import org.entcore.common.storage.Storage;
 import org.entcore.common.user.UserUtils;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class MinetestController extends ControllerHelper {
@@ -24,11 +23,13 @@ public class MinetestController extends ControllerHelper {
 
     private final EventStore eventStore;
     private final MinetestConfig minetestConfig;
+    private final Storage storage;
 
-    public MinetestController(ServiceFactory serviceFactory) {
+    public MinetestController(ServiceFactory serviceFactory, Storage storage) {
         this.worldService = serviceFactory.worldService();
         this.eventStore = EventStoreFactory.getFactory().getEventStore(fr.openent.minetest.Minetest.class.getSimpleName());
         this.minetestConfig = serviceFactory.minetestConfig();
+        this.storage = storage;
     }
 
     @Get("")
@@ -65,18 +66,18 @@ public class MinetestController extends ControllerHelper {
     @ApiDoc("Create world")
     @SecuredAction(value = "", type = ActionType.AUTHENTICATED)
     public void postWorld(final HttpServerRequest request) {
-        RequestUtils.bodyToJson(request, pathPrefix + "world", body
+        RequestUtils.bodyToJson(request, pathPrefix + Field.WORLD, body
                 -> UserUtils.getUserInfos(eb, request, user
-                -> worldService.create(user, body)
-                .onSuccess(res -> renderJson(request, body))
-                .onFailure(err -> renderError(request))));
+                -> worldService.create(body,null, null)
+                            .onSuccess(res -> renderJson(request, body))
+                            .onFailure(err -> renderError(request))));
     }
 
     @Put("/worlds")
     @ApiDoc("Create world")
     @SecuredAction(value = "", type = ActionType.AUTHENTICATED)
     public void putWorld(final HttpServerRequest request) {
-        RequestUtils.bodyToJson(request, pathPrefix + "world", body
+        RequestUtils.bodyToJson(request, pathPrefix + Field.WORLD, body
                 -> UserUtils.getUserInfos(eb, request, user
                 -> worldService.update(user, body)
                             .onSuccess(res -> renderJson(request, body))
@@ -91,9 +92,7 @@ public class MinetestController extends ControllerHelper {
             badRequest(request);
             return;
         }
-        List<String> ids = new ArrayList<>(Collections.singletonList(
-                request.params().get(Field.ID)
-        ));
+        List<String> ids = request.params().getAll(Field.ID);
         UserUtils.getUserInfos(eb, request, user -> worldService.delete(user, ids)
                 .onSuccess(res -> renderJson(request, res))
                 .onFailure(err -> renderError(request)));

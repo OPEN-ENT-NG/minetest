@@ -15,6 +15,7 @@
         "mode" : "${mode}",
         "entcore.port" : 8009,
         "minetest-download": "${minetestDownload}",
-        "minetest-server": "${minetestServer}"
+        "minetest-server": "${minetestServer}",
+        "minetest-port-range": "${minetestPortRange}"
       }
     }
