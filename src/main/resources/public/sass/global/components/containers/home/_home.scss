@@ -38,6 +38,7 @@
 
 $white: #fff;
 $orange: #FF8500;
+$blue: #c7edfc;
 
 .worlds {
   .title-container {
@@ -91,7 +92,7 @@ $orange: #FF8500;
     display: flex;
     &.active {
       border-color: $orange;
-      background-color: #c7edfc;
+      background-color: $blue;
       @include run-transition(all);
     }
     .icon {

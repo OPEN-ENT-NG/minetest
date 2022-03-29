@@ -1,4 +1,6 @@
-&.infoicon:before {
-  font-family: 'material-icons';
-  content: '\F2FD';
+i {
+  &.mdi-information-outline::before {
+    font-family: 'material-icons';
+    content: "/f2fd"";
+  }
 }

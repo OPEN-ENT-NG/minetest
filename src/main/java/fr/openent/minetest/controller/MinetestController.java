@@ -83,7 +83,7 @@ public class MinetestController extends ControllerHelper {
                         String message = String.format("[Minetest@%s::createWorld]: " +
                                 "An error has occurred while creating world with an image: %s",
                                 this.getClass().getSimpleName());
-                log.error(message + " " + resultUpload.getString("message"));
+                log.error(message + " " + resultUpload.getString(Field.MESSAGE));
                 renderError(request);
                 return;
             }

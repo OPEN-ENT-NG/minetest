@@ -22,6 +22,7 @@ public class Field {
     public static final String FILEID = "fileId";
     public static final String METADATA = "metadata";
     public static final String LINK = "link";
+    public static final String MESSAGE = "message";
 
     // Config
     public static final String MINETEST_DOWNLOAD = "minetest-download";
