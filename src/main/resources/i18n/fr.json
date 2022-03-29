@@ -2,7 +2,11 @@
   "minetest.allow.access.world.password": "Permettre l'accès du monde via un mot de passe",
   "minetest.add.image": "Ajouter une image",
   "minetest.copy.link": "Copier le lien",
+  "minetest.copy.link.success": "Le lien est copié dans le presse-papier.",
+  "minetest.copy.link.error": "Une erreur est survenue lors de la copie du lien.",
   "minetest.copy.port": "Copier le port",
+  "minetest.copy.port.success": "Le port est copié dans le presse-papier.",
+  "minetest.copy.port.error": "Une erreur est survenue lors de la copie du lien.",
   "minetest.create": "Créer",
   "minetest.create.world": "Créer un monde",
   "minetest.creation.world.description": "La création d'un monde permet de générer automatiquement une adresse URL et un port qui seront utilisés pour rejoindre le monde. Ces informations sont disponibles dans les propriétés du monde.",
@@ -35,6 +39,4 @@
   "minetest.world.properties": "Propriétés",
   "minetest.world.title": "Nom du monde",
   "minetest.world.update": "Modifier",
-  "copy.link.success": "Le lien est copié dans le presse-papier.",
-  "copy.link.error": "Une erreur est survenue lors de la copie du lien."
 }
