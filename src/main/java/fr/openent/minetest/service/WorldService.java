@@ -16,23 +16,16 @@ public interface WorldService {
      * @return FutureObject containing world {@link JsonObject}
      */
     Future<JsonArray> get(String ownerId, String ownerName, String createdAt, String updatedAt, String img, String shared,
-                          String name);
-
-    /**
-     * Get All Worlds
-     *
-     * @return FutureObject containing world {@link JsonObject}
-     */
-    Future<JsonArray> getAll();
+                          String name, JsonObject sortJson);
 
     /**
      * Create World
      *
      * @param body Data to store
-     * @param fileId File identifier
+     * @param user infos of the user
      * @return Future {@link Future<JsonObject>} containing new world
      */
-    Future<JsonObject> create(JsonObject body, String fileId, String metadata);
+    Future<JsonObject> create(JsonObject body, UserInfos user);
 
     /**
      * Update World
