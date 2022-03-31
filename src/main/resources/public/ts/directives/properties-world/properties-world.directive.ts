@@ -3,6 +3,7 @@ import {RootsConst} from "../../core/constants/roots.const";
 import {IScope} from "angular";
 import {IWorld} from "../../models";
 import {minetestService} from "../../services";
+import {AxiosError} from "axios";
 
 interface IViewModel {
     openPropertiesWorldLightbox(): void;
@@ -29,7 +30,6 @@ class Controller implements ng.IController, IViewModel {
     }
 
     $onInit() {
-        console.log("properties" + " " + this.world)
     }
 
     $onDestroy() {
@@ -44,8 +44,7 @@ class Controller implements ng.IController, IViewModel {
     }
 
     async updateWorld(): Promise<void> {
-        let world = {
-            id: this.world._id,
+        let world: IWorld = {
             owner_id: this.world.owner_id,
             owner_name: this.world.owner_name,
             owner_login: this.world.owner_login,
@@ -57,18 +56,17 @@ class Controller implements ng.IController, IViewModel {
             selected: false,
             img: this.world.img,
             shared: this.world.shared,
-            address: this.world.address,
+            address: this.world.address
         }
-        let response = await minetestService.update(world);
-        if (response) {
-            toasts.confirm('minetest.world.create.confirm');
-        } else {
+        minetestService.update(this.world)
+            .then(() => {
+                toasts.confirm('minetest.world.create.confirm');
+                this.closePropertiesLightbox();
+                this.$scope.$eval(this.$scope['vm']['onCreateWorld']());
+            }).catch((err: AxiosError) => {
             toasts.warning('minetest.world.create.error');
-        }
+        })
     }
-
-
-
 }
 
 function directive() {

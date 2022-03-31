@@ -4,6 +4,7 @@ import {IScope} from "angular";
 import {IWorld} from "../../models";
 import {DateUtils} from "../../utils/date.utils";
 import {minetestService} from "../../services";
+import {AxiosError} from "axios";
 
 interface IViewModel {
     openCreateLightbox();
@@ -53,14 +54,15 @@ class Controller implements ng.IController, IViewModel {
             selected: false,
             address: "minetest.support-ent.fr"
         }
-        let response = await minetestService.create(this.world);
-        if (response) {
-            toasts.confirm('minetest.world.create.confirm');
-            this.closeCreateLightbox();
-            this.$scope.$eval(this.$scope['vm']['onCreateWorld']());
-        } else {
+        minetestService.create(this.world)
+            .then(() => {
+                toasts.confirm('minetest.world.create.confirm');
+                this.closeCreateLightbox();
+                this.$scope.$eval(this.$scope['vm']['onCreateWorld']());
+            }).catch((err: AxiosError) => {
             toasts.warning('minetest.world.create.error');
-        }
+
+        })
     }
 
 }
