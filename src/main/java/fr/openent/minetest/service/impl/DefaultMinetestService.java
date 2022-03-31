@@ -37,7 +37,7 @@ public class DefaultMinetestService implements MinetestService {
                                 resp.result().bodyAsJsonObject().getJsonArray(Field.MESSAGE).getString(0) + ";" +
                                         resp.result().bodyAsJsonObject().getString(Field.DATA);
                         String message = String.format("[Minetest@%s::" + action + "]: An error has occurred " +
-                                        "trough python server: %s",
+                                        "through python server: %s",
                                 this.getClass().getSimpleName(), error);
                         log.error(message, error);
                         promise.fail(message);

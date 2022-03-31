@@ -5,8 +5,6 @@ import fr.openent.minetest.controller.MinetestController;
 import fr.openent.minetest.service.ServiceFactory;
 import fr.wseduc.mongodb.MongoDb;
 import org.entcore.common.http.BaseServer;
-import org.entcore.common.neo4j.Neo4j;
-import org.entcore.common.sql.Sql;
 import org.entcore.common.storage.Storage;
 import org.entcore.common.storage.StorageFactory;
 
@@ -20,7 +18,7 @@ public class Minetest extends BaseServer {
 		Storage storage = new StorageFactory(vertx, config).getStorage();
 		MinetestConfig minetestConfig = new MinetestConfig(config);
 
-		ServiceFactory serviceFactory = new ServiceFactory(vertx, storage, minetestConfig, Neo4j.getInstance(), Sql.getInstance(),
+		ServiceFactory serviceFactory = new ServiceFactory(vertx, minetestConfig,
 				MongoDb.getInstance());
 
 		addController(new MinetestController(serviceFactory));

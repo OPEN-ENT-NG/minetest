@@ -3,6 +3,7 @@ package fr.openent.minetest.service.impl;
 import fr.openent.minetest.config.MinetestConfig;
 import fr.openent.minetest.core.constants.Field;
 import fr.openent.minetest.service.MinetestService;
+import fr.openent.minetest.service.ServiceFactory;
 import fr.openent.minetest.service.WorldService;
 import fr.wseduc.mongodb.MongoDb;
 import io.vertx.core.*;
@@ -15,6 +16,8 @@ import org.entcore.common.user.UserInfos;
 
 import java.util.List;
 
+import static sun.tools.jconsole.Messages.CREATE;
+
 
 public class DefaultWorldService implements WorldService {
 
@@ -24,11 +27,11 @@ public class DefaultWorldService implements WorldService {
     private final MinetestConfig minetestConfig;
     private final MinetestService minetestService;
 
-    public DefaultWorldService(String collection, MongoDb mongo, MinetestConfig minetestConfig, MinetestService minetestService) {
+    public DefaultWorldService(String collection, MongoDb mongo, ServiceFactory serviceFactory) {
         this.collection = collection;
         this.mongoDb = mongo;
-        this.minetestConfig = minetestConfig;
-        this.minetestService = minetestService;
+        this.minetestConfig = serviceFactory.minetestConfig();
+        this.minetestService = serviceFactory.minetestService();
     }
 
     @Override
@@ -77,7 +80,7 @@ public class DefaultWorldService implements WorldService {
     /**
      * Create World
      *
-     * @param user User Object containing user id
+     * @param userInfos User Object containing user id
      * @param body JsonObject containing the data for the world
      */
     @Override
@@ -109,7 +112,7 @@ public class DefaultWorldService implements WorldService {
                                 null, sortByDate)
                                 .onSuccess(resAllUserWorlds -> {
                                     JsonObject worldCreated = resAllUserWorlds.getJsonObject(0);
-                                    minetestService.action(worldCreated,Field.CREATE)
+                                    minetestService.action(worldCreated,CREATE)
                                             .onSuccess(promise::complete)
                                             .onFailure(finalErr -> promise.fail(finalErr.getMessage()));
                                 })

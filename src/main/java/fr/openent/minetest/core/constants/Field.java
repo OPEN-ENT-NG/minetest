@@ -26,12 +26,6 @@ public class Field {
     public static final String MESSAGE = "message";
     public static final String DATA = "data";
 
-    //Minetest API
-    public static final String CREATE = "create";
-    public static final String OPEN = "open";
-    public static final String CLOSE = "close";
-    public static final String DELETE = "delete";
-
     // Config
     public static final String MINETEST_DOWNLOAD = "minetest-download";
     public static final String MINETESTDOWNLOAD = "minetestDownload";
