@@ -1,25 +1,23 @@
 import {ng, toasts} from "entcore";
 import {RootsConst} from "../../core/constants/roots.const";
 import {IScope} from "angular";
-import {IWorld, Worlds} from "../../models";
+import {IWorld} from "../../models";
 import {minetestService} from "../../services";
 
 interface IViewModel {
     openDeleteWorldLightbox(): void;
     closeDeleteLightbox(): void;
     deleteWorld(): Promise<void>;
-    getSelectedWorlds(): Array<IWorld>;
     lightbox: any;
 
     // props
-    worlds: Worlds;
+    world: IWorld;
 }
 
 class Controller implements ng.IController, IViewModel {
     lightbox: any;
-    selectedWorld: Array<IWorld>;
 
-    worlds: Worlds;
+    world: IWorld;
 
     constructor(private $scope: IScope)
     {
@@ -29,11 +27,6 @@ class Controller implements ng.IController, IViewModel {
     }
 
     $onInit() {
-        this.selectedWorld = this.worlds.all.filter((world: IWorld) => world.selected);
-    }
-
-    getSelectedWorlds(): Array<IWorld> {
-        return this.worlds.all.filter((world: IWorld) => world.selected);
     }
 
     $onDestroy() {
@@ -44,15 +37,7 @@ class Controller implements ng.IController, IViewModel {
     }
 
     async deleteWorld(): Promise<void> {
-        let selectedWorldIs = Array<String>();
-
-        this.worlds.all
-            .filter((world: IWorld) => world.selected)
-            .forEach(world => {
-                if (world.selected) selectedWorldIs.push(world._id);
-            })
-
-        let response = await minetestService.delete(selectedWorldIs);
+        let response = await minetestService.delete(this.world);
         if (response) {
             toasts.confirm('minetest.world.delete.confirm');
             this.closeDeleteLightbox();
@@ -72,8 +57,8 @@ function directive() {
         restrict: 'E',
         templateUrl: `${RootsConst.directive}delete-world/delete-world.html`,
         scope: {
-            onDeleteWorld: '&',
-            worlds: '=',
+            world: '=',
+            onDeleteWorld: '&'
         },
         controllerAs: 'vm',
         bindToController: true,
