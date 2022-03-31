@@ -2,6 +2,7 @@ package fr.openent.minetest.service.impl;
 
 import fr.openent.minetest.config.MinetestConfig;
 import fr.openent.minetest.core.constants.Field;
+import fr.openent.minetest.enums.MinestestServiceAction;
 import fr.openent.minetest.service.MinetestService;
 import fr.openent.minetest.service.ServiceFactory;
 import fr.openent.minetest.service.WorldService;
@@ -15,9 +16,6 @@ import org.entcore.common.mongodb.MongoDbResult;
 import org.entcore.common.user.UserInfos;
 
 import java.util.List;
-
-import static sun.tools.jconsole.Messages.CREATE;
-
 
 public class DefaultWorldService implements WorldService {
 
@@ -112,7 +110,7 @@ public class DefaultWorldService implements WorldService {
                                 null, sortByDate)
                                 .onSuccess(resAllUserWorlds -> {
                                     JsonObject worldCreated = resAllUserWorlds.getJsonObject(0);
-                                    minetestService.action(worldCreated,CREATE)
+                                    minetestService.action(worldCreated, MinestestServiceAction.CREATE)
                                             .onSuccess(promise::complete)
                                             .onFailure(finalErr -> promise.fail(finalErr.getMessage()));
                                 })

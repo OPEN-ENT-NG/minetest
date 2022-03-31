@@ -2,6 +2,7 @@ package fr.openent.minetest.service.impl;
 
 import fr.openent.minetest.config.MinetestConfig;
 import fr.openent.minetest.core.constants.Field;
+import fr.openent.minetest.enums.MinestestServiceAction;
 import fr.openent.minetest.service.MinetestService;
 import io.vertx.core.Future;
 import io.vertx.core.Promise;
@@ -23,7 +24,7 @@ public class DefaultMinetestService implements MinetestService {
     }
 
     @Override
-    public Future<JsonObject> action(JsonObject body, String action) {
+    public Future<JsonObject> action(JsonObject body, MinestestServiceAction action) {
         Promise<JsonObject> promise = Promise.promise();
 
         for(String name : body.fieldNames()){
