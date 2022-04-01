@@ -3,7 +3,6 @@ package fr.openent.minetest.service;
 import fr.openent.minetest.Minetest;
 import fr.openent.minetest.config.MinetestConfig;
 import fr.openent.minetest.service.impl.DefaultMinetestService;
-import fr.openent.minetest.service.impl.DefaultMongoService;
 import fr.openent.minetest.service.impl.DefaultWorldService;
 import fr.wseduc.mongodb.MongoDb;
 import io.vertx.core.Vertx;
@@ -40,10 +39,7 @@ public class ServiceFactory {
         return new DefaultMinetestService(this.vertx, this.minetestConfig);
     }
 
-    public MongoService mongoService() { return new DefaultMongoService(Minetest.WORLD_COLLECTION, mongoDb);
-    }
-
     public WorldService worldService() {
-        return new DefaultWorldService(this);
+        return new DefaultWorldService(this, Minetest.WORLD_COLLECTION, mongoDb);
     }
 }
