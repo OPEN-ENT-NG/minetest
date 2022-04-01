@@ -1,10 +1,11 @@
-import {ng, notify, toasts} from "entcore";
+import {moment, ng, notify, toasts} from "entcore";
 import {RootsConst} from "../../core/constants/roots.const";
 import {IScope} from "angular";
 import {IWorld} from "../../models";
 import * as Clipboard from 'clipboard';
 import {minetestService} from "../../services";
 import {AxiosError} from "axios";
+import {DateUtils} from "../../utils/date.utils";
 
 interface IViewModel {
     setStatusWorld(currentWorld: IWorld): void;
@@ -42,7 +43,8 @@ class Controller implements ng.IController, IViewModel {
 
     setStatusWorld(currentWorld: IWorld): void {
         this.world.status = !currentWorld.status;
-        minetestService.update(this.world)
+        this.world.updated_at = DateUtils.format(moment().startOf('minute'), "DD/MM/YYYY HH:mm");
+        minetestService.updateStatus(this.world)
             .then(() => {
                 toasts.confirm('minetest.world.update.status.confirm');
                 this.$scope.$eval(this.$scope['vm']['onCurrentWorld']());

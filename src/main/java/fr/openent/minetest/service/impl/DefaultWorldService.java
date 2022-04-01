@@ -152,7 +152,7 @@ public class DefaultWorldService implements WorldService {
             worldQuery.put(Field.CREATED_AT, createdAt);
         }
         if(updatedAt != null) {
-            worldQuery.put(Field.UPDATE_AT, updatedAt);
+            worldQuery.put(Field.UPDATED_AT, updatedAt);
         }
         if(img != null) {
             worldQuery.put(Field.IMG, img);

@@ -25,6 +25,15 @@ public interface WorldService {
      * @param body Data to store
      * @return Future {@link Future<JsonObject>} containing new world
      */
+    Future<JsonObject> update(UserInfos user, JsonObject body);
+
+    /**
+     * Update Status
+     *
+     * @param user {@link UserInfos}
+     * @param body Data to store
+     * @return Future {@link Future<JsonObject>} containing new world
+     */
     Future<JsonObject> updateStatus(UserInfos user, JsonObject body);
 
     /**

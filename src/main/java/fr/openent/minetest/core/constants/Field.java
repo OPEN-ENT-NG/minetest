@@ -14,7 +14,7 @@ public class Field {
     public static final String OWNER_NAME = "owner_name";
     public static final String OWNER_LOGIN = "owner_login";
     public static final String CREATED_AT = "created_at";
-    public static final String UPDATE_AT = "update_at";
+    public static final String UPDATED_AT = "updated_at";
     public static final String IMG = "img";
     public static final String SHARED = "shared";
     public static final String TITLE = "title";

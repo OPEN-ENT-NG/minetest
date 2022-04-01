@@ -14,6 +14,8 @@ export interface IMinetestService {
 
     update(worldBody: IWorld): Promise<AxiosResponse>;
 
+    updateStatus(worldBody: IWorld): Promise<AxiosResponse>;
+
     delete(world: IWorld): Promise<AxiosResponse>;
 }
 
@@ -42,6 +44,10 @@ export const minetestService: IMinetestService = {
     },
 
     update: (worldBody: IWorld): Promise<AxiosResponse> => {
+        return http.put(`/minetest/worlds`, worldBody);
+    },
+
+    updateStatus: (worldBody: IWorld): Promise<AxiosResponse> => {
         return http.put(`/minetest/worlds/status`, worldBody);
     },
 
