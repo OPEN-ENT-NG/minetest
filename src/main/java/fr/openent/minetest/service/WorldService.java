@@ -19,6 +19,13 @@ public interface WorldService {
                           String name, JsonObject sortJson);
 
     /**
+     * create world in Mongo
+     * @param body body to create in Mongo
+     * @return FutureObject containing world {@link Void}
+     */
+    Future<Void> createMongo(JsonObject body);
+
+    /**
      * Create World
      *
      * @param body Data to store

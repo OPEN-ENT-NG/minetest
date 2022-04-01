@@ -94,30 +94,39 @@ public class DefaultWorldService implements WorldService {
         //get New Port
         JsonObject sortByPort = new JsonObject().put(Field.PORT, 1);
         get(null,null,null,null,null,null,null,sortByPort)
-                .onSuccess(res -> {
+                .compose(res ->  {
                     int newPort = getNewPort(res);
                     body.put(Field.PORT, newPort);
-                    mongoDb.insert(this.collection, body, MongoDbResult.validResultHandler(result -> {
-                        if(result.isLeft()) {
-                            String message = String.format("[Minetest@%s::createWorld]: An error has occurred while creating new world: %s",
-                                    this.getClass().getSimpleName(), result.left().getValue());
-                            log.error(message, result.left().getValue());
-                            promise.fail(message);
-                            return;
-                        }
-                        JsonObject sortByDate = new JsonObject().put(Field.CREATED_AT, -1);
-                        get(userInfos.getUserId(), null,null,null,null,null,
-                                null, sortByDate)
-                                .onSuccess(resAllUserWorlds -> {
-                                    JsonObject worldCreated = resAllUserWorlds.getJsonObject(0);
-                                    minetestService.action(worldCreated, MinestestServiceAction.CREATE)
-                                            .onSuccess(promise::complete)
-                                            .onFailure(finalErr -> promise.fail(finalErr.getMessage()));
-                                })
-                                .onFailure(errAllUserWorlds -> promise.fail(errAllUserWorlds.getMessage()));
-                    }));
+                    return createMongo(body);
                 })
+                .compose(res ->  {
+                    JsonObject sortByDate = new JsonObject().put(Field.CREATED_AT, -1);
+                    return get(userInfos.getUserId(), null,null,null,null,null,
+                            null, sortByDate);
+                })
+                .compose(res -> {
+                    JsonObject worldCreated = res.getJsonObject(0);
+                    return minetestService.action(worldCreated, MinestestServiceAction.CREATE);
+                })
+                .onSuccess(promise::complete)
                 .onFailure(err -> promise.fail(err.getMessage()));
+        return promise.future();
+    }
+
+    @Override
+    public Future<Void> createMongo(JsonObject body) {
+        Promise<Void> promise = Promise.promise();
+
+        mongoDb.insert(this.collection, body, MongoDbResult.validResultHandler(result -> {
+            if(result.isLeft()) {
+                String message = String.format("[Minetest@%s::createWorld]: An error has occurred while creating new world: %s",
+                        this.getClass().getSimpleName(), result.left().getValue());
+                log.error(message, result.left().getValue());
+                promise.fail(message);
+                return;
+            }
+            promise.complete();
+        }));
         return promise.future();
     }
 
