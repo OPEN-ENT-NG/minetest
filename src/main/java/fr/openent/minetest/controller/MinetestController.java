@@ -70,13 +70,13 @@ public class MinetestController extends ControllerHelper {
                 .onFailure(err -> renderError(request))));
     }
 
-    @Put("/worlds")
-    @ApiDoc("Update world")
+    @Put("/worlds/status")
+    @ApiDoc("Update status world")
     @SecuredAction(value = "", type = ActionType.AUTHENTICATED)
     public void putWorld(final HttpServerRequest request) {
         RequestUtils.bodyToJson(request, pathPrefix + Field.WORLD, body
                 -> UserUtils.getUserInfos(eb, request, user
-                -> worldService.update(user, body)
+                -> worldService.updateStatus(user, body)
                             .onSuccess(res -> renderJson(request, body))
                             .onFailure(err -> renderError(request))));
     }

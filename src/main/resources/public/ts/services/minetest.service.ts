@@ -42,7 +42,7 @@ export const minetestService: IMinetestService = {
     },
 
     update: (worldBody: IWorld): Promise<AxiosResponse> => {
-        return http.put(`/minetest/worlds`, worldBody);
+        return http.put(`/minetest/worlds/status`, worldBody);
     },
 
     delete: (world: IWorld): Promise<AxiosResponse> => {

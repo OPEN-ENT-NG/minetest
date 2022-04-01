@@ -24,6 +24,7 @@ public class Field {
     public static final String METADATA = "metadata";
     public static final String LINK = "link";
     public static final String MESSAGE = "message";
+    public static final String STATUS = "status";
     public static final String DATA = "data";
 
     // Config

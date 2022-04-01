@@ -1,8 +1,10 @@
-import {ng, notify} from "entcore";
+import {ng, notify, toasts} from "entcore";
 import {RootsConst} from "../../core/constants/roots.const";
 import {IScope} from "angular";
 import {IWorld} from "../../models";
 import * as Clipboard from 'clipboard';
+import {minetestService} from "../../services";
+import {AxiosError} from "axios";
 
 interface IViewModel {
     setStatusWorld(currentWorld: IWorld): void;
@@ -40,8 +42,14 @@ class Controller implements ng.IController, IViewModel {
 
     setStatusWorld(currentWorld: IWorld): void {
         this.world.status = !currentWorld.status;
+        minetestService.update(this.world)
+            .then(() => {
+                toasts.confirm('minetest.world.update.status.confirm');
+                this.$scope.$eval(this.$scope['vm']['onCurrentWorld']());
+            }).catch((err: AxiosError) => {
+            toasts.warning('minetest.world.create.error');
+        })
     }
-
 }
 
 function directive() {
