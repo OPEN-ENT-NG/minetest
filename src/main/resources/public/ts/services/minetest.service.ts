@@ -55,7 +55,7 @@ export const minetestService: IMinetestService = {
         //     });
         // }
 
-        return http.delete(`/minetest/worlds?&id=${world._id}`);
+        return http.delete(`/minetest/worlds?id=${world._id}&port=${world.port}`);
     }
 };
 

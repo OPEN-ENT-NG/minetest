@@ -2,6 +2,7 @@ package fr.openent.minetest.controller;
 
 import fr.openent.minetest.config.MinetestConfig;
 import fr.openent.minetest.core.constants.Field;
+import fr.openent.minetest.service.MongoService;
 import fr.openent.minetest.service.ServiceFactory;
 import fr.openent.minetest.service.WorldService;
 import fr.wseduc.rs.*;
@@ -19,6 +20,7 @@ import java.util.List;
 
 public class MinetestController extends ControllerHelper {
     private final WorldService worldService;
+    private final MongoService mongoService;
 
     private final EventStore eventStore;
     private final MinetestConfig minetestConfig;
@@ -27,6 +29,7 @@ public class MinetestController extends ControllerHelper {
         this.worldService = serviceFactory.worldService();
         this.eventStore = EventStoreFactory.getFactory().getEventStore(fr.openent.minetest.Minetest.class.getSimpleName());
         this.minetestConfig = serviceFactory.minetestConfig();
+        this.mongoService = serviceFactory.mongoService();
     }
 
     @Get("")
@@ -53,7 +56,7 @@ public class MinetestController extends ControllerHelper {
         String shared = request.getParam(Field.SHARED);
         String title = request.getParam(Field.TITLE);
 
-        UserUtils.getUserInfos(eb, request, user -> worldService.get(ownerId, ownerName, createdAt, updatedAt, img,
+        UserUtils.getUserInfos(eb, request, user -> mongoService.get(ownerId, ownerName, createdAt, updatedAt, img,
                         shared, title, new JsonObject())
                 .onSuccess(world -> renderJson(request, world))
                 .onFailure(err -> renderError(request)));
@@ -90,7 +93,8 @@ public class MinetestController extends ControllerHelper {
             return;
         }
         List<String> ids = request.params().getAll(Field.ID);
-        UserUtils.getUserInfos(eb, request, user -> worldService.delete(user, ids)
+        List<String> ports = request.params().getAll(Field.PORT);
+        UserUtils.getUserInfos(eb, request, user -> worldService.delete(user, ids, ports)
                 .onSuccess(res -> renderJson(request, res))
                 .onFailure(err -> renderError(request)));
 
