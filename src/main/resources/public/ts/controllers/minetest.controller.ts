@@ -59,9 +59,9 @@ class Controller implements ng.IController {
         this.currentWorld = this.worlds.all[0];
     }
 
-    setStatus(world): void {
-        let open = lang.translate('minetest.open');
-        let close = lang.translate('minetest.close');
+    setStatus(world: IWorld): String {
+        let open: String = lang.translate('minetest.open');
+        let close: String = lang.translate('minetest.close');
         if(world.status) {
             return open;
         } else return close;
