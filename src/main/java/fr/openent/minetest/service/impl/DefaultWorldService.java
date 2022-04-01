@@ -2,6 +2,9 @@ package fr.openent.minetest.service.impl;
 
 import fr.openent.minetest.config.MinetestConfig;
 import fr.openent.minetest.core.constants.Field;
+import fr.openent.minetest.enums.MinestestServiceAction;
+import fr.openent.minetest.service.MinetestService;
+import fr.openent.minetest.service.ServiceFactory;
 import fr.openent.minetest.service.WorldService;
 import fr.wseduc.mongodb.MongoDb;
 import io.vertx.core.*;
@@ -14,29 +17,34 @@ import org.entcore.common.user.UserInfos;
 
 import java.util.List;
 
-
 public class DefaultWorldService implements WorldService {
 
     private final MongoDb mongoDb;
     private final String collection;
     private final Logger log = LoggerFactory.getLogger(DefaultWorldService.class);
     private final MinetestConfig minetestConfig;
+    private final MinetestService minetestService;
 
-    public DefaultWorldService(String collection, MongoDb mongo, MinetestConfig minetestConfig) {
+    public DefaultWorldService(String collection, MongoDb mongo, ServiceFactory serviceFactory) {
         this.collection = collection;
         this.mongoDb = mongo;
-        this.minetestConfig = minetestConfig;
+        this.minetestConfig = serviceFactory.minetestConfig();
+        this.minetestService = serviceFactory.minetestService();
     }
 
     @Override
     public Future<JsonArray> get(String ownerId, String ownerName, String createdAt, String updatedAt,
-                                 String img, String shared, String name) {
+                                 String img, String shared, String name, JsonObject sortJson) {
         Promise<JsonArray> promise = Promise.promise();
 
-        JsonObject worldQuery = new JsonObject()
-                .put(Field.OWNER_ID, ownerId)
-                .put(Field.OWNER_NAME, ownerName);
+        JsonObject worldQuery = new JsonObject();
 
+        if(ownerId != null) {
+            worldQuery.put(Field.OWNER_ID, ownerId);
+        }
+        if(ownerName != null) {
+            worldQuery.put(Field.OWNER_NAME, ownerName);
+        }
         if(createdAt != null) {
             worldQuery.put(Field.CREATED_AT, createdAt);
         }
@@ -53,29 +61,9 @@ public class DefaultWorldService implements WorldService {
             worldQuery.put(Field.TITLE, name);
         }
 
-        mongoDb.find(this.collection, worldQuery, MongoDbResult.validResultsHandler(result -> {
+        mongoDb.find(this.collection, worldQuery, sortJson, null, MongoDbResult.validResultsHandler(result -> {
             if(result.isLeft()) {
                 String message = String.format("[Minetest@%s::getWorlds] An error has occured while finding worlds list: %s",
-                        this.getClass().getSimpleName(), result.left().getValue());
-                log.error(message, result.left().getValue());
-                promise.fail(message);
-                return;
-            }
-            promise.complete(result.right().getValue());
-        }));
-        return promise.future();
-    }
-
-    @Override
-    public Future<JsonArray> getAll() {
-        Promise<JsonArray> promise = Promise.promise();
-
-        JsonObject sortByPort = new JsonObject().put(Field.PORT, 1);
-
-        mongoDb.find(this.collection, new JsonObject(), sortByPort, null, MongoDbResult.validResultsHandler(result -> {
-
-            if(result.isLeft()) {
-                String message = String.format("[Minetest@%s::getAll] An error has occured while finding worlds list: %s",
                         this.getClass().getSimpleName(), result.left().getValue());
                 log.error(message, result.left().getValue());
                 promise.fail(message);
@@ -90,40 +78,55 @@ public class DefaultWorldService implements WorldService {
     /**
      * Create World
      *
-     * @param user User Object containing user id
+     * @param userInfos User Object containing user id
      * @param body JsonObject containing the data for the world
      */
     @Override
-    public Future<JsonObject> create(JsonObject body, String fileId, String metadata) {
+    public Future<JsonObject> create(JsonObject body, UserInfos userInfos) {
         Promise<JsonObject> promise = Promise.promise();
 
-        if(fileId != null) {
-            body.put(Field.FILEID, fileId);
-        }
-        if(metadata != null) {
-            body.put(Field.METADATA, metadata);
-        }
+        //add user Login
+        body.put(Field.OWNER_LOGIN, userInfos.getLogin());
 
         //add link to minetest server
         body.put(Field.LINK, minetestConfig.minetestServer());
 
         //get New Port
-        getAll().onSuccess(res -> {
+        JsonObject sortByPort = new JsonObject().put(Field.PORT, 1);
+        get(null,null,null,null,null,null,null,sortByPort)
+                .compose(res ->  {
                     int newPort = getNewPort(res);
                     body.put(Field.PORT, newPort);
-                    mongoDb.insert(this.collection, body, MongoDbResult.validResultHandler(result -> {
-                        if(result.isLeft()) {
-                            String message = String.format("[Minetest@%s::createWorld]: An error has occurred while " +
-                                            "creating new world: %s",
-                                    this.getClass().getSimpleName(), result.left().getValue());
-                            log.error(message, result.left().getValue());
-                            promise.fail(message);
-                            return;
-                        }
-                        promise.complete(result.right().getValue());
-                    }));
-        })
+                    return createMongo(body);
+                })
+                .compose(res ->  {
+                    JsonObject sortByDate = new JsonObject().put(Field.CREATED_AT, -1);
+                    return get(userInfos.getUserId(), null,null,null,null,null,
+                            null, sortByDate);
+                })
+                .compose(res -> {
+                    JsonObject worldCreated = res.getJsonObject(0);
+                    return minetestService.action(worldCreated, MinestestServiceAction.CREATE);
+                })
+                .onSuccess(promise::complete)
                 .onFailure(err -> promise.fail(err.getMessage()));
+        return promise.future();
+    }
+
+    @Override
+    public Future<Void> createMongo(JsonObject body) {
+        Promise<Void> promise = Promise.promise();
+
+        mongoDb.insert(this.collection, body, MongoDbResult.validResultHandler(result -> {
+            if(result.isLeft()) {
+                String message = String.format("[Minetest@%s::createWorld]: An error has occurred while creating new world: %s",
+                        this.getClass().getSimpleName(), result.left().getValue());
+                log.error(message, result.left().getValue());
+                promise.fail(message);
+                return;
+            }
+            promise.complete();
+        }));
         return promise.future();
     }
 

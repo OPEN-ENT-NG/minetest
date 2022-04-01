@@ -13,7 +13,6 @@ import io.vertx.core.json.JsonObject;
 import org.entcore.common.controller.ControllerHelper;
 import org.entcore.common.events.EventStore;
 import org.entcore.common.events.EventStoreFactory;
-import org.entcore.common.storage.Storage;
 import org.entcore.common.user.UserUtils;
 
 import java.util.List;
@@ -23,13 +22,11 @@ public class MinetestController extends ControllerHelper {
 
     private final EventStore eventStore;
     private final MinetestConfig minetestConfig;
-    private final Storage storage;
 
-    public MinetestController(ServiceFactory serviceFactory, Storage storage) {
+    public MinetestController(ServiceFactory serviceFactory) {
         this.worldService = serviceFactory.worldService();
         this.eventStore = EventStoreFactory.getFactory().getEventStore(fr.openent.minetest.Minetest.class.getSimpleName());
         this.minetestConfig = serviceFactory.minetestConfig();
-        this.storage = storage;
     }
 
     @Get("")
@@ -57,7 +54,7 @@ public class MinetestController extends ControllerHelper {
         String title = request.getParam(Field.TITLE);
 
         UserUtils.getUserInfos(eb, request, user -> worldService.get(ownerId, ownerName, createdAt, updatedAt, img,
-                        shared, title)
+                        shared, title, new JsonObject())
                 .onSuccess(world -> renderJson(request, world))
                 .onFailure(err -> renderError(request)));
     }
@@ -68,33 +65,9 @@ public class MinetestController extends ControllerHelper {
     public void postWorld(final HttpServerRequest request) {
         RequestUtils.bodyToJson(request, pathPrefix + Field.WORLD, body
                 -> UserUtils.getUserInfos(eb, request, user
-                -> worldService.create(body, null, null)
-                            .onSuccess(res -> renderJson(request, body))
-                            .onFailure(err -> renderError(request))));
-    }
-
-    @Post("/worlds/attachment")
-    @ApiDoc("Create world with an attachment")
-    @SecuredAction(value = "", type = ActionType.AUTHENTICATED)
-    public void postWorldWithFile(HttpServerRequest request) {
-        RequestUtils.bodyToJson(request, pathPrefix + Field.WORLD, body
-                -> UserUtils.getUserInfos(eb, request, user -> storage.writeUploadFile(request, resultUpload -> {
-                    if (!"ok".equals(resultUpload.getString("status"))) {
-                        String message = String.format("[Minetest@%s::createWorld]: " +
-                                "An error has occurred while creating world with an image: %s",
-                                this.getClass().getSimpleName());
-                log.error(message + " " + resultUpload.getString(Field.MESSAGE));
-                renderError(request);
-                return;
-            }
-            String file_id = resultUpload.getString(Field._ID);
-            String metadata = resultUpload.getJsonObject(Field.METADATA).toString();
-
-            worldService.create(body, file_id, metadata)
-                            .onSuccess(res -> renderJson(request, body))
-                            .onFailure(err -> renderError(request));
-
-        })));
+                -> worldService.create(body,user)
+                .onSuccess(res -> renderJson(request, body))
+                .onFailure(err -> renderError(request))));
     }
 
     @Put("/worlds/status")
