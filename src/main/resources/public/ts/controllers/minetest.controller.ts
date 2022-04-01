@@ -1,8 +1,7 @@
-import {model, moment, ng, template, toasts} from 'entcore';
+import {model, moment, ng, toasts, idiom as lang} from 'entcore';
 import {IWorld, Worlds} from "../models";
 import {minetestService} from "../services";
 import {IScope} from "angular";
-import {currentWorld} from "../directives";
 
 class Controller implements ng.IController {
     currentWorld: IWorld;
@@ -58,6 +57,14 @@ class Controller implements ng.IController {
 
     setCurrentWorld(): void {
         this.currentWorld = this.worlds.all[0];
+    }
+
+    setStatus(world): void {
+        let open = lang.translate('minetest.open');
+        let close = lang.translate('minetest.close');
+        if(world.status) {
+            return open;
+        } else return close;
     }
 
     async updateWorld(): Promise<void> {

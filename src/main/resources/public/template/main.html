@@ -27,7 +27,7 @@
     <div class="cards-view twelve">
         <div class="row" ng-show="vm.worlds.all.length > 0">
             <!-- display current world -->
-            <current-world world="vm.currentWorld" on-current-world="vm.updateWorld()"></current-world>
+            <current-world world="vm.currentWorld" on-current-world="vm.refreshWorldList()"></current-world>
             <div class="grid">
                 <div class="flex-card card cell center-component f-row flex-row horizontal-spacing twelve-mobile"
                      data-ng-click="vm.currentWorld = world"
@@ -48,7 +48,7 @@
                         <h4>[[world.title]]</h4>
                         <div class="owner"><h5>[[world.owner_name]]</h5></div>
                         <em>
-                            [[world.status]]
+                            [[vm.setStatus(world)]]
                             <i18n>minetest.the</i18n> [[world.created_at]]
                         </em>
                     </div>
