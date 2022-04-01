@@ -34,7 +34,7 @@ public class DefaultMinetestService implements MinetestService {
             body.put(name,body.getValue(name).toString());
         }
 
-        client.postAbs(serverPythonUrl + "/" + action)
+        client.postAbs(serverPythonUrl + "/" + action.toString())
                 .sendJsonObject(body , resp -> {
                     if(resp.failed() || resp.result().statusCode() != 200) {
                         answerFailure(action, promise, resp);

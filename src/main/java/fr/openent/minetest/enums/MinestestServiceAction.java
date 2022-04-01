@@ -13,7 +13,7 @@ public enum MinestestServiceAction {
         this.action = action;
     }
 
-    public String action() {
+    public String toString() {
         return this.action;
     }
 }
