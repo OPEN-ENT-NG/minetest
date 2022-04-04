@@ -45,5 +45,7 @@
   "minetest.world.open": "Ouvrir le monde",
   "minetest.world.properties": "Propriétés",
   "minetest.world.title": "Nom du monde",
-  "minetest.world.update": "Modifier"
+  "minetest.world.update": "Modifier",
+  "minetest.world.update.confirm": "Modification du monde effectuée avec succès",
+  "minetest.world.update.error": "Une erreur est survenue lors de la modification du monde"
 }

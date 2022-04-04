@@ -1,4 +1,4 @@
-import {moment, ng, toasts} from "entcore";
+import {ng, toasts} from "entcore";
 import {RootsConst} from "../../core/constants/roots.const";
 import {IScope} from "angular";
 import {IWorld} from "../../models";

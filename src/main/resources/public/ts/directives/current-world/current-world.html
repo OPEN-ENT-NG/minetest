@@ -1,4 +1,4 @@
-<div class="worlds">
+<div class="minetestCurrent worlds">
     <div class="card horizontal-spacing-twice vertical-spacing row">
         <div class="center-component">
             <div class="twelve current-container">
@@ -8,8 +8,7 @@
                         [[vm.world.title]]
                     </h2>
                     <!-- information -->
-                    <i class="mdi-information-outline" data-ng-click="vm.setLegendLightboxVisible()"
-                        tooltip="[[translate('minetest.click.display.link')]]">
+                    <i class="mdi-information-outline" data-ng-click="vm.setLegendLightboxVisible()">
                         <span class="tooltip"><i18n>minetest.click.display.link</i18n></span>
                     </i>
                     <h6 ng-show="vm.isLegendVisible" class="three twelve-mobile"><i18n>minetest.info.download.software.link</i18n></h6>
@@ -19,7 +18,8 @@
                 </div>
                 <!-- open/close world -->
                 <div class="six button zero-mobile">
-                    <button ng-click="vm.setStatusWorld(vm.world)" on-current-world="vm.updateWorld()">
+                    <button ng-click="vm.setStatusWorld(vm.world)" on-current-world="vm.updateWorld()"
+                            ng-class="!vm.world.status ? '' : 'custom-cancel'">
                         <i18n ng-show="!vm.world.status">minetest.world.open</i18n>
                         <i18n ng-show="vm.world.status">minetest.world.close</i18n>
                     </button>

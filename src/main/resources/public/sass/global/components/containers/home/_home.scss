@@ -100,7 +100,8 @@
       //width: 35%;
       .img-container {
         img, .img {
-          width: 130px;
+          max-width: 130px;
+          max-height: 130px;
         }
       }
     }
@@ -158,8 +159,52 @@
   }
 }
 
+.minetestProperties {
+  .custom-cancel {
+    color: $minetest-orange;
+    background: $minetest-grey;
+  }
+
+  .custom-cancel:hover {
+    background: $minetest-orange;
+    color: $minetest-white;
+  }
+
+  .custom-button {
+    background: $minetest-orange;
+    color: $minetest-white;
+  }
+
+  .custom-button:hover {
+    background-color: $minetest-dark-orange;
+    box-shadow: none;
+    color: $minetest-white;
+  }
+}
+
 .minetestDelete {
   .responsive-table table thead tr {
+    color: $minetest-white;
+  }
+
+  .custom-cancel {
+    color: $minetest-orange;
+    background: $minetest-grey;
+  }
+
+  .custom-cancel:hover {
+    background: $minetest-orange;
+    color: $minetest-white;
+  }
+
+  .custom-button {
+    background: $minetest-orange;
+    color: $minetest-white;
+  }
+
+  .custom-button:hover {
+    background-color: $minetest-dark-orange;
+    box-shadow: none;
     color: $minetest-white;
   }
 }
@@ -169,4 +214,17 @@ i {
     margin: 10px;
     font-size: 20px;
   }
+}
+
+.minetestCurrent {
+  .custom-cancel {
+    color: $minetest-orange;
+    background: $minetest-grey;
+  }
+
+  .custom-cancel:hover {
+    background: $minetest-orange;
+    color: $minetest-white;
+  }
+
 }
