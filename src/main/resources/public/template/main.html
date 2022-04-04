@@ -29,7 +29,7 @@
             <!-- display current world -->
             <current-world world="vm.currentWorld" on-current-world="vm.refreshWorldList()"></current-world>
             <div class="grid">
-                <div class="flex-card card cell center-component f-row flex-row horizontal-spacing twelve-mobile"
+                <div class="flex-card card cell center-component f-row flex-row twelve-mobile"
                      data-ng-click="vm.currentWorld = world"
                      ng-class="vm.currentWorld == world ? 'active' : ''"
                      ng-repeat="world in vm.worlds.all"
@@ -55,6 +55,6 @@
                 </div>
             </div>
         </div>
-        <toggle-menu world="vm.currentWorld" on-delete-world="vm.refreshWorldList()"></toggle-menu>
+        <toggle-menu world="vm.currentWorld" on-delete-world="vm.refreshWorldList()" ng-if="vm.currentWorld"></toggle-menu>
     </div>
 </div>

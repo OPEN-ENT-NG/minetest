@@ -5,10 +5,6 @@
     justify-content: space-between;
   }
 
-  img {
-    margin-right: 10px;
-  }
-
   .download {
     &-description {
       display: contents;
@@ -34,6 +30,10 @@
   flex-direction: column;
   margin: auto;
   text-align: center;
+
+  img {
+    margin: auto;
+  }
 }
 
 .worlds {
@@ -42,7 +42,7 @@
     align-items: center;
     margin-top: 10px;
     h2 {
-      font-size: 34px;
+      font-size: 26px;
     }
     h6, a {
       margin: 10px 0;
@@ -97,7 +97,7 @@
       @include run-transition(all);
     }
     .icon {
-      width: 35%;
+      //width: 35%;
       .img-container {
         img, .img {
           width: 130px;
