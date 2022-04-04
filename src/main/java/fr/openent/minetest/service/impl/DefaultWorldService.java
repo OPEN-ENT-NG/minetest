@@ -53,8 +53,9 @@ public class DefaultWorldService implements WorldService {
         //get New Port
         JsonObject sortByPort = new JsonObject().put(Field.PORT, 1);
         getMongo(null,null,null,null,null,null,null,sortByPort)
+                .compose(this::getNewPort)
                 .compose(res ->  {
-                    int newPort = getNewPort(res);
+                    int newPort = res;
                     body.put(Field.PORT, newPort);
                     return createMongo(body);
                 })
@@ -72,8 +73,10 @@ public class DefaultWorldService implements WorldService {
         return promise.future();
     }
 
-    private int getNewPort(JsonArray res) {
-        int newPort = minetestConfig.minetestMinPort();
+    private Future<Integer> getNewPort(JsonArray res) {
+        Promise<Integer> promise = Promise.promise();
+
+        Integer newPort = minetestConfig.minetestMinPort();
 
         for(Object world: res) {
             JsonObject worldJson = (JsonObject) world;
@@ -85,7 +88,15 @@ public class DefaultWorldService implements WorldService {
                 newPort ++;
             }
         }
-        return newPort;
+        if(newPort > minetestConfig.minetestMaxPort()) {
+            String message = String.format("[Minetest@%s::createWorld]: The maximum port limit was reach. " +
+                    "Please, contact the administrator to extend the port range.", this.getClass().getSimpleName());
+            log.error(message);
+            promise.fail(message);
+        } else {
+            promise.complete(newPort);
+        }
+        return promise.future();
     }
 
     @Override
