@@ -40,6 +40,6 @@ public class ServiceFactory {
     }
 
     public WorldService worldService() {
-        return new DefaultWorldService(Minetest.WORLD_COLLECTION, mongoDb, this);
+        return new DefaultWorldService(this, Minetest.WORLD_COLLECTION, mongoDb);
     }
 }
