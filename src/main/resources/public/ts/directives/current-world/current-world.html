@@ -1,19 +1,22 @@
 <div class="worlds">
     <div class="card horizontal-spacing-twice vertical-spacing row">
         <div class="center-component">
-            <div class="twelve title-container">
-                <!-- title -->
-                <h2 class="two twelve-mobile">
-                    [[vm.world.title]]
-                </h2>
-                <!-- information -->
-                <i class="mdi-information-outline"
-                   data-ng-click="vm.showInfoDownload()">
-                </i>
-                <h6 class="four twelve-mobile"><i18n>minetest.info.download.software.link</i18n></h6>
-                <a href="https://www.minetest.net/downloads/" target=_blank>
-                    <i18n>minetest.download.software.link</i18n>
-                </a>
+            <div class="twelve current-container">
+                <div class="twelve current-container-title">
+                    <!-- title -->
+                    <h2 class="twelve-mobile">
+                        [[vm.world.title]]
+                    </h2>
+                    <!-- information -->
+                    <i class="mdi-information-outline" data-ng-click="vm.setLegendLightboxVisible()"
+                        tooltip="[[translate('minetest.click.display.link')]]">
+                        <span class="tooltip"><i18n>minetest.click.display.link</i18n></span>
+                    </i>
+                    <h6 ng-show="vm.isLegendVisible" class="three twelve-mobile"><i18n>minetest.info.download.software.link</i18n></h6>
+                    <a ng-show="vm.isLegendVisible" href="https://www.minetest.net/downloads/" target=_blank>
+                        <i18n>minetest.download.software.link</i18n>
+                    </a>
+                </div>
                 <!-- open/close world -->
                 <div class="six button zero-mobile">
                     <button ng-click="vm.setStatusWorld(vm.world)" on-current-world="vm.updateWorld()">
@@ -50,7 +53,7 @@
                 <div class="top-spacing-three">
                     <div class="twelve url-container zero-mobile">
                         <i18n class="bold one cell">minetest.url.address</i18n>
-                        <div class="input-url nine cell">
+                        <div class="input-url eight cell">
                             <input type="text" ng-model="vm.world.address" readonly>
                         </div>
                         <a class="clipboard-link-field" data-clipboard-text="[[vm.world.address]]">
@@ -62,7 +65,7 @@
                 <div>
                     <div class="twelve url-container zero-mobile">
                         <i18n class="bold one cell">minetest.port</i18n>
-                        <div class="input-url nine cell">
+                        <div class="input-url eight cell">
                             <input type="text" ng-model="vm.world.port" readonly>
                         </div>
                         <a class="clipboard-link-field" data-clipboard-text="[[vm.world.port]]">

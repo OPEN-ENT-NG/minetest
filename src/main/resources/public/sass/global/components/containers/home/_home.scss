@@ -37,19 +37,24 @@
 }
 
 .worlds {
-  .title-container {
+  .current-container {
     display: flex;
     align-items: center;
-    padding-top: 10px;
+    margin-top: 10px;
     h2 {
       font-size: 34px;
     }
     h6, a {
+      margin: 10px 0;
       font-size: 13px;
     }
     .button {
       display: flex;
       justify-content: flex-end;
+    }
+    &-title {
+      display: flex;
+      align-items: center;
     }
   }
   .url-container {
@@ -95,12 +100,13 @@
       width: 35%;
       .img-container {
         img, .img {
-          width: 35%;
+          width: 130px;
         }
       }
     }
     .title {
       width: 65%;
+      margin: 10px;
 
       .owner > h5 {
         margin: 0;
@@ -155,5 +161,12 @@
 .minetestDelete {
   .responsive-table table thead tr {
     color: $minetest-white;
+  }
+}
+
+i {
+  &.mdi-information-outline {
+    margin: 10px;
+    font-size: 20px;
   }
 }

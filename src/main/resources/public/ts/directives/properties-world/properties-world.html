@@ -6,12 +6,17 @@
     </button>
 
     <!-- popup modal to update world -->
-    <lightbox show="vm.lightbox.properties" on-close="vm.closeUpdateLightbox()">
-        <!-- title -->
-        <h2>
-            <i18n>minetest.world.properties</i18n>
-        </h2>
+    <lightbox class="minetest-lightbox" show="vm.lightbox.properties" on-close="vm.closeUpdateLightbox()">
 
+        <!-- Title -->
+        <section class="minetest-lightbox-head">
+            <h3>
+                <i18n>minetest.world.properties</i18n>
+            </h3>
+        </section>
+
+        <div class="minetest-lightbox-content">
+        <!-- Image -->
         <section class="minetest-lightbox-content-upload">
             <div class="minetest-lightbox-content-upload-box">
                 <image-select id="img" class="initialFloat cell" default="/img/illustrations/image-default.svg"
@@ -19,41 +24,25 @@
             </div>
         </section>
 
+        <!-- Content -->
         <section class="minetest-lightbox-content-form">
-            <div class="minetest-lightbox-content-form-input-text">
-                <span class="minetest-lightbox-content-form-input-text-title"><i18n>minetest.world.title</i18n></span>
+            <div class="cell twelve minetest-lightbox-content-form-input-text">
+                <span class="cell four minetest-lightbox-content-form-input-text-title"><i18n>minetest.world.title</i18n></span>
                 <input type="text" class="six cell" data-ng-model="vm.world.title" />
             </div>
 
-            <div class="minetest-lightbox-content-form-input-checkbox">
-                <div class="minetest-lightbox-content-form-input-checkbox-password">
-                    <div class="minetest-lightbox-content-form-input-text">
-                        <span class="minetest-lightbox-content-form-input-text-title"><i18n>minetext.password</i18n></span>
-                        <input type="text" class="six cell" data-ng-model="vm.world.password" />
-                    </div>
-                </div>
+            <div class="cell twelve minetest-lightbox-content-form-input-text">
+                <span class="cell four minetest-lightbox-content-form-input-text-title"><i18n>minetest.url.address</i18n></span>
+                <input type="text" class="six cell" data-ng-model="vm.world.address" readonly/>
             </div>
 
-            <div class="twelve">
-                <div class="top-spacing-three">
-                    <div class="twelve url-container zero-mobile">
-                        <i18n class="bold one cell">minetest.url.address</i18n>
-                        <div class="input-url nine cell">
-                            <input type="text" ng-model="vm.world.address" readonly>
-                        </div>
-                    </div>
-                </div>
-                <div>
-                    <div class="twelve url-container zero-mobile">
-                        <i18n class="bold one cell">minetest.port</i18n>
-                        <div class="input-url nine cell">
-                            <input type="text" ng-model="vm.world.port" readonly>
-                        </div>
-                    </div>
-                </div>
+            <div class="cell twelve minetest-lightbox-content-form-input-text">
+                <span class="cell four minetest-lightbox-content-form-input-text-title"><i18n>minetest.port</i18n></span>
+                <input type="text" class="six cell" data-ng-model="vm.world.port" readonly/>
             </div>
 
         </section>
+        </div>
 
         <!-- button action delete -->
         <button class="right-magnet" ng-click="vm.updateWorld()"><i18n>minetest.world.update</i18n></button>

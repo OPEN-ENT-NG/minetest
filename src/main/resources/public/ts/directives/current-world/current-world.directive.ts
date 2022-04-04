@@ -9,8 +9,10 @@ import {DateUtils} from "../../utils/date.utils";
 
 interface IViewModel {
     setStatusWorld(currentWorld: IWorld): void;
+    setLegendLightboxVisible(state: boolean);
 
     isWorldValid(): boolean;
+
 
     // props
     world: IWorld;
@@ -18,6 +20,7 @@ interface IViewModel {
 
 class Controller implements ng.IController, IViewModel {
     world: IWorld;
+    isLegendVisible: boolean;
 
     constructor(private $scope: IScope) {
 
@@ -32,6 +35,8 @@ class Controller implements ng.IController, IViewModel {
         clipboard.on('error', function(e) {
             notify.error('copy.link.error');
         });
+
+        this.isLegendVisible = false;
     }
 
     $onDestroy() {
@@ -51,6 +56,10 @@ class Controller implements ng.IController, IViewModel {
             }).catch((err: AxiosError) => {
             toasts.warning('minetest.world.create.error');
         })
+    }
+
+    setLegendLightboxVisible() {
+        this.isLegendVisible = !this.isLegendVisible;
     }
 }
 
