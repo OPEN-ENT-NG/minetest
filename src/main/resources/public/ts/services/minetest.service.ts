@@ -10,8 +10,6 @@ export interface IMinetestService {
     // Settings
     create(worldBody: IWorld): Promise<AxiosResponse>;
 
-    // createWithAttachment(worldBody: IWorld): Promise<AxiosResponse>;
-
     update(worldBody: IWorld): Promise<AxiosResponse>;
 
     updateStatus(worldBody: IWorld): Promise<AxiosResponse>;
@@ -38,10 +36,6 @@ export const minetestService: IMinetestService = {
     create: (worldBody: IWorld): Promise<AxiosResponse> => {
         return http.post(`/minetest/worlds`, worldBody);
     },
-
-    // createWithAttachment: (worldBody: IWorld): Promise<AxiosResponse> => {
-    //     return http.post(`/minetest/worlds/attachment`, worldBody);
-    // },
 
     update: (worldBody: IWorld): Promise<AxiosResponse> => {
         return http.put(`/minetest/worlds`, worldBody);

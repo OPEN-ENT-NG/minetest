@@ -9,7 +9,7 @@ import {DateUtils} from "../../utils/date.utils";
 
 interface IViewModel {
     setStatusWorld(currentWorld: IWorld): void;
-    setLegendLightboxVisible(state: boolean);
+    setLegendLightboxVisible(): void;
 
     isWorldValid(): boolean;
 
@@ -58,7 +58,7 @@ class Controller implements ng.IController, IViewModel {
         })
     }
 
-    setLegendLightboxVisible() {
+    setLegendLightboxVisible(): void {
         this.isLegendVisible = !this.isLegendVisible;
     }
 }
