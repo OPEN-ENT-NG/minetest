@@ -1,4 +1,4 @@
-import {moment, ng, toasts} from "entcore";
+import {ng, toasts} from "entcore";
 import {RootsConst} from "../../core/constants/roots.const";
 import {IScope} from "angular";
 import {IWorld} from "../../models";
@@ -44,27 +44,13 @@ class Controller implements ng.IController, IViewModel {
     }
 
     async updateWorld(): Promise<void> {
-        let world: IWorld = {
-            owner_id: this.world.owner_id,
-            owner_name: this.world.owner_name,
-            owner_login: this.world.owner_login,
-            created_at: this.world.created_at,
-            updated_at: moment().startOf('day')._d,
-            password: this.world.password,
-            status: false,
-            title: this.world.title,
-            selected: false,
-            img: this.world.img,
-            shared: this.world.shared,
-            address: this.world.address
-        }
         minetestService.update(this.world)
             .then(() => {
-                toasts.confirm('minetest.world.create.confirm');
+                toasts.confirm('minetest.world.update.confirm');
                 this.closePropertiesLightbox();
-                this.$scope.$eval(this.$scope['vm']['onCreateWorld']());
+                this.$scope.$eval(this.$scope['vm']['onUpdateWorld']());
             }).catch((err: AxiosError) => {
-            toasts.warning('minetest.world.create.error');
+            toasts.warning('minetest.world.update.error');
         })
     }
 }

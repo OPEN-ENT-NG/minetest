@@ -48,7 +48,7 @@ public class MinetestController extends ControllerHelper {
         String ownerId = request.getParam(Field.OWNER_ID);
         String ownerName = request.getParam(Field.OWNER_NAME);
         String createdAt = request.getParam(Field.CREATED_AT);
-        String updatedAt = request.getParam(Field.UPDATE_AT);
+        String updatedAt = request.getParam(Field.UPDATED_AT);
         String img = request.getParam(Field.IMG);
         String shared = request.getParam(Field.SHARED);
         String title = request.getParam(Field.TITLE);
@@ -70,10 +70,21 @@ public class MinetestController extends ControllerHelper {
                 .onFailure(err -> renderError(request))));
     }
 
+    @Put("/worlds")
+    @ApiDoc("Update world")
+    @SecuredAction(value = "", type = ActionType.AUTHENTICATED)
+    public void putWorld(final HttpServerRequest request) {
+        RequestUtils.bodyToJson(request, pathPrefix + Field.WORLD, body
+                -> UserUtils.getUserInfos(eb, request, user
+                -> worldService.update(user, body)
+                .onSuccess(res -> renderJson(request, body))
+                .onFailure(err -> renderError(request))));
+    }
+
     @Put("/worlds/status")
     @ApiDoc("Update status world")
     @SecuredAction(value = "", type = ActionType.AUTHENTICATED)
-    public void putWorld(final HttpServerRequest request) {
+    public void putStatus(final HttpServerRequest request) {
         RequestUtils.bodyToJson(request, pathPrefix + Field.WORLD, body
                 -> UserUtils.getUserInfos(eb, request, user
                 -> worldService.updateStatus(user, body)

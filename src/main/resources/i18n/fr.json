@@ -3,6 +3,7 @@
   "minetest.cancel": "Annuler",
   "minetest.copy.url.address": "Copier l'adresse",
   "minetest.add.image": "Ajouter une image",
+  "minetest.click.display.link": "Cliquez pour afficher le lien pour télécharger le logiciel Minetest",
   "minetest.close": "Fermé",
   "minetest.copy.link": "Copier le lien",
   "minetest.copy.link.success": "Le lien est copié dans le presse-papier.",
@@ -33,7 +34,7 @@
   "minetest.title": "Minetest",
   "minetest.title.world": "Titre du monde",
   "minetest.url.address": "Adresse URL",
-  "minetest.url.ent": "minetest.support-ent.fr",
+  "minetest.url.ent": "minetest-dev.support-ent.fr",
   "minetest.world.create.confirm": "Création du monde effectuée avec succès",
   "minetest.world.create.error": "Une erreur est survenue lors de la création du monde",
   "minetest.world.delete.confirm": "Suppression du monde effectuée avec succès",
@@ -44,5 +45,7 @@
   "minetest.world.open": "Ouvrir le monde",
   "minetest.world.properties": "Propriétés",
   "minetest.world.title": "Nom du monde",
-  "minetest.world.update": "Modifier"
+  "minetest.world.update": "Modifier",
+  "minetest.world.update.confirm": "Modification du monde effectuée avec succès",
+  "minetest.world.update.error": "Une erreur est survenue lors de la modification du monde"
 }

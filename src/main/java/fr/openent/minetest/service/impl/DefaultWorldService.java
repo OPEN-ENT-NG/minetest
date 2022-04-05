@@ -120,6 +120,30 @@ public class DefaultWorldService implements WorldService {
     }
 
     @Override
+    public Future<JsonObject> update(UserInfos user, JsonObject body) {
+        Promise<JsonObject> promise = Promise.promise();
+
+        JsonObject worldId = new JsonObject().put(Field._ID, body.getValue(Field._ID));
+        JsonObject title = new JsonObject().put("$set", new JsonObject()
+                .put(Field.TITLE, body.getValue(Field.TITLE))
+                .put(Field.IMG,body.getValue(Field.IMG))
+                .put(Field.UPDATED_AT, body.getValue(Field.UPDATED_AT))
+        );
+
+        mongoDb.update(this.collection, worldId, title, MongoDbResult.validResultHandler(result -> {
+            if(result.isLeft()) {
+                String message = String.format("[Minetest@%s::updateWorld]: An error has occurred while updating world: %s",
+                        this.getClass().getSimpleName(), result.left().getValue());
+                log.error(message, result.left().getValue());
+                promise.fail(message);
+                return;
+            }
+            promise.complete(result.right().getValue());
+        }));
+        return promise.future();
+    }
+
+    @Override
     public Future<JsonObject> delete(UserInfos user, List<String> ids, List<String> ports) {
         Promise<JsonObject> promise = Promise.promise();
         JsonObject query = new JsonObject()
@@ -152,7 +176,7 @@ public class DefaultWorldService implements WorldService {
             worldQuery.put(Field.CREATED_AT, createdAt);
         }
         if(updatedAt != null) {
-            worldQuery.put(Field.UPDATE_AT, updatedAt);
+            worldQuery.put(Field.UPDATED_AT, updatedAt);
         }
         if(img != null) {
             worldQuery.put(Field.IMG, img);

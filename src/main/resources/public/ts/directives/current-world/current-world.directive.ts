@@ -1,15 +1,18 @@
-import {ng, notify, toasts} from "entcore";
+import {moment, ng, notify, toasts} from "entcore";
 import {RootsConst} from "../../core/constants/roots.const";
 import {IScope} from "angular";
 import {IWorld} from "../../models";
 import * as Clipboard from 'clipboard';
 import {minetestService} from "../../services";
 import {AxiosError} from "axios";
+import {DateUtils} from "../../utils/date.utils";
 
 interface IViewModel {
     setStatusWorld(currentWorld: IWorld): void;
+    setLegendLightboxVisible(): void;
 
     isWorldValid(): boolean;
+
 
     // props
     world: IWorld;
@@ -17,6 +20,7 @@ interface IViewModel {
 
 class Controller implements ng.IController, IViewModel {
     world: IWorld;
+    isLegendVisible: boolean;
 
     constructor(private $scope: IScope) {
 
@@ -31,6 +35,8 @@ class Controller implements ng.IController, IViewModel {
         clipboard.on('error', function(e) {
             notify.error('copy.link.error');
         });
+
+        this.isLegendVisible = false;
     }
 
     $onDestroy() {
@@ -42,13 +48,18 @@ class Controller implements ng.IController, IViewModel {
 
     setStatusWorld(currentWorld: IWorld): void {
         this.world.status = !currentWorld.status;
-        minetestService.update(this.world)
+        this.world.updated_at = DateUtils.format(moment().startOf('minute'), "DD/MM/YYYY HH:mm");
+        minetestService.updateStatus(this.world)
             .then(() => {
                 toasts.confirm('minetest.world.update.status.confirm');
                 this.$scope.$eval(this.$scope['vm']['onCurrentWorld']());
             }).catch((err: AxiosError) => {
             toasts.warning('minetest.world.create.error');
         })
+    }
+
+    setLegendLightboxVisible(): void {
+        this.isLegendVisible = !this.isLegendVisible;
     }
 }
 

@@ -5,10 +5,6 @@
     justify-content: space-between;
   }
 
-  img {
-    margin-right: 10px;
-  }
-
   .download {
     &-description {
       display: contents;
@@ -34,22 +30,31 @@
   flex-direction: column;
   margin: auto;
   text-align: center;
+
+  img {
+    margin: auto;
+  }
 }
 
 .worlds {
-  .title-container {
+  .current-container {
     display: flex;
     align-items: center;
-    padding-top: 10px;
+    margin-top: 10px;
     h2 {
-      font-size: 34px;
+      font-size: 26px;
     }
     h6, a {
+      margin: 10px 0;
       font-size: 13px;
     }
     .button {
       display: flex;
       justify-content: flex-end;
+    }
+    &-title {
+      display: flex;
+      align-items: center;
     }
   }
   .url-container {
@@ -92,15 +97,17 @@
       @include run-transition(all);
     }
     .icon {
-      width: 35%;
+      //width: 35%;
       .img-container {
         img, .img {
-          width: 35%;
+          max-width: 130px;
+          max-height: 130px;
         }
       }
     }
     .title {
       width: 65%;
+      margin: 10px;
 
       .owner > h5 {
         margin: 0;
@@ -152,8 +159,72 @@
   }
 }
 
+.minetestProperties {
+  .custom-cancel {
+    color: $minetest-orange;
+    background: $minetest-grey;
+  }
+
+  .custom-cancel:hover {
+    background: $minetest-orange;
+    color: $minetest-white;
+  }
+
+  .custom-button {
+    background: $minetest-orange;
+    color: $minetest-white;
+  }
+
+  .custom-button:hover {
+    background-color: $minetest-dark-orange;
+    box-shadow: none;
+    color: $minetest-white;
+  }
+}
+
 .minetestDelete {
   .responsive-table table thead tr {
     color: $minetest-white;
   }
+
+  .custom-cancel {
+    color: $minetest-orange;
+    background: $minetest-grey;
+  }
+
+  .custom-cancel:hover {
+    background: $minetest-orange;
+    color: $minetest-white;
+  }
+
+  .custom-button {
+    background: $minetest-orange;
+    color: $minetest-white;
+  }
+
+  .custom-button:hover {
+    background-color: $minetest-dark-orange;
+    box-shadow: none;
+    color: $minetest-white;
+  }
+}
+
+i {
+  &.mdi-information-outline {
+    margin: 10px;
+    font-size: 20px;
+  }
+}
+
+.minetestCurrent {
+  .custom-cancel {
+    color: $minetest-orange;
+    background: $minetest-grey;
+  }
+
+  .custom-cancel:hover {
+    background: $minetest-orange;
+    color: $minetest-white;
+  }
+
 }
