@@ -35,7 +35,8 @@ public class MinetestController extends ControllerHelper {
     public void view(HttpServerRequest request) {
         UserUtils.getUserInfos(eb, request, user -> {
             JsonObject config = new JsonObject()
-                    .put(Field.MINETESTDOWNLOAD, this.minetestConfig.minetestDownload());
+                    .put(Field.MINETESTDOWNLOAD, this.minetestConfig.minetestDownload())
+                    .put(Field.MINETEST_SERVER, this.minetestConfig.minetestServer());
             renderView(request, config);
             eventStore.createAndStoreEvent(Field.ACCESS, request);
         });

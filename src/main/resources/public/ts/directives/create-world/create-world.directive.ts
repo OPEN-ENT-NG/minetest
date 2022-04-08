@@ -5,6 +5,8 @@ import {IWorld} from "../../models";
 import {DateUtils} from "../../utils/date.utils";
 import {minetestService} from "../../services";
 
+declare let window: any;
+
 interface IViewModel {
     openCreateLightbox(): void;
     closeCreateLightbox(): void;
@@ -64,7 +66,7 @@ class Controller implements ng.IController, IViewModel {
             img: this.world.img,
             title: this.world.title,
             selected: false,
-            address: "minetest.support-ent.fr"
+            address: window.minetestServer
         }
         minetestService.create(this.world)
             .then(() => {
