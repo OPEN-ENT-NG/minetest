@@ -4,12 +4,12 @@ import {IScope} from "angular";
 import {IWorld} from "../../models";
 import {DateUtils} from "../../utils/date.utils";
 import {minetestService} from "../../services";
-import {AxiosError} from "axios";
 
 interface IViewModel {
-    openCreateLightbox();
-    closeCreateLightbox();
-    createWorld();
+    openCreateLightbox(): void;
+    closeCreateLightbox(): void;
+    createWorld(): Promise<void>;
+    resetForm(): void;
 
     lightbox: any;
     world: IWorld;
@@ -37,7 +37,14 @@ class Controller implements ng.IController, IViewModel {
     }
 
     closeCreateLightbox(): void {
+        this.resetForm();
         this.lightbox.create = false;
+    }
+
+    resetForm() {
+        this.world.title = "";
+        this.world.password = "";
+        this.world.img = "";
     }
 
     async createWorld(): Promise<void> {
@@ -59,7 +66,7 @@ class Controller implements ng.IController, IViewModel {
                 toasts.confirm('minetest.world.create.confirm');
                 this.closeCreateLightbox();
                 this.$scope.$eval(this.$scope['vm']['onCreateWorld']());
-            }).catch((err: AxiosError) => {
+            }).catch(() => {
             toasts.warning('minetest.world.create.error');
 
         })
