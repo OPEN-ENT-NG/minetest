@@ -67,31 +67,6 @@ class Controller implements ng.IController {
         } else return close;
     }
 
-    async updateWorld(): Promise<void> {
-        let world = {
-            id: this.world._id,
-            owner_id: this.world.owner_id,
-            owner_name: this.world.owner_name,
-            owner_login: this.world.owner_login,
-            created_at: this.world.created_at,
-            updated_at: moment().startOf('day')._d,
-            password: this.world.password,
-            status: false,
-            title: this.world.title,
-            selected: false,
-            img: this.world.img,
-            shared: this.world.shared,
-            address: this.world.address,
-        }
-        let response = await minetestService.update(world);
-        if (response) {
-            toasts.confirm('minetest.world.create.confirm');
-        } else {
-            toasts.warning('minetest.world.create.error');
-        }
-    }
-
-    // TODO IS USED TO CALLBACK
     async refreshWorldList() {
         await this.getWorld();
         this.$scope.$apply();
