@@ -10,6 +10,7 @@ interface IViewModel {
     closeCreateLightbox(): void;
     createWorld(): Promise<void>;
     resetForm(): void;
+    isValidForm(): boolean;
 
     lightbox: any;
     world: IWorld;
@@ -45,6 +46,10 @@ class Controller implements ng.IController, IViewModel {
         this.world.title = "";
         this.world.password = "";
         this.world.img = "";
+    }
+
+    isValidForm(): boolean {
+        return this.world && this.world.title.length > 0 && this.world.password.length > 0;
     }
 
     async createWorld(): Promise<void> {
