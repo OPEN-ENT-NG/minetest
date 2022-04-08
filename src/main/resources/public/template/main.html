@@ -21,9 +21,9 @@
         </div>
         <!-- button create world -->
         <create-world class="empty-state-button" on-create-world="vm.refreshWorldList()"></create-world>
-
     </div>
 
+    <!-- Display worlds -->
     <div class="cards-view twelve">
         <div class="row" ng-show="vm.worlds.all.length > 0">
             <!-- display current world -->
@@ -36,7 +36,7 @@
                      data-ng-model="selected">
                     <div class="icon">
                         <div class="img-container center-component">
-                            <img data-ng-src="/minetest/public/img/illustration_sans_monde.svg"
+                            <img data-ng-src="/minetest/public/img/pages-default.png"
                                  data-ng-if="world.img === null || world.img === undefined"
                                  alt="">
                             <img data-ng-src="[[world.img]]"
