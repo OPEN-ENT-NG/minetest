@@ -5,7 +5,18 @@ import {IScope} from "angular";
 
 declare let window: any;
 
-class Controller implements ng.IController {
+interface IViewModel {
+    initData(): Promise<void>;
+    getWorld(): Promise<void>;
+    setCurrentWorld(): void;
+    setStatus(world: IWorld): string;
+    getLink(): string;
+    refreshWorldList(): Promise<void>;
+
+    world: IWorld;
+}
+
+class Controller implements ng.IController, IViewModel {
     currentWorld: IWorld;
     display: { allowPassword: boolean };
     filter: { creation_date: Date; up_date: Date; guests: any; shared: boolean; title: string };
@@ -59,23 +70,22 @@ class Controller implements ng.IController {
         this.currentWorld = this.worlds.all[0];
     }
 
-    setStatus(world: IWorld): String {
-        let open: String = lang.translate('minetest.open');
-        let close: String = lang.translate('minetest.close');
+    setStatus(world: IWorld): string {
+        let open: string = lang.translate('minetest.open');
+        let close: string = lang.translate('minetest.close');
         if(world.status) {
             return open;
         } else return close;
     }
 
-    getLink(): void {
+    getLink(): string {
         return window.minetestDownload;
     }
 
-    async refreshWorldList() {
+    async refreshWorldList(): Promise<void> {
         await this.getWorld();
         this.$scope.$apply();
     }
-
 }
 
 export const minetestController = ng.controller('MinetestController', ['$scope', Controller]);
