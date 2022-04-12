@@ -1,10 +1,17 @@
 <div ng-controller="MinetestController as vm">
 
     <div class="minetest-head">
-        <h1 class="minetest-head-title">
-            <i18n>minetest.title</i18n>
-        </h1>
-
+        <div class="">
+            <h1 class="minetest-head-title">
+                <i18n>minetest.title</i18n>
+            </h1>
+            <span class="minetest-head-download">
+                <i18n class="minetest-head-download-text">minetest.info.download.software.link</i18n>
+                <a href="https://www.minetest.net/downloads/" target=_blank>
+                    <i18n>minetest.download.software.link</i18n>
+                </a>
+            </span>
+        </div>
         <!-- button create first world -->
         <create-world data-ng-show="vm.worlds.all.length > 0" on-create-world="vm.refreshWorldList()"></create-world>
     </div>
@@ -29,23 +36,21 @@
             <!-- display current world -->
             <current-world world="vm.currentWorld" on-current-world="vm.refreshWorldList()"></current-world>
             <div class="grid">
-                <div class="flex-card card cell center-component f-row flex-row twelve-mobile"
+                <div class="flex-card card cell f-row flex-row twelve-mobile"
                      data-ng-click="vm.currentWorld = world"
                      ng-class="vm.currentWorld == world ? 'active' : ''"
                      ng-repeat="world in vm.worlds.all"
                      data-ng-model="selected">
-                    <div class="icon">
-                        <div class="img-container center-component">
-                            <img data-ng-src="/minetest/public/img/pages-default.png"
-                                 data-ng-if="world.img === null || world.img === undefined"
-                                 alt="">
-                            <img data-ng-src="[[world.img]]"
-                                 data-ng-if="world.img !== null || world.img !== undefined"
-                                 alt="">
-                        </div>
+                    <div class="icon four">
+                        <img data-ng-src="/minetest/public/img/pages-default.png"
+                             data-ng-if="world.img === null || world.img === undefined"
+                             alt="">
+                        <img data-ng-src="[[world.img]]"
+                             data-ng-if="world.img !== null || world.img !== undefined"
+                             alt="">
                     </div>
-                    <div class="title align-start center-component flex-row">
-                        <h4>[[world.title]]</h4>
+                    <div class="eight title align-start center-component flex-row">
+                        <h4 class="row ellipsis">[[world.title]]</h4>
                         <div class="owner"><h5>[[world.owner_name]]</h5></div>
                         <em>
                             [[vm.setStatus(world)]]

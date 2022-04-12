@@ -44,14 +44,22 @@ class Controller implements ng.IController, IViewModel {
         this.lightbox.create = false;
     }
 
-    resetForm() {
-        this.world.title = "";
-        this.world.password = "";
-        this.world.img = "";
-    }
-
     isValidForm(): boolean {
         return this.world && this.world.title.length > 0 && this.world.password.length > 0;
+    }
+
+    resetForm() {
+        if(this.world) {
+            if(this.world.title) {
+                this.world.title = "";
+            }
+            if(this.world.password) {
+                this.world.password = "";
+            }
+            if(this.world.img) {
+                this.world.img = "";
+            }
+        }
     }
 
     async createWorld(): Promise<void> {
