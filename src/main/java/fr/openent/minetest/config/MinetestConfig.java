@@ -19,9 +19,7 @@ public class MinetestConfig {
         this.minetestPythonServerPort = config.getString(Field.MINETEST_PYTHON_SERVER_PORT);
     }
 
-    public String minetestDownload() {
-        return minetestDownload;
-    }
+    public String minetestDownload() { return minetestDownload; }
 
     public String minetestServer() { return minetestServer; }
 

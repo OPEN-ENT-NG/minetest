@@ -1,4 +1,4 @@
-import {moment, ng, notify, toasts} from "entcore";
+import {idiom, moment, ng, notify, toasts} from "entcore";
 import {RootsConst} from "../../core/constants/roots.const";
 import {IScope} from "angular";
 import {IWorld} from "../../models";
@@ -27,13 +27,24 @@ class Controller implements ng.IController, IViewModel {
     }
 
     $onInit() {
-        let clipboard = new Clipboard('.clipboard-link-field');
-        clipboard.on('success', function(e) {
+        //copy link
+        let clipboardLink = new Clipboard('.clipboard-link-field');
+        clipboardLink.on('success', function(e) {
             e.clearSelection();
-            notify.info('copy.link.success');
+            notify.info('minetest.copy.link.success');
         });
-        clipboard.on('error', function(e) {
-            notify.error('copy.link.error');
+        clipboardLink.on('error', function(e) {
+            notify.error('minetest.copy.link.error');
+        });
+
+        //copy port
+        let clipboardPort = new Clipboard('.clipboard-port-field');
+        clipboardPort.on('success', function(e) {
+            e.clearSelection();
+            notify.info('minetest.copy.port.success');
+        });
+        clipboardPort.on('error', function(e) {
+            notify.error('minetest.copy.port.error');
         });
 
         this.isLegendVisible = false;
@@ -51,10 +62,17 @@ class Controller implements ng.IController, IViewModel {
         this.world.updated_at = DateUtils.format(moment().startOf('minute'), "DD/MM/YYYY HH:mm");
         minetestService.updateStatus(this.world)
             .then(() => {
-                toasts.confirm('minetest.world.update.status.confirm');
+                notify.info(idiom.translate('minetest.world.open.confirm'));
+                if(this.world.status) {
+                    notify.info('minetest.world.open.confirm');
+                    toasts.confirm('minetest.world.open.confirm');
+                }
+                else
+                    notify.info('minetest.world.close.confirm');
+                    // toasts.confirm('minetest.world.close.confirm');
                 this.$scope.$eval(this.$scope['vm']['onCurrentWorld']());
             }).catch((err: AxiosError) => {
-            toasts.warning('minetest.world.create.error');
+            toasts.warning('minetest.world.open.close.error');
         })
     }
 

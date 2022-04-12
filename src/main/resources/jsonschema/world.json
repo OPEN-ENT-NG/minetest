@@ -23,9 +23,6 @@
     },
     "title": {
       "type": "string"
-    },
-    "selected": {
-      "type": "boolean"
     }
   },
   "required": [

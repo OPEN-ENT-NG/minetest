@@ -1,13 +1,25 @@
-import {model, moment, ng, toasts, idiom as lang} from 'entcore';
+import {model, ng, idiom as lang} from 'entcore';
 import {IWorld, Worlds} from "../models";
 import {minetestService} from "../services";
 import {IScope} from "angular";
 
-class Controller implements ng.IController {
+declare let window: any;
+
+interface IViewModel {
+    initData(): Promise<void>;
+    getWorld(): Promise<void>;
+    setCurrentWorld(): void;
+    setStatus(world: IWorld): string;
+    getLink(): string;
+    refreshWorldList(): Promise<void>;
+
+    world: IWorld;
+}
+
+class Controller implements ng.IController, IViewModel {
     currentWorld: IWorld;
     display: { allowPassword: boolean };
     filter: { creation_date: Date; up_date: Date; guests: any; shared: boolean; title: string };
-    selected: boolean;
     selectedWorld: Array<IWorld>;
     user_id: string;
     user_name: string;
@@ -23,7 +35,6 @@ class Controller implements ng.IController {
         this.user_id = model.me.userId;
         this.user_name = model.me.username;
         this.user_login = model.me.login;
-        this.selected = false;
         this.currentWorld = {} as IWorld;
         this.selectedWorld = [];
 
@@ -59,44 +70,22 @@ class Controller implements ng.IController {
         this.currentWorld = this.worlds.all[0];
     }
 
-    setStatus(world: IWorld): String {
-        let open: String = lang.translate('minetest.open');
-        let close: String = lang.translate('minetest.close');
+    setStatus(world: IWorld): string {
+        let open: string = lang.translate('minetest.open');
+        let close: string = lang.translate('minetest.close');
         if(world.status) {
             return open;
         } else return close;
     }
 
-    async updateWorld(): Promise<void> {
-        let world = {
-            id: this.world._id,
-            owner_id: this.world.owner_id,
-            owner_name: this.world.owner_name,
-            owner_login: this.world.owner_login,
-            created_at: this.world.created_at,
-            updated_at: moment().startOf('day')._d,
-            password: this.world.password,
-            status: false,
-            title: this.world.title,
-            selected: false,
-            img: this.world.img,
-            shared: this.world.shared,
-            address: this.world.address,
-        }
-        let response = await minetestService.update(world);
-        if (response) {
-            toasts.confirm('minetest.world.create.confirm');
-        } else {
-            toasts.warning('minetest.world.create.error');
-        }
+    getLink(): string {
+        return window.minetestDownload;
     }
 
-    // TODO IS USED TO CALLBACK
-    async refreshWorldList() {
+    async refreshWorldList(): Promise<void> {
         await this.getWorld();
         this.$scope.$apply();
     }
-
 }
 
 export const minetestController = ng.controller('MinetestController', ['$scope', Controller]);

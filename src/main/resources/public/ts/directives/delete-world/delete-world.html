@@ -1,12 +1,12 @@
 <div class="minetestDelete">
 
     <!-- button delete world -->
-    <button data-ng-click="vm.openDeleteWorldLightbox()">
+    <button data-ng-click="vm.openDeleteLightbox()">
         <i18n>minetest.delete</i18n>
     </button>
 
     <!-- popup modal to delete world -->
-    <lightbox show="vm.lightbox.delete" on-close="vm.closeDeleteLightbox()">
+    <lightbox class="minetest-lightbox" show="vm.lightbox.delete" on-close="vm.closeDeleteLightbox()">
         <!-- title -->
         <h2>
             <i18n>minetest.world.delete.selected</i18n>
@@ -56,7 +56,7 @@
         </div>
 
         <!-- button action delete -->
-        <button class="custom-button right-magnet" ng-click="vm.deleteWorld()"><i18n>minetest.OK</i18n></button>
+        <button class="custom-button right-magnet" ng-click="vm.deleteWorld()"><i18n>minetest.delete</i18n></button>
         <button class="custom-cancel right-magnet" ng-click="vm.closeDeleteLightbox()"><i18n>minetest.cancel</i18n></button>
     </lightbox>
 </div>
