@@ -2,7 +2,7 @@
     <div class="toggle">
         <div class="row">
             <!-- properties -->
-            <properties-world world="vm.world"></properties-world>
+            <properties-world world="vm.world" on-update-world="vm.onUpdateWorld()"></properties-world>
 
             <!-- delete -->
             <delete-world world="vm.world" on-delete-world="vm.onDeleteWorld()"></delete-world>

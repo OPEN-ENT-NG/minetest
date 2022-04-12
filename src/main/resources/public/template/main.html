@@ -34,7 +34,7 @@
     <div class="cards-view twelve">
         <div class="row" ng-show="vm.worlds.all.length > 0">
             <!-- display current world -->
-            <current-world world="vm.currentWorld" on-current-world="vm.refreshWorldList()"></current-world>
+            <current-world world="vm.currentWorld" on-current-world="vm.onCurrentWorld()"></current-world>
             <div class="grid">
                 <div class="flex-card card cell f-row flex-row twelve-mobile"
                      data-ng-click="vm.currentWorld = world"
@@ -60,6 +60,10 @@
                 </div>
             </div>
         </div>
-        <toggle-menu world="vm.currentWorld" on-delete-world="vm.refreshWorldList()" ng-if="vm.currentWorld"></toggle-menu>
+
+        <!-- toggle menu -->
+        <toggle-menu ng-if="vm.currentWorld" world="vm.currentWorld"
+                     on-update-world="vm.refreshWorldList()" on-delete-world="vm.refreshWorldList()">
+        </toggle-menu>
     </div>
 </div>

@@ -3,10 +3,9 @@ import {RootsConst} from "../../core/constants/roots.const";
 import {IScope} from "angular";
 import {IWorld} from "../../models";
 import {minetestService} from "../../services";
-import {AxiosError} from "axios";
 
 interface IViewModel {
-    openPropertiesWorldLightbox(): void;
+    openPropertiesLightbox(): void;
     closePropertiesLightbox(): void;
     updateWorld(): Promise<void>;
 
@@ -18,7 +17,6 @@ interface IViewModel {
 
 class Controller implements ng.IController, IViewModel {
     lightbox: any;
-
     world: IWorld;
 
     constructor(private $scope: IScope) {
@@ -35,12 +33,13 @@ class Controller implements ng.IController, IViewModel {
     $onDestroy() {
     }
 
-    openPropertiesWorldLightbox(): void {
+    openPropertiesLightbox(): void {
         this.lightbox.properties = true;
     }
 
     closePropertiesLightbox(): void {
         this.lightbox.properties = false;
+        // this.$scope.$apply();
     }
 
     async updateWorld(): Promise<void> {
@@ -49,7 +48,7 @@ class Controller implements ng.IController, IViewModel {
                 toasts.confirm('minetest.world.update.confirm');
                 this.closePropertiesLightbox();
                 this.$scope.$eval(this.$scope['vm']['onUpdateWorld']());
-            }).catch((err: AxiosError) => {
+            }).catch(() => {
             toasts.warning('minetest.world.update.error');
         })
     }
@@ -60,7 +59,8 @@ function directive() {
         restrict: 'E',
         templateUrl: `${RootsConst.directive}properties-world/properties-world.html`,
         scope: {
-            world: '='
+            world: '=',
+            onUpdateWorld: '&'
         },
         controllerAs: 'vm',
         bindToController: true,

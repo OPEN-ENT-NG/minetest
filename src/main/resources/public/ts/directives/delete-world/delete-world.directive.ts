@@ -5,9 +5,10 @@ import {IWorld} from "../../models";
 import {minetestService} from "../../services";
 
 interface IViewModel {
-    openDeleteWorldLightbox(): void;
+    openDeleteLightbox(): void;
     closeDeleteLightbox(): void;
     deleteWorld(): Promise<void>;
+
     lightbox: any;
 
     // props
@@ -16,7 +17,6 @@ interface IViewModel {
 
 class Controller implements ng.IController, IViewModel {
     lightbox: any;
-
     world: IWorld;
 
     constructor(private $scope: IScope)
@@ -32,23 +32,23 @@ class Controller implements ng.IController, IViewModel {
     $onDestroy() {
     }
 
+    openDeleteLightbox(): void {
+        this.lightbox.delete = true;
+    }
+
     closeDeleteLightbox(): void {
         this.lightbox.delete = false;
     }
 
     async deleteWorld(): Promise<void> {
-        let response = await minetestService.delete(this.world);
-        if (response) {
-            toasts.confirm('minetest.world.delete.confirm');
-            this.closeDeleteLightbox();
-            this.$scope.$eval(this.$scope['vm']['onDeleteWorld']());
-        } else {
+        minetestService.delete(this.world)
+            .then(() => {
+                toasts.confirm('minetest.world.delete.confirm');
+                this.closeDeleteLightbox();
+                this.$scope.$eval(this.$scope['vm']['onDeleteWorld']());
+            }).catch(() => {
             toasts.warning('minetest.world.delete.error');
-        }
-    }
-
-    openDeleteWorldLightbox(): void {
-        this.lightbox.delete = true;
+        })
     }
 }
 
