@@ -52,7 +52,7 @@ public class DefaultWorldService implements WorldService {
 
         //get New Port
         JsonObject sortByPort = new JsonObject().put(Field.PORT, 1);
-        getMongo(null,null,null,null,null,null,null,sortByPort)
+        getMongo(null, null, null, null, null, null, null, sortByPort)
                 .compose(this::getNewPort)
                 .compose(res ->  {
                     int newPort = res;
@@ -124,13 +124,13 @@ public class DefaultWorldService implements WorldService {
         Promise<JsonObject> promise = Promise.promise();
 
         JsonObject worldId = new JsonObject().put(Field._ID, body.getValue(Field._ID));
-        JsonObject title = new JsonObject().put("$set", new JsonObject()
+        JsonObject world = new JsonObject().put("$set", new JsonObject()
                 .put(Field.TITLE, body.getValue(Field.TITLE))
                 .put(Field.IMG,body.getValue(Field.IMG))
                 .put(Field.UPDATED_AT, body.getValue(Field.UPDATED_AT))
         );
 
-        mongoDb.update(this.collection, worldId, title, MongoDbResult.validResultHandler(result -> {
+        mongoDb.update(this.collection, worldId, world, MongoDbResult.validResultHandler(result -> {
             if(result.isLeft()) {
                 String message = String.format("[Minetest@%s::updateWorld]: An error has occurred while updating world: %s",
                         this.getClass().getSimpleName(), result.left().getValue());

@@ -1,14 +1,14 @@
 <div ng-controller="MinetestController as vm">
 
     <div class="minetest-head">
-        <div class="">
+        <div>
             <h1 class="minetest-head-title">
                 <i18n>minetest.title</i18n>
             </h1>
-            <span class="minetest-head-download">
+            <span ng-show="vm.worlds.all.length > 0" class="minetest-head-download">
                 <i18n class="minetest-head-download-text">minetest.info.download.software.link</i18n>
-                <a href="https://www.minetest.net/downloads/" target=_blank>
-                    <i18n>minetest.download.software.link</i18n>
+                <a href=[[vm.getLink()]] target=_blank>
+                    [[vm.getLink()]]
                 </a>
             </span>
         </div>
@@ -21,7 +21,7 @@
         <img data-ng-src="/minetest/public/img/illustration_sans_monde.svg" class="two" alt="">
         <div class="download-description">
             <i18n>minetest.download.software.link.description</i18n>
-            <a href="https://www.minetest.net/downloads/" target=_blank><i18n>minetest.download.software.link</i18n></a>
+            <a href=[[vm.getLink()]] target=_blank>[[vm.getLink()]]</a>
         </div>
         <div class="empty-state">
             <i18n>minetest.world.empty.state</i18n>
@@ -39,9 +39,8 @@
                 <div class="flex-card card cell f-row flex-row twelve-mobile"
                      data-ng-click="vm.currentWorld = world"
                      ng-class="vm.currentWorld == world ? 'active' : ''"
-                     ng-repeat="world in vm.worlds.all"
-                     data-ng-model="selected">
-                    <div class="icon four">
+                     ng-repeat="world in vm.worlds.all">
+                    <div class="icon">
                         <img data-ng-src="/minetest/public/img/pages-default.png"
                              data-ng-if="world.img === null || world.img === undefined"
                              alt="">
@@ -49,7 +48,7 @@
                              data-ng-if="world.img !== null || world.img !== undefined"
                              alt="">
                     </div>
-                    <div class="eight title align-start center-component flex-row">
+                    <div class="title align-start center-component flex-row">
                         <h4 class="row ellipsis">[[world.title]]</h4>
                         <div class="owner"><h5>[[world.owner_name]]</h5></div>
                         <em>

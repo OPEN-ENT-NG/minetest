@@ -48,7 +48,7 @@ class Controller implements ng.IController, IViewModel {
         return this.world && this.world.title.length > 0 && this.world.password.length > 0;
     }
 
-    resetForm() {
+    resetForm(): void {
         if(this.world) {
             if(this.world.title) {
                 this.world.title = "";
@@ -73,7 +73,6 @@ class Controller implements ng.IController, IViewModel {
             status: false,
             img: this.world.img,
             title: this.world.title,
-            selected: false,
             address: window.minetestServer
         }
         minetestService.create(this.world)

@@ -16,7 +16,6 @@
   "minetest.creation.world.description": "La création d'un monde permet de générer automatiquement une adresse URL et un port qui seront utilisés pour rejoindre le monde. Ces informations sont disponibles dans les propriétés du monde.",
   "minetest.creator": "Créateur",
   "minetest.delete": "Supprimer",
-  "minetest.download.software.link": "https://www.minetest.net/downloads/",
   "minetest.download.software.link.description": "Pour commencer, téléchargez le logiciel Minetest via ce lien :",
   "minetest.follow": "Suivi",
   "minetest.info.download.software.link": "Téléchargez le logiciel Minetest à partir de ce lien : ",

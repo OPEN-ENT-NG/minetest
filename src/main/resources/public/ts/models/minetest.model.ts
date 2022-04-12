@@ -17,7 +17,6 @@ export interface IWorld {
     shared?: boolean;
     title: string;
 
-    selected?: boolean;
     address: string;
 
     port?: number;

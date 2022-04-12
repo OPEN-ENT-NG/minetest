@@ -1,13 +1,14 @@
-import {model, moment, ng, toasts, idiom as lang} from 'entcore';
+import {model, ng, idiom as lang} from 'entcore';
 import {IWorld, Worlds} from "../models";
 import {minetestService} from "../services";
 import {IScope} from "angular";
+
+declare let window: any;
 
 class Controller implements ng.IController {
     currentWorld: IWorld;
     display: { allowPassword: boolean };
     filter: { creation_date: Date; up_date: Date; guests: any; shared: boolean; title: string };
-    selected: boolean;
     selectedWorld: Array<IWorld>;
     user_id: string;
     user_name: string;
@@ -23,7 +24,6 @@ class Controller implements ng.IController {
         this.user_id = model.me.userId;
         this.user_name = model.me.username;
         this.user_login = model.me.login;
-        this.selected = false;
         this.currentWorld = {} as IWorld;
         this.selectedWorld = [];
 
@@ -65,6 +65,10 @@ class Controller implements ng.IController {
         if(world.status) {
             return open;
         } else return close;
+    }
+
+    getLink(): void {
+        return window.minetestDownload;
     }
 
     async refreshWorldList() {
