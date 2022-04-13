@@ -29,7 +29,8 @@ function directive() {
         templateUrl: `${RootsConst.directive}toggle-menu/toggle-menu.html`,
         scope: {
             world: '=',
-            onDeleteWorld: '&'
+            onDeleteWorld: '&',
+            onUpdateWorld: '&'
         },
         controllerAs: 'vm',
         bindToController: true,
