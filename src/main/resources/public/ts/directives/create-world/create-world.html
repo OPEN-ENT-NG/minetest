@@ -25,24 +25,34 @@
             <!-- Content -->
             <section class="minetest-lightbox-content-form">
                 <div class="minetest-lightbox-content-form-input-text">
-                    <span class="minetest-lightbox-content-form-input-text-title"><i18n>minetest.world.title</i18n></span>
+                    <span class="minetest-lightbox-content-form-input-text-title">
+                        <i18n>minetest.world.title</i18n>
+                    </span>
                     <input type="text" class="six cell" data-ng-model="vm.world.title" />
                 </div>
 
-                <span class="minetest-lightbox-content-form-description"><i18n>minetest.creation.world.description</i18n></span>
+                <span class="minetest-lightbox-content-form-description">
+                    <i18n>minetest.creation.world.description</i18n>
+                </span>
 
                 <div class="minetest-lightbox-content-form-input-checkbox">
                     <div class="minetest-lightbox-content-form-input-checkbox-password">
                         <div class="minetest-lightbox-content-form-input-text">
-                            <span class="minetest-lightbox-content-form-input-text-title"><i18n>minetext.password</i18n></span>
+                            <span class="minetest-lightbox-content-form-input-text-title">
+                                <i18n>minetext.password</i18n>
+                            </span>
                             <input type="text" class="six cell" data-ng-model="vm.world.password" />
                         </div>
                     </div>
                 </div>
             </section>
         </div>
+
         <!-- Button/submit -->
-        <button class="minetest-lightbox-button right-magnet" data-ng-disabled="!vm.isValidForm()" data-ng-click="vm.createWorld()"><i18n>minetest.create</i18n></button>
+        <button class="minetest-lightbox-button right-magnet"
+                data-ng-disabled="!vm.isValidForm()" data-ng-click="vm.createWorld()">
+            <i18n>minetest.create</i18n>
+        </button>
 
     </lightbox>
 </div>
