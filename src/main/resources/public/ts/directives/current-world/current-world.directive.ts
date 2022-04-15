@@ -62,14 +62,11 @@ class Controller implements ng.IController, IViewModel {
         this.world.updated_at = DateUtils.format(moment().startOf('minute'), "DD/MM/YYYY HH:mm");
         minetestService.updateStatus(this.world)
             .then(() => {
-                notify.info(idiom.translate('minetest.world.open.confirm'));
                 if(this.world.status) {
                     notify.info('minetest.world.open.confirm');
-                    toasts.confirm('minetest.world.open.confirm');
                 }
                 else
                     notify.info('minetest.world.close.confirm');
-                    // toasts.confirm('minetest.world.close.confirm');
                 this.$scope.$eval(this.$scope['vm']['onCurrentWorld']());
             }).catch((err: AxiosError) => {
             toasts.warning('minetest.world.open.close.error');

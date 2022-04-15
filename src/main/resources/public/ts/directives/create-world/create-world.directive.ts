@@ -12,7 +12,6 @@ interface IViewModel {
     closeCreateLightbox(): void;
     createWorld(): Promise<void>;
     resetForm(): void;
-    isValidForm(): boolean;
 
     lightbox: any;
     world: IWorld;
@@ -42,10 +41,6 @@ class Controller implements ng.IController, IViewModel {
     closeCreateLightbox(): void {
         this.resetForm();
         this.lightbox.create = false;
-    }
-
-    isValidForm(): boolean {
-        return this.world && this.world.title.length > 0 && this.world.password.length > 0;
     }
 
     resetForm(): void {
@@ -82,10 +77,8 @@ class Controller implements ng.IController, IViewModel {
                 this.$scope.$eval(this.$scope['vm']['onCreateWorld']());
             }).catch(() => {
             toasts.warning('minetest.world.create.error');
-
         })
     }
-
 }
 
 function directive() {
