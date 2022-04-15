@@ -35,7 +35,6 @@ class Controller implements ng.IController, IViewModel {
         this.user_id = model.me.userId;
         this.user_name = model.me.username;
         this.user_login = model.me.login;
-        this.currentWorld = {} as IWorld;
         this.selectedWorld = [];
 
         this.filter = {
@@ -67,7 +66,7 @@ class Controller implements ng.IController, IViewModel {
     }
 
     setCurrentWorld(): void {
-        this.currentWorld = this.worlds.all[0];
+        this.currentWorld ? this.currentWorld = this.currentWorld : this.currentWorld = this.worlds.all[0];
     }
 
     setStatus(world: IWorld): string {

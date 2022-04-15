@@ -39,7 +39,6 @@ class Controller implements ng.IController, IViewModel {
 
     closePropertiesLightbox(): void {
         this.lightbox.properties = false;
-        // this.$scope.$apply();
     }
 
     async updateWorld(): Promise<void> {

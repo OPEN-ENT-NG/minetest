@@ -42,10 +42,10 @@
                      ng-repeat="world in vm.worlds.all">
                     <div class="four icon">
                         <img data-ng-src="/minetest/public/img/pages-default.png"
-                             data-ng-if="world.img === null || world.img === undefined"
+                             data-ng-if="world.img === null || world.img === undefined || world.img === ''"
                              alt="">
                         <img data-ng-src="[[world.img]]"
-                             data-ng-if="world.img !== null || world.img !== undefined"
+                             data-ng-if="world.img !== null || world.img !== undefined || world.img === ''"
                              alt="">
                     </div>
                     <div class="eight title align-start center-component flex-row">

@@ -50,7 +50,7 @@
 
         <!-- Button/submit -->
         <button class="minetest-lightbox-button right-magnet"
-                data-ng-disabled="!vm.isValidForm()" data-ng-click="vm.createWorld()">
+                data-ng-disabled="!vm.world.title || !vm.world.password" data-ng-click="vm.createWorld()">
             <i18n>minetest.create</i18n>
         </button>
 
