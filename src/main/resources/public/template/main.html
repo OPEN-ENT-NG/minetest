@@ -40,7 +40,7 @@
                      data-ng-click="vm.currentWorld = world"
                      ng-class="vm.currentWorld == world ? 'active' : ''"
                      ng-repeat="world in vm.worlds.all">
-                    <div class="icon">
+                    <div class="four icon">
                         <img data-ng-src="/minetest/public/img/pages-default.png"
                              data-ng-if="world.img === null || world.img === undefined || world.img === ''"
                              alt="">
@@ -48,7 +48,7 @@
                              data-ng-if="world.img !== null || world.img !== undefined || world.img === ''"
                              alt="">
                     </div>
-                    <div class="title align-start center-component flex-row">
+                    <div class="eight title align-start center-component flex-row">
                         <h4 class="row ellipsis">[[world.title]]</h4>
                         <div class="owner"><h5>[[world.owner_name]]</h5></div>
                         <em>
