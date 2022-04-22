@@ -9,5 +9,7 @@
   font-style: normal;
 }
 
-@import "components/index";
+body.minetest {
+  @import "components/index";
+}
 
