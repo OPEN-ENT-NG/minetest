@@ -66,7 +66,12 @@ class Controller implements ng.IController, IViewModel {
     }
 
     setCurrentWorld(): void {
-        this.currentWorld ? this.currentWorld = this.currentWorld : this.currentWorld = this.worlds.all[0];
+        if (this.currentWorld) {
+            let worldId = this.currentWorld._id
+            this.currentWorld = this.worlds.all.filter(w => w._id === worldId)[0]
+        } else {
+            this.currentWorld = this.worlds.all[0]
+        }
     }
 
     setStatus(world: IWorld): string {
