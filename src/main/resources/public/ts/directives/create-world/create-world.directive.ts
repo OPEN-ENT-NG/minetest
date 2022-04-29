@@ -12,6 +12,7 @@ interface IViewModel {
     closeCreateLightbox(): void;
     createWorld(): Promise<void>;
     resetForm(): void;
+    formatAddress(): string;
 
     lightbox: any;
     world: IWorld;
@@ -57,6 +58,12 @@ class Controller implements ng.IController, IViewModel {
         }
     }
 
+    formatAddress(): string {
+        let address = window.minetestServer;
+        return address.includes("https://") ? window.minetestServer.replace('https://', '')
+            : window.minetestServer.replace('http://', '')
+    }
+
     async createWorld(): Promise<void> {
         this.world = {
             owner_id:  model.me.userId,
@@ -68,7 +75,7 @@ class Controller implements ng.IController, IViewModel {
             status: false,
             img: this.world.img,
             title: this.world.title,
-            address: window.minetestServer.replace('http://', '')
+            address: this.formatAddress()
         }
         minetestService.create(this.world)
             .then(() => {
