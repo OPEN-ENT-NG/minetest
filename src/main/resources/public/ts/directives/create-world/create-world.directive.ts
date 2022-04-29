@@ -62,13 +62,13 @@ class Controller implements ng.IController, IViewModel {
             owner_id:  model.me.userId,
             owner_name: model.me.username,
             owner_login: model.me.login,
-            created_at: DateUtils.format(moment().startOf('minute'), "DD/MM/YYYY HH:mm"),
-            updated_at: DateUtils.format(moment().startOf('minute'), "DD/MM/YYYY HH:mm"),
+            created_at: DateUtils.format(moment().startOf('minute'), DateUtils.FORMAT["DAY/MONTH/YEAR-HOUR-MIN"]),
+            updated_at: DateUtils.format(moment().startOf('minute'), DateUtils.FORMAT["DAY/MONTH/YEAR-HOUR-MIN"]),
             password: this.world.password,
             status: false,
             img: this.world.img,
             title: this.world.title,
-            address: window.minetestServer
+            address: window.minetestServer.replace('http://', '')
         }
         minetestService.create(this.world)
             .then(() => {

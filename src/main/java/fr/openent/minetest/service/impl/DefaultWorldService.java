@@ -112,7 +112,7 @@ public class DefaultWorldService implements WorldService {
                             .put(Field.ID,body.getString(Field._ID))
                             .put(Field.PORT,body.getInteger(Field.PORT));
                     return minetestService.action(bodyToUpdateStatus,
-                            body.getBoolean(Field.STATUS) ? MinestestServiceAction.OPEN : MinestestServiceAction.CLOSE);
+                            Boolean.TRUE.equals(body.getBoolean(Field.STATUS)) ? MinestestServiceAction.OPEN : MinestestServiceAction.CLOSE);
                 })
                 .onSuccess(promise::complete)
                 .onFailure(err -> promise.fail(err.getMessage()));
@@ -124,11 +124,15 @@ public class DefaultWorldService implements WorldService {
         Promise<JsonObject> promise = Promise.promise();
 
         JsonObject worldId = new JsonObject().put(Field._ID, body.getValue(Field._ID));
-        JsonObject world = new JsonObject().put("$set", new JsonObject()
-                .put(Field.TITLE, body.getValue(Field.TITLE))
-                .put(Field.IMG,body.getValue(Field.IMG))
-                .put(Field.UPDATED_AT, body.getValue(Field.UPDATED_AT))
-        );
+        JsonObject worldData = new JsonObject();
+
+        if(body.getValue(Field.IMG) != null) {
+            worldData.put(Field.IMG, body.getValue(Field.IMG));
+        }
+        worldData.put(Field.TITLE, body.getValue(Field.TITLE))
+                .put(Field.UPDATED_AT, body.getValue(Field.UPDATED_AT));
+
+        JsonObject world = new JsonObject().put("$set", worldData);
 
         mongoDb.update(this.collection, worldId, world, MongoDbResult.validResultHandler(result -> {
             if(result.isLeft()) {
