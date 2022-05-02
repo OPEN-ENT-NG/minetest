@@ -13,11 +13,13 @@ interface IViewModel {
 
     // props
     world: IWorld;
+    worldForm: IWorld;
 }
 
 class Controller implements ng.IController, IViewModel {
     lightbox: any;
     world: IWorld;
+    worldForm: IWorld;
 
     constructor(private $scope: IScope) {
         {
@@ -35,6 +37,8 @@ class Controller implements ng.IController, IViewModel {
 
     openPropertiesLightbox(): void {
         this.lightbox.properties = true;
+        let world = this.world;
+        this.worldForm = Object.assign({}, world);
     }
 
     closePropertiesLightbox(): void {
@@ -42,7 +46,7 @@ class Controller implements ng.IController, IViewModel {
     }
 
     async updateWorld(): Promise<void> {
-        minetestService.update(this.world)
+        minetestService.update(this.worldForm)
             .then(() => {
                 toasts.confirm('minetest.world.update.confirm');
                 this.closePropertiesLightbox();
