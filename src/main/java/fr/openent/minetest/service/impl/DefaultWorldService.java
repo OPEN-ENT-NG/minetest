@@ -96,6 +96,35 @@ public class DefaultWorldService implements WorldService {
         return promise.future();
     }
 
+    /**
+     * Import World
+     *
+     * @param body JsonObject containing the data for the world
+     * @param user User Object containing user id
+     */
+    @Override
+    public Future<JsonObject> importWorld(JsonObject body, UserInfos user) {
+        Promise<JsonObject> promise = Promise.promise();
+
+        mongoDb.insert(this.collection, body, MongoDbResult.validResultHandler(result -> {
+            if(result.isLeft()) {
+                String message = String.format("[Minetest@%s::importWorld]: An error has occurred while importing world: %s",
+                        this.getClass().getSimpleName(), result.left().getValue());
+                log.error(message, result.left().getValue());
+                promise.fail(message);
+                return;
+            }
+            promise.complete();
+        }));
+        return promise.future();
+    }
+
+    /**
+     * Update World status
+     *
+     * @param body JsonObject containing the data for the world
+     * @param user User Object containing user id
+     */
     @Override
     public Future<JsonObject> updateStatus(UserInfos user, JsonObject body) {
         Promise<JsonObject> promise = Promise.promise();
@@ -116,6 +145,12 @@ public class DefaultWorldService implements WorldService {
         return promise.future();
     }
 
+    /**
+     * Update World
+     *
+     * @param body JsonObject containing the data for the world
+     * @param user User Object containing user id
+     */
     @Override
     public Future<JsonObject> update(UserInfos user, JsonObject body) {
         Promise<JsonObject> promise = Promise.promise();
@@ -125,6 +160,12 @@ public class DefaultWorldService implements WorldService {
 
         if(body.getValue(Field.IMG) != null) {
             worldData.put(Field.IMG, body.getValue(Field.IMG));
+        }
+        if(body.getValue(Field.ADDRESS) != null) {
+            worldData.put(Field.ADDRESS, body.getValue(Field.ADDRESS));
+        }
+        if(body.getValue(Field.PORT) != null) {
+            worldData.put(Field.PORT, body.getValue(Field.PORT));
         }
         worldData.put(Field.TITLE, body.getValue(Field.TITLE))
                 .put(Field.UPDATED_AT, body.getValue(Field.UPDATED_AT));
@@ -157,6 +198,31 @@ public class DefaultWorldService implements WorldService {
                 })
                 .onSuccess(promise::complete)
                 .onFailure(err -> promise.fail(err.getMessage()));
+        return promise.future();
+    }
+
+    /**
+     * Delete Import World
+     *
+     * @param ids List world's ids to delete
+     * @param user User Object containing user id
+     */
+    @Override
+    public Future<JsonObject> deleteImportWorld(UserInfos user, List<String> ids) {
+        Promise<JsonObject> promise = Promise.promise();
+        JsonObject query = new JsonObject()
+                .put(Field._ID, new JsonObject().put(Field.$IN, ids));
+
+        mongoDb.delete(this.collection, query, MongoDbResult.validResultHandler(result -> {
+            if(result.isLeft()) {
+                String message = String.format("[Minetest@%s::deleteWorld]: An error has occurred while deleting import world: %s",
+                        this.getClass().getSimpleName(), result.left().getValue());
+                log.error(message, result.left().getValue());
+                promise.fail(message);
+                return;
+            }
+            promise.complete(result.right().getValue());
+        }));
         return promise.future();
     }
 

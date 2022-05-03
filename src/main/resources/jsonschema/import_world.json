@@ -1,0 +1,36 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://jsonschema.net",
+  "type": "object",
+  "properties": {
+    "created_at": {
+      "type": "string"
+    },
+    "updated_at": {
+      "type": "string"
+    },
+    "img": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "address": {
+      "type": "string"
+    },
+    "port": {
+      "type": "string"
+    },
+    "isExternal": {
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "created_at",
+    "updated_at",
+    "title",
+    "address",
+    "port",
+    "isExternal"
+  ]
+}

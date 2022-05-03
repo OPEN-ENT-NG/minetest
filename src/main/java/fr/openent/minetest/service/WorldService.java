@@ -19,6 +19,15 @@ public interface WorldService {
     Future<JsonObject> create(JsonObject body, UserInfos user);
 
     /**
+     * Import World
+     *
+     * @param body Data to store
+     * @param user infos of the user
+     * @return Future {@link Future<JsonObject>} containing new world
+     */
+    Future<JsonObject> importWorld(JsonObject body, UserInfos user);
+
+    /**
      * Update World
      *
      * @param user {@link UserInfos}
@@ -37,12 +46,21 @@ public interface WorldService {
     Future<JsonObject> updateStatus(UserInfos user, JsonObject body);
 
     /**
+     * Delete World
      * @param user User
      * @param ids  List world id to delete
      * @param ports  List world port to delete
      * @return returning data
      */
     Future<JsonObject> delete(UserInfos user, List<String> ids, List<String> ports);
+
+    /**
+     * Delete Import World
+     * @param user User
+     * @param ids  List world id to delete
+     * @return returning data
+     */
+    Future<JsonObject> deleteImportWorld(UserInfos user, List<String> ids);
 
     /**
      * Get Worlds with filter

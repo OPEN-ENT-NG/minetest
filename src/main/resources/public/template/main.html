@@ -12,6 +12,8 @@
                 </a>
             </span>
         </div>
+        <!-- button import first world -->
+        <import-world data-ng-show="vm.worlds.all.length > 0" on-import-world="vm.refreshWorldList()"></import-world>
         <!-- button create first world -->
         <create-world data-ng-show="vm.worlds.all.length > 0" on-create-world="vm.refreshWorldList()"></create-world>
     </div>
@@ -26,6 +28,8 @@
         <div class="empty-state">
             <i18n>minetest.world.empty.state</i18n>
         </div>
+        <!-- button import world -->
+        <import-world class="empty-state-button" on-import-world="vm.refreshWorldList()"></import-world>
         <!-- button create world -->
         <create-world class="empty-state-button" on-create-world="vm.refreshWorldList()"></create-world>
     </div>

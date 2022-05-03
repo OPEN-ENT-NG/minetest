@@ -1,0 +1,50 @@
+<div class="importWorld">
+
+    <!-- button import world -->
+    <button data-ng-click="vm.openImportLightbox()">
+        <i18n>minetest.import.world</i18n>
+    </button>
+
+    <!-- popup modal to import world -->
+    <lightbox class="minetest-lightbox" show="vm.lightbox.import" on-close="vm.closeImportLightbox()">
+
+        <!-- Title -->
+        <section class="minetest-lightbox-head">
+            <h3>
+                <i18n>minetest.import.world</i18n>
+            </h3>
+        </section>
+
+        <div class="minetest-lightbox-content">
+            <!-- Image -->
+            <section class="minetest-lightbox-content-upload">
+                <div class="minetest-lightbox-content-upload-box">
+                    <image-select id="img" class="initialFloat cell" default="/img/illustrations/image-default.svg"
+                                  ng-model="vm.world.img"/>
+                </div>
+            </section>
+
+            <!-- Content -->
+            <section class="minetest-lightbox-content-form">
+                <div class="cell twelve minetest-lightbox-content-form-input-text">
+                    <span class="cell four minetest-lightbox-content-form-input-text-title"><i18n>minetest.world.title</i18n></span>
+                    <input type="text" class="six cell" data-ng-model="vm.world.title" />
+                </div>
+
+                <div class="cell twelve minetest-lightbox-content-form-input-text">
+                    <span class="cell four minetest-lightbox-content-form-input-text-title"><i18n>minetest.url.address</i18n></span>
+                    <input type="text" class="six cell" data-ng-model="vm.world.address" />
+                </div>
+
+                <div class="cell twelve minetest-lightbox-content-form-input-text">
+                    <span class="cell four minetest-lightbox-content-form-input-text-title"><i18n>minetest.port</i18n></span>
+                    <input type="text" class="six cell" data-ng-model="vm.world.port" />
+                </div>
+
+            </section>
+        </div>
+
+        <!-- button import world -->
+        <button class="custom-button right-magnet" ng-click="vm.importWorld()"><i18n>minetest.import</i18n></button>
+    </lightbox>
+</div>

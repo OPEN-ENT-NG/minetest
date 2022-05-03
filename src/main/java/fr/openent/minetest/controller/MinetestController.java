@@ -15,6 +15,8 @@ import org.entcore.common.events.EventStore;
 import org.entcore.common.events.EventStoreFactory;
 import org.entcore.common.user.UserUtils;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class MinetestController extends ControllerHelper {
@@ -71,11 +73,33 @@ public class MinetestController extends ControllerHelper {
                 .onFailure(err -> renderError(request))));
     }
 
+    @Post("/worlds/import")
+    @ApiDoc("Import world")
+    @SecuredAction(value = "", type = ActionType.AUTHENTICATED)
+    public void importWorld(final HttpServerRequest request) {
+        RequestUtils.bodyToJson(request, pathPrefix + Field.IMPORT_WORLD, body
+                -> UserUtils.getUserInfos(eb, request, user
+                -> worldService.importWorld(body, user)
+                .onSuccess(res -> renderJson(request, body))
+                .onFailure(err -> renderError(request))));
+    }
+
     @Put("/worlds")
     @ApiDoc("Update world")
     @SecuredAction(value = "", type = ActionType.AUTHENTICATED)
     public void putWorld(final HttpServerRequest request) {
         RequestUtils.bodyToJson(request, pathPrefix + Field.WORLD, body
+                -> UserUtils.getUserInfos(eb, request, user
+                -> worldService.update(user, body)
+                .onSuccess(res -> renderJson(request, body))
+                .onFailure(err -> renderError(request))));
+    }
+
+    @Put("/worlds/import")
+    @ApiDoc("Update import world")
+    @SecuredAction(value = "", type = ActionType.AUTHENTICATED)
+    public void putImportWorld(final HttpServerRequest request) {
+        RequestUtils.bodyToJson(request, pathPrefix + Field.IMPORT_WORLD, body
                 -> UserUtils.getUserInfos(eb, request, user
                 -> worldService.update(user, body)
                 .onSuccess(res -> renderJson(request, body))
@@ -106,6 +130,21 @@ public class MinetestController extends ControllerHelper {
         UserUtils.getUserInfos(eb, request, user -> worldService.delete(user, ids, ports)
                 .onSuccess(res -> renderJson(request, res))
                 .onFailure(err -> renderError(request)));
+    }
 
+    @Delete("/worlds/import")
+    @ApiDoc("Delete world")
+    @SecuredAction(value = "", type = ActionType.AUTHENTICATED)
+    public void deleteImportWorld(final HttpServerRequest request) {
+        if (!request.params().contains(Field.ID)) {
+            badRequest(request);
+            return;
+        }
+        List<String> ids = new ArrayList<>(Collections.singletonList(
+                request.params().get(Field.ID)
+        ));
+        UserUtils.getUserInfos(eb, request, user -> worldService.deleteImportWorld(user, ids)
+                .onSuccess(res -> renderJson(request, res))
+                .onFailure(err -> renderError(request)));
     }
 }

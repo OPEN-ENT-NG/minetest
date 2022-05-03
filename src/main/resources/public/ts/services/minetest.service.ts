@@ -1,6 +1,6 @@
 import {ng} from 'entcore'
 import http, {AxiosResponse} from 'axios';
-import {IWorld} from "../models";
+import {IImportWorld, IWorld} from "../models";
 
 export interface IMinetestService {
     test(): Promise<AxiosResponse>;
@@ -10,11 +10,17 @@ export interface IMinetestService {
     // Settings
     create(worldBody: IWorld): Promise<AxiosResponse>;
 
+    import(worldBody: IImportWorld): Promise<AxiosResponse>;
+
     update(worldBody: IWorld): Promise<AxiosResponse>;
+
+    updateImportWorld(worldBody: IWorld): Promise<AxiosResponse>;
 
     updateStatus(worldBody: IWorld): Promise<AxiosResponse>;
 
     delete(world: IWorld): Promise<AxiosResponse>;
+
+    deleteImportWorld(world: IWorld): Promise<AxiosResponse>;
 }
 
 export const minetestService: IMinetestService = {
@@ -37,8 +43,16 @@ export const minetestService: IMinetestService = {
         return http.post(`/minetest/worlds`, worldBody);
     },
 
+    import: (worldBody: IImportWorld): Promise<AxiosResponse> => {
+        return http.post(`/minetest/worlds/import`, worldBody);
+    },
+
     update: (worldBody: IWorld): Promise<AxiosResponse> => {
         return http.put(`/minetest/worlds`, worldBody);
+    },
+
+    updateImportWorld: (worldBody: IWorld): Promise<AxiosResponse> => {
+        return http.put(`/minetest/worlds/import`, worldBody);
     },
 
     updateStatus: (worldBody: IWorld): Promise<AxiosResponse> => {
@@ -56,6 +70,10 @@ export const minetestService: IMinetestService = {
         // }
 
         return http.delete(`/minetest/worlds?id=${world._id}&port=${world.port}`);
+    },
+
+    deleteImportWorld: (world: IWorld): Promise<AxiosResponse> => {
+        return http.delete(`/minetest/worlds/import?id=${world._id}`)
     }
 };
 
