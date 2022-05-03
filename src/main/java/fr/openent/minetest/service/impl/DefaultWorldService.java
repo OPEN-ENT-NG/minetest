@@ -59,13 +59,10 @@ public class DefaultWorldService implements WorldService {
                     body.put(Field.PORT, newPort);
                     return createMongo(body);
                 })
-                .compose(res ->  {
-                    JsonObject sortByDate = new JsonObject().put(Field.CREATED_AT, -1);
-                    return getMongo(userInfos.getUserId(), null,null,null,null,null,
-                            null, sortByDate);
-                })
+                .compose(res -> getMongo(userInfos.getUserId(), null,null,null,null,null,
+                        null, null))
                 .compose(res -> {
-                    JsonObject worldCreated = res.getJsonObject(0);
+                    JsonObject worldCreated = res.getJsonObject(res.size() - 1);
                     return minetestService.action(worldCreated, MinestestServiceAction.CREATE);
                 })
                 .onSuccess(promise::complete)
