@@ -39,6 +39,7 @@ class Controller implements ng.IController, IViewModel {
 
     closeImportLightbox(): void {
         this.lightbox.import = false;
+        this.resetForm();
     }
 
     resetForm(): void {
