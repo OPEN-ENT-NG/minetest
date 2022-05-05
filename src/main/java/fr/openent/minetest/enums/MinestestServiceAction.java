@@ -4,6 +4,7 @@ public enum MinestestServiceAction {
     CREATE("create"),
     DELETE("delete"),
     OPEN("open"),
+    RESET_PASSWORD("resetPassword"),
     CLOSE("close");
 
 

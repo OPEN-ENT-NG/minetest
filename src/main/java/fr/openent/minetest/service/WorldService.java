@@ -64,6 +64,13 @@ public interface WorldService {
     Future<JsonObject> deleteImportWorld(UserInfos user, List<String> ids);
 
     /**
+     * @param newPassword String
+     * @param body Data of the world to change password
+     * @return returning data
+     */
+    Future<JsonObject> resetPassword(String newPassword, JsonObject body);
+
+    /**
      * Get Worlds with filter
      *
      * @param createdAt Created date

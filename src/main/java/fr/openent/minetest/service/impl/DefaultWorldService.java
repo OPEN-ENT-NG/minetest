@@ -234,6 +234,19 @@ public class DefaultWorldService implements WorldService {
     }
 
     @Override
+    public Future<JsonObject> resetPassword(String newPassword, JsonObject body) {
+        Promise<JsonObject> promise = Promise.promise();
+
+        body.put(Field.PASSWORD, newPassword);
+
+        minetestService.action(body, MinestestServiceAction.RESET_PASSWORD)
+                .onSuccess(promise::complete)
+                .onFailure(err -> promise.fail(err.getMessage()));
+
+        return promise.future();
+    }
+
+    @Override
     public Future<JsonArray> getMongo(String ownerId, String ownerName, String createdAt, String updatedAt,
                                  String img, String name, JsonObject sortJson) {
         Promise<JsonArray> promise = Promise.promise();
