@@ -69,8 +69,8 @@ public interface WorldService {
      * @param updatedAt Updated date
      * @return FutureObject containing world {@link JsonObject}
      */
-    Future<JsonArray> getMongo(String ownerId, String ownerName, String createdAt, String updatedAt, String img, String shared,
-                          String name, JsonObject sortJson);
+    Future<JsonArray> getMongo(String ownerId, String ownerName, String createdAt, String updatedAt, String img, String name,
+                               JsonObject sortJson);
 
     /**
      * create world in Mongo

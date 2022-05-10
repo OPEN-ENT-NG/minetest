@@ -52,14 +52,14 @@ public class DefaultWorldService implements WorldService {
 
         //get New Port
         JsonObject sortByPort = new JsonObject().put(Field.PORT, 1);
-        getMongo(null, null, null, null, null, null, null, sortByPort)
+        getMongo(null, null, null, null, null, null, sortByPort)
                 .compose(this::getNewPort)
                 .compose(res ->  {
                     int newPort = res;
                     body.put(Field.PORT, newPort);
                     return createMongo(body);
                 })
-                .compose(res -> getMongo(userInfos.getUserId(), null,null,null,null,null,
+                .compose(res -> getMongo(userInfos.getUserId(), null,null,null,null,
                         null, null))
                 .compose(res -> {
                     JsonObject worldCreated = res.getJsonObject(res.size() - 1);
@@ -138,7 +138,8 @@ public class DefaultWorldService implements WorldService {
                             .put(Field.ID,body.getString(Field._ID))
                             .put(Field.PORT,body.getInteger(Field.PORT));
                     return minetestService.action(bodyToUpdateStatus,
-                            Boolean.TRUE.equals(body.getBoolean(Field.STATUS)) ? MinestestServiceAction.OPEN : MinestestServiceAction.CLOSE);
+                            Boolean.TRUE.equals(body.getBoolean(Field.STATUS)) ?
+                                    MinestestServiceAction.OPEN : MinestestServiceAction.CLOSE);
                 })
                 .onSuccess(promise::complete)
                 .onFailure(err -> promise.fail(err.getMessage()));
@@ -228,7 +229,7 @@ public class DefaultWorldService implements WorldService {
 
     @Override
     public Future<JsonArray> getMongo(String ownerId, String ownerName, String createdAt, String updatedAt,
-                                 String img, String shared, String name, JsonObject sortJson) {
+                                 String img, String name, JsonObject sortJson) {
         Promise<JsonArray> promise = Promise.promise();
 
         JsonObject worldQuery = new JsonObject();
@@ -247,9 +248,6 @@ public class DefaultWorldService implements WorldService {
         }
         if(img != null) {
             worldQuery.put(Field.IMG, img);
-        }
-        if(shared != null) {
-            worldQuery.put(Field.SHARED, shared);
         }
         if(name != null) {
             worldQuery.put(Field.TITLE, name);

@@ -53,11 +53,10 @@ public class MinetestController extends ControllerHelper {
         String createdAt = request.getParam(Field.CREATED_AT);
         String updatedAt = request.getParam(Field.UPDATED_AT);
         String img = request.getParam(Field.IMG);
-        String shared = request.getParam(Field.SHARED);
         String title = request.getParam(Field.TITLE);
 
         UserUtils.getUserInfos(eb, request, user -> worldService.getMongo(ownerId, ownerName, createdAt, updatedAt, img,
-                        shared, title, new JsonObject())
+                        title, new JsonObject())
                 .onSuccess(world -> renderJson(request, world))
                 .onFailure(err -> renderError(request)));
     }

@@ -46,7 +46,7 @@ public class DefaultMinetestService implements MinetestService {
     }
 
     private void answerFailure(MinestestServiceAction action, Promise<JsonObject> promise, AsyncResult<HttpResponse<Buffer>> resp) {
-        String error = "";
+        String error;
         if (resp.failed()){
             error = resp.cause().getMessage();
         } else {
@@ -54,8 +54,7 @@ public class DefaultMinetestService implements MinetestService {
             error = errorJson.getJsonArray(Field.MESSAGE).getString(0) + " ; " + errorJson.getString(Field.DATA);
         }
         String message = String.format("[Minetest@%s::" + action + "]: An error has occurred " +
-                        "through python server: %s",
-                this.getClass().getSimpleName(), error);
+                        "through python server: %s", this.getClass().getSimpleName(), error);
         log.error(message, error);
         promise.fail(message);
     }
