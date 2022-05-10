@@ -31,20 +31,20 @@ class Controller implements ng.IController, IViewModel {
         let clipboardLink = new Clipboard('.clipboard-link-field');
         clipboardLink.on('success', function(e) {
             e.clearSelection();
-            notify.info('minetest.copy.link.success');
+            toasts.confirm('minetest.copy.link.success');
         });
         clipboardLink.on('error', function(e) {
-            notify.error('minetest.copy.link.error');
+            toasts.warning('minetest.copy.link.error');
         });
 
         //copy port
         let clipboardPort = new Clipboard('.clipboard-port-field');
         clipboardPort.on('success', function(e) {
             e.clearSelection();
-            notify.info('minetest.copy.port.success');
+            toasts.confirm('minetest.copy.port.success');
         });
         clipboardPort.on('error', function(e) {
-            notify.error('minetest.copy.port.error');
+            toasts.warning('minetest.copy.port.error');
         });
 
         this.isLegendVisible = false;
@@ -63,10 +63,10 @@ class Controller implements ng.IController, IViewModel {
         minetestService.updateStatus(this.world)
             .then(() => {
                 if(this.world.status) {
-                    notify.info('minetest.world.open.confirm');
+                    toasts.confirm('minetest.world.open.confirm');
                 }
                 else
-                    notify.info('minetest.world.close.confirm');
+                    toasts.confirm('minetest.world.close.confirm');
                 this.$scope.$eval(this.$scope['vm']['onCurrentWorld']());
             }).catch((err: AxiosError) => {
             toasts.warning('minetest.world.open.close.error');
