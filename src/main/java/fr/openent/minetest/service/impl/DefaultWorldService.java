@@ -72,26 +72,33 @@ public class DefaultWorldService implements WorldService {
 
     private Future<Integer> getNewPort(JsonArray res) {
         Promise<Integer> promise = Promise.promise();
-
-        Integer newPort = minetestConfig.minetestMinPort();
-
-        for(Object world: res) {
-            JsonObject worldJson = (JsonObject) world;
-            int port = worldJson.getInteger(Field.PORT);
-            if(port > newPort) {
-                break;
-            }
-            else {
-                newPort ++;
-            }
-        }
-        if(newPort > minetestConfig.minetestMaxPort()) {
+        if(res == null || res.size() != 1) {
             String message = String.format("[Minetest@%s::createWorld]: The maximum port limit was reach. " +
                     "Please, contact the administrator to extend the port range.", this.getClass().getSimpleName());
             log.error(message);
             promise.fail(message);
-        } else {
-            promise.complete(newPort);
+        }
+        else {
+            JsonObject world = res.getJsonObject(0);
+            if(Boolean.TRUE.equals(world.getBoolean(Field.ISEXTERNAL))) {
+                if(!world.getString(Field.PORT).isEmpty()) {
+                    promise.complete(Integer.parseInt(world.getString(Field.PORT)));
+                }
+                return promise.future();
+            }
+
+            Integer newPort = minetestConfig.minetestMinPort();
+            int port = world.getInteger(Field.PORT);
+            if(port <= newPort) newPort ++;
+
+            if(newPort > minetestConfig.minetestMaxPort()) {
+                String message = String.format("[Minetest@%s::createWorld]: An error has occurred while creating world",
+                        this.getClass().getSimpleName());
+                log.error(message);
+                promise.fail(message);
+            } else {
+                promise.complete(newPort);
+            }
         }
         return promise.future();
     }
