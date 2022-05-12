@@ -8,6 +8,8 @@ interface IViewModel {
     openPropertiesLightbox(): void;
     closePropertiesLightbox(): void;
     updateWorld(): Promise<void>;
+    resetPassword(): void;
+    showInputPassword: boolean;
     updateImportWorld(): Promise<void>;
 
     lightbox: any;
@@ -21,6 +23,7 @@ class Controller implements ng.IController, IViewModel {
     lightbox: any;
     world: IWorld;
     worldForm: IWorld;
+    showInputPassword;
 
     constructor(private $scope: IScope) {
         {
@@ -56,6 +59,12 @@ class Controller implements ng.IController, IViewModel {
             toasts.warning('minetest.world.update.error');
         })
     }
+
+    resetPassword(): void {
+        this.worldForm.password = "";
+        this.showInputPassword = !this.showInputPassword;
+    }
+
 
     async updateImportWorld(): Promise<void> {
         minetestService.updateImportWorld(this.worldForm)

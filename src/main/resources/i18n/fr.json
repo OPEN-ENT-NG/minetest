@@ -29,6 +29,8 @@
   "minetest.placeholder.search": "Rechercher",
   "minetest.port": "Port",
   "minetest.properties": "Propriétés",
+  "minetest.reset.password": "Réinitialiser le mot de passe",
+  "minetest.reset.password.explanation": "Vous pouvez publiposter de nouveau le monde pour faire part du nouveau mot de passe aux utilisateurs",
   "minetest.share": "Partager",
   "minetest.the": "le",
   "minetest.title": "Minetest",
