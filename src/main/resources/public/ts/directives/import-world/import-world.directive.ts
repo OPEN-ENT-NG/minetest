@@ -43,17 +43,17 @@ class Controller implements ng.IController, IViewModel {
     }
 
     resetForm(): void {
-        if(this.world) {
-            if(this.world.title) {
+        if (this.world) {
+            if (this.world.title) {
                 this.world.title = "";
             }
-            if(this.world.address) {
+            if (this.world.address) {
                 this.world.address = "";
             }
-            if(this.world.port) {
+            if (this.world.port) {
                 this.world.port = "";
             }
-            if(this.world.img) {
+            if (this.world.img) {
                 this.world.img = "";
             }
         }
