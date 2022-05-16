@@ -97,4 +97,4 @@ function directive() {
         }
     }
 }
-export const propertiesWorld = ng.directive('propertiesWorld', directive)
+export const propertiesWorld = ng.directive('propertiesWorld', directive);
