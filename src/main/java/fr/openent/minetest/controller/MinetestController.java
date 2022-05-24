@@ -87,10 +87,6 @@ public class MinetestController extends ControllerHelper {
     @ApiDoc("Update world")
     @SecuredAction(value = "", type = ActionType.AUTHENTICATED)
     public void putWorld(final HttpServerRequest request) {
-        if (!request.params().contains(Field.ID)) {
-            badRequest(request);
-            return;
-        }
         RequestUtils.bodyToJson(request, pathPrefix + Field.WORLD, body
                 -> UserUtils.getUserInfos(eb, request, user
                 -> worldService.update(user, body)
@@ -102,10 +98,6 @@ public class MinetestController extends ControllerHelper {
     @ApiDoc("Update import world")
     @SecuredAction(value = "", type = ActionType.AUTHENTICATED)
     public void putImportWorld(final HttpServerRequest request) {
-        if (!request.params().contains(Field.ID)) {
-            badRequest(request);
-            return;
-        }
         RequestUtils.bodyToJson(request, pathPrefix + Field.IMPORT_WORLD, body
                 -> UserUtils.getUserInfos(eb, request, user
                 -> worldService.update(user, body)
@@ -117,10 +109,6 @@ public class MinetestController extends ControllerHelper {
     @ApiDoc("Update status world")
     @SecuredAction(value = "", type = ActionType.AUTHENTICATED)
     public void putStatus(final HttpServerRequest request) {
-        if (!request.params().contains(Field.ID)) {
-            badRequest(request);
-            return;
-        }
         RequestUtils.bodyToJson(request, pathPrefix + Field.WORLD, body
                 -> UserUtils.getUserInfos(eb, request, user
                 -> worldService.updateStatus(user, body)
