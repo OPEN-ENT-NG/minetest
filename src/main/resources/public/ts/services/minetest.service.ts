@@ -48,15 +48,15 @@ export const minetestService: IMinetestService = {
     },
 
     update: (worldBody: IWorld): Promise<AxiosResponse> => {
-        return http.put(`/minetest/worlds`, worldBody);
+        return http.put(`/minetest/worlds/id=${worldBody._id}`, worldBody);
     },
 
     updateImportWorld: (worldBody: IWorld): Promise<AxiosResponse> => {
-        return http.put(`/minetest/worlds/import`, worldBody);
+        return http.put(`/minetest/worlds/import/id=${worldBody._id}`, worldBody);
     },
 
     updateStatus: (worldBody: IWorld): Promise<AxiosResponse> => {
-        return http.put(`/minetest/worlds/status`, worldBody);
+        return http.put(`/minetest/worlds/status/id=${worldBody._id}`, worldBody);
     },
 
     delete: (world: IWorld): Promise<AxiosResponse> => {

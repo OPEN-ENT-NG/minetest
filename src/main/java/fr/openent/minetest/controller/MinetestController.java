@@ -83,10 +83,14 @@ public class MinetestController extends ControllerHelper {
                 .onFailure(err -> renderError(request))));
     }
 
-    @Put("/worlds")
+    @Put("/worlds/:id")
     @ApiDoc("Update world")
     @SecuredAction(value = "", type = ActionType.AUTHENTICATED)
     public void putWorld(final HttpServerRequest request) {
+        if (!request.params().contains(Field.ID)) {
+            badRequest(request);
+            return;
+        }
         RequestUtils.bodyToJson(request, pathPrefix + Field.WORLD, body
                 -> UserUtils.getUserInfos(eb, request, user
                 -> worldService.update(user, body)
@@ -94,10 +98,14 @@ public class MinetestController extends ControllerHelper {
                 .onFailure(err -> renderError(request))));
     }
 
-    @Put("/worlds/import")
+    @Put("/worlds/import/:id")
     @ApiDoc("Update import world")
     @SecuredAction(value = "", type = ActionType.AUTHENTICATED)
     public void putImportWorld(final HttpServerRequest request) {
+        if (!request.params().contains(Field.ID)) {
+            badRequest(request);
+            return;
+        }
         RequestUtils.bodyToJson(request, pathPrefix + Field.IMPORT_WORLD, body
                 -> UserUtils.getUserInfos(eb, request, user
                 -> worldService.update(user, body)
@@ -105,10 +113,14 @@ public class MinetestController extends ControllerHelper {
                 .onFailure(err -> renderError(request))));
     }
 
-    @Put("/worlds/status")
+    @Put("/worlds/status/:id")
     @ApiDoc("Update status world")
     @SecuredAction(value = "", type = ActionType.AUTHENTICATED)
     public void putStatus(final HttpServerRequest request) {
+        if (!request.params().contains(Field.ID)) {
+            badRequest(request);
+            return;
+        }
         RequestUtils.bodyToJson(request, pathPrefix + Field.WORLD, body
                 -> UserUtils.getUserInfos(eb, request, user
                 -> worldService.updateStatus(user, body)

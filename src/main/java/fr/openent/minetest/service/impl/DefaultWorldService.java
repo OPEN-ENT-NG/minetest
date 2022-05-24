@@ -26,7 +26,7 @@ public class DefaultWorldService implements WorldService {
     private final String collection;
     private final Logger log = LoggerFactory.getLogger(DefaultWorldService.class);
 
-    public DefaultWorldService(ServiceFactory serviceFactory,String collection, MongoDb mongo) {
+    public DefaultWorldService(ServiceFactory serviceFactory, String collection, MongoDb mongo) {
         this.collection = collection;
         this.mongoDb = mongo;
         this.minetestConfig = serviceFactory.minetestConfig();
@@ -72,33 +72,32 @@ public class DefaultWorldService implements WorldService {
 
     private Future<Integer> getNewPort(JsonArray res) {
         Promise<Integer> promise = Promise.promise();
-        if (res == null || res.size() != 1) {
+
+        Integer newPort = minetestConfig.minetestMinPort();
+
+        for(Object world: res) {
+            JsonObject worldJson = (JsonObject) world;
+            if (Boolean.TRUE.equals(worldJson.getBoolean(Field.ISEXTERNAL))) {
+                if (!worldJson.getString(Field.PORT).isEmpty()) {
+                    promise.complete(Integer.parseInt(worldJson.getString(Field.PORT)));
+                }
+                return promise.future();
+            }
+            int port = worldJson.getInteger(Field.PORT);
+            if(port > newPort) {
+                break;
+            }
+            else {
+                newPort ++;
+            }
+        }
+        if(newPort > minetestConfig.minetestMaxPort()) {
             String message = String.format("[Minetest@%s::createWorld]: The maximum port limit was reach. " +
                     "Please, contact the administrator to extend the port range.", this.getClass().getSimpleName());
             log.error(message);
             promise.fail(message);
-        }
-        else {
-            JsonObject world = res.getJsonObject(0);
-            if (Boolean.TRUE.equals(world.getBoolean(Field.ISEXTERNAL))) {
-                if (!world.getString(Field.PORT).isEmpty()) {
-                    promise.complete(Integer.parseInt(world.getString(Field.PORT)));
-                }
-                return promise.future();
-            }
-
-            Integer newPort = minetestConfig.minetestMinPort();
-            int port = world.getInteger(Field.PORT);
-            if (port <= newPort) newPort ++;
-
-            if (newPort > minetestConfig.minetestMaxPort()) {
-                String message = String.format("[Minetest@%s::createWorld]: An error has occurred while creating world",
-                        this.getClass().getSimpleName());
-                log.error(message);
-                promise.fail(message);
-            } else {
-                promise.complete(newPort);
-            }
+        } else {
+            promise.complete(newPort);
         }
         return promise.future();
     }

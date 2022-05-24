@@ -1,15 +1,11 @@
-export interface IMinetest {
-
-}
-
 export interface IWorld {
     _id?: string;
     owner_id: string;
     owner_name: string;
     owner_login: string;
 
-    created_at: Date;
-    updated_at: Date;
+    created_at: string;
+    updated_at: string;
     password: string;
     status?: boolean;
 
@@ -27,8 +23,8 @@ export interface IImportWorld {
     owner_name: string;
     owner_login: string;
 
-    created_at: Date;
-    updated_at: Date;
+    created_at: string;
+    updated_at: string;
 
     img?: string;
     title: string;
