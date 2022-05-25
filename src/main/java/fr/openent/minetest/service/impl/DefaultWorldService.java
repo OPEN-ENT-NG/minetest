@@ -222,7 +222,7 @@ public class DefaultWorldService implements WorldService {
 
         mongoDb.delete(this.collection, query, MongoDbResult.validResultHandler(result -> {
             if (result.isLeft()) {
-                String message = String.format("[Minetest@%s::deleteWorld]: An error has occurred while deleting import world: %s",
+                String message = String.format("[Minetest@%s::deleteImportWorld]: An error has occurred while deleting import world: %s",
                         this.getClass().getSimpleName(), result.left().getValue());
                 log.error(message, result.left().getValue());
                 promise.fail(message);

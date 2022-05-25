@@ -131,16 +131,12 @@ public class MinetestController extends ControllerHelper {
                 .onFailure(err -> renderError(request)));
     }
 
-    @Delete("/worlds/import")
+    @Delete("/worlds/import/:id")
     @ApiDoc("Delete world")
     @SecuredAction(value = "", type = ActionType.AUTHENTICATED)
     public void deleteImportWorld(final HttpServerRequest request) {
-        if (!request.params().contains(Field.ID)) {
-            badRequest(request);
-            return;
-        }
         List<String> ids = new ArrayList<>(Collections.singletonList(
-                request.params().get(Field.ID)
+                request.getParam(Field.ID)
         ));
         UserUtils.getUserInfos(eb, request, user -> worldService.deleteImportWorld(user, ids)
                 .onSuccess(res -> renderJson(request, res))

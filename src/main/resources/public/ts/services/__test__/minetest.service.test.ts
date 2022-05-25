@@ -96,12 +96,12 @@ describe('MinetestService', () => {
 
         }
 
-        mock.onDelete(`/minetest/worlds/import?id=${world._id}`, world)
+        mock.onDelete(`/minetest/worlds/import/${world._id}`, world)
             .reply(200, data);
 
         minetestService.deleteImportWorld(world).then(response => {
             expect(response.status).toEqual(200);
-            expect(response.config.url).toEqual(`/minetest/worlds/import?id=${world._id}`);
+            expect(response.config.url).toEqual(`/minetest/worlds/import/${world._id}`);
             expect(response.config.method).toEqual(`delete`);
             done();
         });

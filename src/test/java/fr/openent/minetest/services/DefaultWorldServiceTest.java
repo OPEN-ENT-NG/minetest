@@ -61,17 +61,9 @@ public class DefaultWorldServiceTest {
 
         //Expected data
         String expectedCollection = "world";
-        JsonObject expectedWorld = new JsonObject()
-                .put("_id", IMPORTWORLD_ID)
-                .put("owner_id", "ownerId")
-                .put("owner_name", "ownerName")
-                .put("owner_login", "ownerLogin")
-                .put("created_at", "createdAt")
-                .put("updated_at", "updatedAt")
-                .put("title", "my world")
-                .put("address", "myworld.fr")
-                .put("port", "30000")
-                .put("isExternal", true);
+        String expectedWorld = "{\"_id\":\"5fzef5\",\"owner_id\":\"ownerId\",\"owner_name\":\"ownerName\"," +
+                "\"owner_login\":\"ownerLogin\",\"created_at\":\"createdAt\",\"updated_at\":\"updatedAt\"," +
+                "\"title\":\"my world updated\",\"address\":\"myworld.fr\",\"port\":\"30000\",\"isExternal\":true}";
 
         Mockito.doAnswer(invocation -> {
             String collection = invocation.getArgument(0);
@@ -93,19 +85,21 @@ public class DefaultWorldServiceTest {
 
         //Expected data
         String expectedCollection = "world";
-        JsonObject expectedQuery = new JsonObject()
+        JsonObject world = new JsonObject()
                 .put("_id", IMPORTWORLD_ID)
                 .put("isExternal", true);
+
+        String expectedWorld = "{\"_id\":\"5fzef5\",\"isExternal\":true}";
 
         Mockito.doAnswer(invocation -> {
             String collection = invocation.getArgument(0);
             JsonObject query = invocation.getArgument(1);
             context.assertEquals(collection, expectedCollection);
-            context.assertEquals(query, expectedQuery);
+            context.assertEquals(query, expectedWorld);
             return null;
         }).when(mongo).findOne(Mockito.anyString(), Mockito.any(JsonObject.class), Mockito.any(Handler.class));
 
-        worldService.importWorld(expectedQuery, new UserInfos());
+        worldService.importWorld(world, new UserInfos());
     }
 
 }

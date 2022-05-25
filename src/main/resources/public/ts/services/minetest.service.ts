@@ -73,7 +73,7 @@ export const minetestService: IMinetestService = {
     },
 
     deleteImportWorld: (world: IWorld): Promise<AxiosResponse> => {
-        return http.delete(`/minetest/worlds/import?id=${world._id}`)
+        return http.delete(`/minetest/worlds/import/${world._id}`)
     }
 };
 
