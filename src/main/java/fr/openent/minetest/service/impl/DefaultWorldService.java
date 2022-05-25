@@ -159,10 +159,10 @@ public class DefaultWorldService implements WorldService {
      * @param user User Object containing user id
      */
     @Override
-    public Future<JsonObject> update(UserInfos user, JsonObject body) {
+    public Future<JsonObject> update(UserInfos user, String worldId, JsonObject body) {
         Promise<JsonObject> promise = Promise.promise();
 
-        JsonObject worldId = new JsonObject().put(Field._ID, body.getValue(Field._ID));
+        JsonObject worldQuery = new JsonObject().put(Field._ID, worldId);
         JsonObject worldData = new JsonObject();
 
         if (body.getValue(Field.IMG) != null) {
@@ -179,7 +179,7 @@ public class DefaultWorldService implements WorldService {
 
         JsonObject world = new JsonObject().put("$set", worldData);
 
-        mongoDb.update(this.collection, worldId, world, MongoDbResult.validResultHandler(result -> {
+        mongoDb.update(this.collection, worldQuery, world, MongoDbResult.validResultHandler(result -> {
             if (result.isLeft()) {
                 String message = String.format("[Minetest@%s::updateWorld]: An error has occurred while updating world: %s",
                         this.getClass().getSimpleName(), result.left().getValue());
