@@ -7,7 +7,6 @@ import fr.openent.minetest.service.WorldService;
 import fr.openent.minetest.service.impl.DefaultWorldService;
 import fr.wseduc.mongodb.MongoDb;
 import io.vertx.core.Handler;
-import io.vertx.core.Promise;
 import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.unit.TestContext;
@@ -26,8 +25,6 @@ public class DefaultWorldServiceTest {
 
     private WorldService worldService;
     MongoDb mongo = mock(MongoDb.class);
-
-    private static final String IMPORTWORLD_ID = "{\"5fzef5\"}";
 
     @Before
     public void setUp() {
@@ -75,28 +72,6 @@ public class DefaultWorldServiceTest {
         } catch (Exception e) {
             context.assertNull(e);
         }
-    }
-
-    @Test
-    public void testImportWorldHasIsExternal(TestContext context) {
-
-        //Expected data
-        String expectedCollection = "world";
-        JsonObject world = new JsonObject()
-                .put("_id", IMPORTWORLD_ID)
-                .put("isExternal", true);
-
-        String expectedWorld = "{\"_id\":\"5fzef5\",\"isExternal\":true}";
-
-        Mockito.doAnswer(invocation -> {
-            String collection = invocation.getArgument(0);
-            JsonObject query = invocation.getArgument(1);
-            context.assertEquals(collection, expectedCollection);
-            context.assertEquals(query, expectedWorld);
-            return null;
-        }).when(mongo).findOne(Mockito.anyString(), Mockito.any(JsonObject.class), Mockito.any(Handler.class));
-
-        worldService.importWorld(world, new UserInfos());
     }
 
 }

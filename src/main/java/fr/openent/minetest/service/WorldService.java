@@ -22,7 +22,7 @@ public interface WorldService {
      * Import World
      *
      * @param body Data to store
-     * @param user infos of the user
+     * @param user {@link UserInfos}
      * @return Future {@link Future<JsonObject>} containing new world
      */
     Future<JsonObject> importWorld(JsonObject body, UserInfos user);
