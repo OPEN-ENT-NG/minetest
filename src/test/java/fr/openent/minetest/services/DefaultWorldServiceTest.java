@@ -27,7 +27,7 @@ public class DefaultWorldServiceTest {
     private WorldService worldService;
     MongoDb mongo = mock(MongoDb.class);
 
-    private static final String IMPORTWORLD_ID = "{\"_id\":\"111\"}";
+    private static final String IMPORTWORLD_ID = "{\"5fzef5\"}";
 
     @Before
     public void setUp() {
@@ -42,13 +42,11 @@ public class DefaultWorldServiceTest {
 
     @Test
     public void testCreateImportWorld(TestContext context) {
-        JsonObject now = MongoDb.now();
-
         // Arguments
-        Promise<JsonObject> promise = Promise.promise();
+        UserInfos userInfos = new UserInfos();
 
         JsonObject world = new JsonObject()
-                .put("_id", IMPORTWORLD_ID)
+                .put("_id", "5fzef5")
                 .put("owner_id", "ownerId")
                 .put("owner_name", "ownerName")
                 .put("owner_login", "ownerLogin")
@@ -63,20 +61,19 @@ public class DefaultWorldServiceTest {
         String expectedCollection = "world";
         String expectedWorld = "{\"_id\":\"5fzef5\",\"owner_id\":\"ownerId\",\"owner_name\":\"ownerName\"," +
                 "\"owner_login\":\"ownerLogin\",\"created_at\":\"createdAt\",\"updated_at\":\"updatedAt\"," +
-                "\"title\":\"my world updated\",\"address\":\"myworld.fr\",\"port\":\"30000\",\"isExternal\":true}";
-
+                "\"title\":\"my world\",\"address\":\"myworld.fr\",\"port\":\"30000\",\"isExternal\":true}";
         Mockito.doAnswer(invocation -> {
             String collection = invocation.getArgument(0);
-            JsonObject query = invocation.getArgument(1);
+            String query = invocation.getArgument(1).toString();
             context.assertEquals(collection, expectedCollection);
             context.assertEquals(query, expectedWorld);
             return null;
         }).when(mongo).insert(Mockito.anyString(), Mockito.any(JsonObject.class), Mockito.any(Handler.class));
 
         try {
-            Whitebox.invokeMethod(worldService, "importWorld", promise, world);
+            Whitebox.invokeMethod(worldService, "importWorld", world, userInfos);
         } catch (Exception e) {
-            e.printStackTrace();
+            context.assertNull(e);
         }
     }
 
