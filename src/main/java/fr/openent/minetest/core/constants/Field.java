@@ -16,9 +16,9 @@ public class Field {
     public static final String CREATED_AT = "created_at";
     public static final String UPDATED_AT = "updated_at";
     public static final String IMG = "img";
-    public static final String SHARED = "shared";
     public static final String TITLE = "title";
     public static final String WORLD = "world";
+    public static final String IMPORT_WORLD = "import_world";
     public static final String PORT = "port";
     public static final String FILEID = "fileId";
     public static final String METADATA = "metadata";
@@ -26,6 +26,8 @@ public class Field {
     public static final String MESSAGE = "message";
     public static final String STATUS = "status";
     public static final String DATA = "data";
+    public static final String ADDRESS = "address";
+    public static final String ISEXTERNAL = "isExternal";
 
     // Config
     public static final String MINETEST_DOWNLOAD = "minetest-download";

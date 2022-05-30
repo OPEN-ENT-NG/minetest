@@ -8,6 +8,7 @@ interface IViewModel {
     openDeleteLightbox(): void;
     closeDeleteLightbox(): void;
     deleteWorld(): Promise<void>;
+    deleteImportWorld(): Promise<void>;
 
     lightbox: any;
 
@@ -42,6 +43,17 @@ class Controller implements ng.IController, IViewModel {
 
     async deleteWorld(): Promise<void> {
         minetestService.delete(this.world)
+            .then(() => {
+                toasts.confirm('minetest.world.delete.confirm');
+                this.closeDeleteLightbox();
+                this.$scope.$eval(this.$scope['vm']['onDeleteWorld']());
+            }).catch(() => {
+            toasts.warning('minetest.world.delete.error');
+        })
+    }
+
+    async deleteImportWorld(): Promise<void> {
+        minetestService.deleteImportWorld(this.world)
             .then(() => {
                 toasts.confirm('minetest.world.delete.confirm');
                 this.closeDeleteLightbox();

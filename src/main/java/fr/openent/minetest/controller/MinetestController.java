@@ -15,6 +15,8 @@ import org.entcore.common.events.EventStore;
 import org.entcore.common.events.EventStoreFactory;
 import org.entcore.common.user.UserUtils;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class MinetestController extends ControllerHelper {
@@ -51,11 +53,10 @@ public class MinetestController extends ControllerHelper {
         String createdAt = request.getParam(Field.CREATED_AT);
         String updatedAt = request.getParam(Field.UPDATED_AT);
         String img = request.getParam(Field.IMG);
-        String shared = request.getParam(Field.SHARED);
         String title = request.getParam(Field.TITLE);
 
         UserUtils.getUserInfos(eb, request, user -> worldService.getMongo(ownerId, ownerName, createdAt, updatedAt, img,
-                        shared, title, new JsonObject())
+                        title, new JsonObject())
                 .onSuccess(world -> renderJson(request, world))
                 .onFailure(err -> renderError(request)));
     }
@@ -71,18 +72,42 @@ public class MinetestController extends ControllerHelper {
                 .onFailure(err -> renderError(request))));
     }
 
-    @Put("/worlds")
-    @ApiDoc("Update world")
+    @Post("/worlds/import")
+    @ApiDoc("Import world")
     @SecuredAction(value = "", type = ActionType.AUTHENTICATED)
-    public void putWorld(final HttpServerRequest request) {
-        RequestUtils.bodyToJson(request, pathPrefix + Field.WORLD, body
+    public void importWorld(final HttpServerRequest request) {
+        RequestUtils.bodyToJson(request, pathPrefix + Field.IMPORT_WORLD, body
                 -> UserUtils.getUserInfos(eb, request, user
-                -> worldService.update(user, body)
+                -> worldService.importWorld(body, user)
                 .onSuccess(res -> renderJson(request, body))
                 .onFailure(err -> renderError(request))));
     }
 
-    @Put("/worlds/status")
+    @Put("/worlds/:id")
+    @ApiDoc("Update world")
+    @SecuredAction(value = "", type = ActionType.AUTHENTICATED)
+    public void putWorld(final HttpServerRequest request) {
+        String worldId = request.getParam("id");
+        RequestUtils.bodyToJson(request, pathPrefix + Field.WORLD, body
+                -> UserUtils.getUserInfos(eb, request, user
+                -> worldService.update(user, worldId, body)
+                .onSuccess(res -> renderJson(request, body))
+                .onFailure(err -> renderError(request))));
+    }
+
+    @Put("/worlds/import/:id")
+    @ApiDoc("Update import world")
+    @SecuredAction(value = "", type = ActionType.AUTHENTICATED)
+    public void putImportWorld(final HttpServerRequest request) {
+        String worldId = request.getParam("id");
+        RequestUtils.bodyToJson(request, pathPrefix + Field.IMPORT_WORLD, body
+                -> UserUtils.getUserInfos(eb, request, user
+                -> worldService.update(user, worldId, body)
+                .onSuccess(res -> renderJson(request, body))
+                .onFailure(err -> renderError(request))));
+    }
+
+    @Put("/worlds/status/:id")
     @ApiDoc("Update status world")
     @SecuredAction(value = "", type = ActionType.AUTHENTICATED)
     public void putStatus(final HttpServerRequest request) {
@@ -106,6 +131,17 @@ public class MinetestController extends ControllerHelper {
         UserUtils.getUserInfos(eb, request, user -> worldService.delete(user, ids, ports)
                 .onSuccess(res -> renderJson(request, res))
                 .onFailure(err -> renderError(request)));
+    }
 
+    @Delete("/worlds/import/:id")
+    @ApiDoc("Delete world")
+    @SecuredAction(value = "", type = ActionType.AUTHENTICATED)
+    public void deleteImportWorld(final HttpServerRequest request) {
+        List<String> ids = new ArrayList<>(Collections.singletonList(
+                request.getParam(Field.ID)
+        ));
+        UserUtils.getUserInfos(eb, request, user -> worldService.deleteImportWorld(user, ids)
+                .onSuccess(res -> renderJson(request, res))
+                .onFailure(err -> renderError(request)));
     }
 }

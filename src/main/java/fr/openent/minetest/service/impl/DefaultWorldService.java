@@ -26,7 +26,7 @@ public class DefaultWorldService implements WorldService {
     private final String collection;
     private final Logger log = LoggerFactory.getLogger(DefaultWorldService.class);
 
-    public DefaultWorldService(ServiceFactory serviceFactory,String collection, MongoDb mongo) {
+    public DefaultWorldService(ServiceFactory serviceFactory, String collection, MongoDb mongo) {
         this.collection = collection;
         this.mongoDb = mongo;
         this.minetestConfig = serviceFactory.minetestConfig();
@@ -52,14 +52,14 @@ public class DefaultWorldService implements WorldService {
 
         //get New Port
         JsonObject sortByPort = new JsonObject().put(Field.PORT, 1);
-        getMongo(null, null, null, null, null, null, null, sortByPort)
+        getMongo(null, null, null, null, null, null, sortByPort)
                 .compose(this::getNewPort)
                 .compose(res ->  {
                     int newPort = res;
                     body.put(Field.PORT, newPort);
                     return createMongo(body);
                 })
-                .compose(res -> getMongo(userInfos.getUserId(), null,null,null,null,null,
+                .compose(res -> getMongo(userInfos.getUserId(), null,null,null,null,
                         null, null))
                 .compose(res -> {
                     JsonObject worldCreated = res.getJsonObject(res.size() - 1);
@@ -77,6 +77,12 @@ public class DefaultWorldService implements WorldService {
 
         for(Object world: res) {
             JsonObject worldJson = (JsonObject) world;
+            if (Boolean.TRUE.equals(worldJson.getBoolean(Field.ISEXTERNAL))) {
+                if (!worldJson.getString(Field.PORT).isEmpty()) {
+                    promise.complete(Integer.parseInt(worldJson.getString(Field.PORT)));
+                }
+                return promise.future();
+            }
             int port = worldJson.getInteger(Field.PORT);
             if(port > newPort) {
                 break;
@@ -96,6 +102,35 @@ public class DefaultWorldService implements WorldService {
         return promise.future();
     }
 
+    /**
+     * Import World
+     *
+     * @param body JsonObject containing the data for the world
+     * @param user User Object containing user id
+     */
+    @Override
+    public Future<JsonObject> importWorld(JsonObject body, UserInfos user) {
+        Promise<JsonObject> promise = Promise.promise();
+
+        mongoDb.insert(this.collection, body, MongoDbResult.validResultHandler(result -> {
+            if (result.isLeft()) {
+                String message = String.format("[Minetest@%s::importWorld]: An error has occurred while importing world: %s",
+                        this.getClass().getSimpleName(), result.left().getValue());
+                log.error(message, result.left().getValue());
+                promise.fail(message);
+                return;
+            }
+            promise.complete();
+        }));
+        return promise.future();
+    }
+
+    /**
+     * Update World status
+     *
+     * @param body JsonObject containing the data for the world
+     * @param user User Object containing user id
+     */
     @Override
     public Future<JsonObject> updateStatus(UserInfos user, JsonObject body) {
         Promise<JsonObject> promise = Promise.promise();
@@ -109,30 +144,43 @@ public class DefaultWorldService implements WorldService {
                             .put(Field.ID,body.getString(Field._ID))
                             .put(Field.PORT,body.getInteger(Field.PORT));
                     return minetestService.action(bodyToUpdateStatus,
-                            Boolean.TRUE.equals(body.getBoolean(Field.STATUS)) ? MinestestServiceAction.OPEN : MinestestServiceAction.CLOSE);
+                            Boolean.TRUE.equals(body.getBoolean(Field.STATUS)) ?
+                                    MinestestServiceAction.OPEN : MinestestServiceAction.CLOSE);
                 })
                 .onSuccess(promise::complete)
                 .onFailure(err -> promise.fail(err.getMessage()));
         return promise.future();
     }
 
+    /**
+     * Update World
+     *
+     * @param body JsonObject containing the data for the world
+     * @param user User Object containing user id
+     */
     @Override
-    public Future<JsonObject> update(UserInfos user, JsonObject body) {
+    public Future<JsonObject> update(UserInfos user, String worldId, JsonObject body) {
         Promise<JsonObject> promise = Promise.promise();
 
-        JsonObject worldId = new JsonObject().put(Field._ID, body.getValue(Field._ID));
+        JsonObject worldQuery = new JsonObject().put(Field._ID, worldId);
         JsonObject worldData = new JsonObject();
 
-        if(body.getValue(Field.IMG) != null) {
+        if (body.getValue(Field.IMG) != null) {
             worldData.put(Field.IMG, body.getValue(Field.IMG));
+        }
+        if (body.getValue(Field.ADDRESS) != null) {
+            worldData.put(Field.ADDRESS, body.getValue(Field.ADDRESS));
+        }
+        if (body.getValue(Field.PORT) != null) {
+            worldData.put(Field.PORT, body.getValue(Field.PORT));
         }
         worldData.put(Field.TITLE, body.getValue(Field.TITLE))
                 .put(Field.UPDATED_AT, body.getValue(Field.UPDATED_AT));
 
         JsonObject world = new JsonObject().put("$set", worldData);
 
-        mongoDb.update(this.collection, worldId, world, MongoDbResult.validResultHandler(result -> {
-            if(result.isLeft()) {
+        mongoDb.update(this.collection, worldQuery, world, MongoDbResult.validResultHandler(result -> {
+            if (result.isLeft()) {
                 String message = String.format("[Minetest@%s::updateWorld]: An error has occurred while updating world: %s",
                         this.getClass().getSimpleName(), result.left().getValue());
                 log.error(message, result.left().getValue());
@@ -160,37 +208,59 @@ public class DefaultWorldService implements WorldService {
         return promise.future();
     }
 
+    /**
+     * Delete Import World
+     *
+     * @param ids List world's ids to delete
+     * @param user User Object containing user id
+     */
+    @Override
+    public Future<JsonObject> deleteImportWorld(UserInfos user, List<String> ids) {
+        Promise<JsonObject> promise = Promise.promise();
+        JsonObject query = new JsonObject()
+                .put(Field._ID, new JsonObject().put(Field.$IN, ids));
+
+        mongoDb.delete(this.collection, query, MongoDbResult.validResultHandler(result -> {
+            if (result.isLeft()) {
+                String message = String.format("[Minetest@%s::deleteImportWorld]: An error has occurred while deleting import world: %s",
+                        this.getClass().getSimpleName(), result.left().getValue());
+                log.error(message, result.left().getValue());
+                promise.fail(message);
+                return;
+            }
+            promise.complete(result.right().getValue());
+        }));
+        return promise.future();
+    }
+
     @Override
     public Future<JsonArray> getMongo(String ownerId, String ownerName, String createdAt, String updatedAt,
-                                 String img, String shared, String name, JsonObject sortJson) {
+                                 String img, String name, JsonObject sortJson) {
         Promise<JsonArray> promise = Promise.promise();
 
         JsonObject worldQuery = new JsonObject();
 
-        if(ownerId != null) {
+        if (ownerId != null) {
             worldQuery.put(Field.OWNER_ID, ownerId);
         }
-        if(ownerName != null) {
+        if (ownerName != null) {
             worldQuery.put(Field.OWNER_NAME, ownerName);
         }
-        if(createdAt != null) {
+        if (createdAt != null) {
             worldQuery.put(Field.CREATED_AT, createdAt);
         }
-        if(updatedAt != null) {
+        if (updatedAt != null) {
             worldQuery.put(Field.UPDATED_AT, updatedAt);
         }
-        if(img != null) {
+        if (img != null) {
             worldQuery.put(Field.IMG, img);
         }
-        if(shared != null) {
-            worldQuery.put(Field.SHARED, shared);
-        }
-        if(name != null) {
+        if (name != null) {
             worldQuery.put(Field.TITLE, name);
         }
 
         mongoDb.find(this.collection, worldQuery, sortJson, null, MongoDbResult.validResultsHandler(result -> {
-            if(result.isLeft()) {
+            if (result.isLeft()) {
                 String message = String.format("[Minetest@%s::getWorlds] An error has occured while finding worlds list: %s",
                         this.getClass().getSimpleName(), result.left().getValue());
                 log.error(message, result.left().getValue());
@@ -207,7 +277,7 @@ public class DefaultWorldService implements WorldService {
         Promise<Void> promise = Promise.promise();
 
         mongoDb.insert(this.collection, body, MongoDbResult.validResultHandler(result -> {
-            if(result.isLeft()) {
+            if (result.isLeft()) {
                 String message = String.format("[Minetest@%s::createWorld]: An error has occurred while creating new world: %s",
                         this.getClass().getSimpleName(), result.left().getValue());
                 log.error(message, result.left().getValue());
@@ -224,7 +294,7 @@ public class DefaultWorldService implements WorldService {
         Promise<Void> promise = Promise.promise();
 
         mongoDb.delete(this.collection, query, MongoDbResult.validResultHandler(result -> {
-            if(result.isLeft()) {
+            if (result.isLeft()) {
                 String message = String.format("[Minetest@%s::deleteWorld]: An error has occurred while deleting new world: %s",
                         this.getClass().getSimpleName(), result.left().getValue());
                 log.error(message, result.left().getValue());
@@ -241,7 +311,7 @@ public class DefaultWorldService implements WorldService {
         Promise<JsonObject> promise = Promise.promise();
 
         mongoDb.update(this.collection, worldId, status, MongoDbResult.validResultHandler(result -> {
-            if(result.isLeft()) {
+            if (result.isLeft()) {
                 String message = String.format("[Minetest@%s::updateWorld]: An error has occurred while updating status: %s",
                         this.getClass().getSimpleName(), result.left().getValue());
                 log.error(message, result.left().getValue());

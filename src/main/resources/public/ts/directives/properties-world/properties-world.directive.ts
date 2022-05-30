@@ -8,6 +8,7 @@ interface IViewModel {
     openPropertiesLightbox(): void;
     closePropertiesLightbox(): void;
     updateWorld(): Promise<void>;
+    updateImportWorld(): Promise<void>;
 
     lightbox: any;
 
@@ -37,7 +38,7 @@ class Controller implements ng.IController, IViewModel {
 
     openPropertiesLightbox(): void {
         this.lightbox.properties = true;
-        let world = this.world;
+        let world: IWorld = this.world;
         this.worldForm = Object.assign({}, world);
     }
 
@@ -53,6 +54,17 @@ class Controller implements ng.IController, IViewModel {
                 this.$scope.$eval(this.$scope['vm']['onUpdateWorld']());
             }).catch(() => {
             toasts.warning('minetest.world.update.error');
+        })
+    }
+
+    async updateImportWorld(): Promise<void> {
+        minetestService.updateImportWorld(this.worldForm)
+            .then(() => {
+                toasts.confirm('minetest.world.update.confirm');
+                this.closePropertiesLightbox();
+                this.$scope.$eval(this.$scope['vm']['onUpdateWorld']);
+            }).catch(() => {
+                toasts.warning('minetest.world.update.error');
         })
     }
 }

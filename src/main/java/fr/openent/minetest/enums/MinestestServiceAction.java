@@ -13,6 +13,7 @@ public enum MinestestServiceAction {
         this.action = action;
     }
 
+    @Override
     public String toString() {
         return this.action;
     }

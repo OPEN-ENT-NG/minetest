@@ -59,7 +59,7 @@ class Controller implements ng.IController, IViewModel {
 
     setStatusWorld(currentWorld: IWorld): void {
         this.world.status = !currentWorld.status;
-        this.world.updated_at = DateUtils.format(moment().startOf('minute'), "DD/MM/YYYY HH:mm");
+        this.world.updated_at = DateUtils.format(moment().startOf('minute'), DateUtils.FORMAT["DAY/MONTH/YEAR-HOUR-MIN"]);
         minetestService.updateStatus(this.world)
             .then(() => {
                 if(this.world.status) {

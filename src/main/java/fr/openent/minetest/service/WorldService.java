@@ -19,13 +19,23 @@ public interface WorldService {
     Future<JsonObject> create(JsonObject body, UserInfos user);
 
     /**
+     * Import World
+     *
+     * @param body Data to store
+     * @param user {@link UserInfos}
+     * @return Future {@link Future<JsonObject>} containing new world
+     */
+    Future<JsonObject> importWorld(JsonObject body, UserInfos user);
+
+    /**
      * Update World
      *
      * @param user {@link UserInfos}
      * @param body Data to store
+     * @param worldId World identifier
      * @return Future {@link Future<JsonObject>} containing new world
      */
-    Future<JsonObject> update(UserInfos user, JsonObject body);
+    Future<JsonObject> update(UserInfos user, String worldId, JsonObject body);
 
     /**
      * Update Status
@@ -37,6 +47,7 @@ public interface WorldService {
     Future<JsonObject> updateStatus(UserInfos user, JsonObject body);
 
     /**
+     * Delete World
      * @param user User
      * @param ids  List world id to delete
      * @param ports  List world port to delete
@@ -45,14 +56,22 @@ public interface WorldService {
     Future<JsonObject> delete(UserInfos user, List<String> ids, List<String> ports);
 
     /**
+     * Delete Import World
+     * @param user User
+     * @param ids  List world id to delete
+     * @return returning data
+     */
+    Future<JsonObject> deleteImportWorld(UserInfos user, List<String> ids);
+
+    /**
      * Get Worlds with filter
      *
      * @param createdAt Created date
      * @param updatedAt Updated date
      * @return FutureObject containing world {@link JsonObject}
      */
-    Future<JsonArray> getMongo(String ownerId, String ownerName, String createdAt, String updatedAt, String img, String shared,
-                          String name, JsonObject sortJson);
+    Future<JsonArray> getMongo(String ownerId, String ownerName, String createdAt, String updatedAt, String img, String name,
+                               JsonObject sortJson);
 
     /**
      * create world in Mongo

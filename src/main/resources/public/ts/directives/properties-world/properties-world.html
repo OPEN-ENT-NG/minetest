@@ -33,18 +33,25 @@
 
             <div class="cell twelve minetest-lightbox-content-form-input-text">
                 <span class="cell four minetest-lightbox-content-form-input-text-title"><i18n>minetest.url.address</i18n></span>
-                <input type="text" class="six cell" data-ng-model="vm.world.address" readonly/>
+                <input ng-show="!vm.world.isExternal" type="text" class="six cell" data-ng-model="vm.worldForm.address" readonly/>
+                <input ng-show="vm.world.isExternal" type="text" class="six cell" data-ng-model="vm.worldForm.address"/>
             </div>
 
             <div class="cell twelve minetest-lightbox-content-form-input-text">
                 <span class="cell four minetest-lightbox-content-form-input-text-title"><i18n>minetest.port</i18n></span>
-                <input type="text" class="six cell" data-ng-model="vm.world.port" readonly/>
+                <input ng-show="!vm.world.isExternal" type="text" class="six cell" data-ng-model="vm.worldForm.port" readonly/>
+                <input ng-show="vm.world.isExternal" type="text" class="six cell" data-ng-model="vm.worldForm.port"/>
             </div>
 
         </section>
         </div>
 
         <!-- button action update -->
-        <button class="custom-button right-magnet" ng-click="vm.updateWorld()"><i18n>minetest.world.update</i18n></button>
+        <button ng-show="!vm.world.isExternal" class="custom-button right-magnet" ng-click="vm.updateWorld()">
+            <i18n>minetest.world.update</i18n>
+        </button>
+        <button ng-show="vm.world.isExternal" class="custom-button right-magnet" ng-click="vm.updateImportWorld()">
+            <i18n>minetest.world.update</i18n>
+        </button>
     </lightbox>
 </div>
