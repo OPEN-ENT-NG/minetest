@@ -176,6 +176,7 @@ public class DefaultWorldService implements WorldService {
         }
         worldData.put(Field.TITLE, body.getValue(Field.TITLE))
                 .put(Field.UPDATED_AT, body.getValue(Field.UPDATED_AT));
+
         if(body.getValue(Field.PASSWORD) != null) {
             worldData.put(Field.PASSWORD, body.getValue(Field.PASSWORD));
             resetPassword(String.valueOf(body.getValue(Field.PASSWORD)), body);
@@ -245,7 +246,7 @@ public class DefaultWorldService implements WorldService {
     public Future<JsonObject> resetPassword(String newPassword, JsonObject body) {
         Promise<JsonObject> promise = Promise.promise();
 
-        body.put(Field.PASSWORD, newPassword);
+        body.put(Field.ID,body.getString(Field._ID)).put(Field.PASSWORD, newPassword);
 
         minetestService.action(body, MinestestServiceAction.RESET_PASSWORD)
                 .onSuccess(promise::complete)
