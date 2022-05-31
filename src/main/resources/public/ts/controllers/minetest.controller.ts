@@ -77,9 +77,14 @@ class Controller implements ng.IController, IViewModel {
     setStatus(world: IWorld): string {
         let open: string = lang.translate('minetest.open');
         let close: string = lang.translate('minetest.close');
-        if(world.status) {
-            return open;
-        } else return close;
+        let added: string = lang.translate('minetest.added');
+
+        if (world.password) {
+            if (world.status) {
+                return open;
+            } else return close;
+        }
+        else return added;
     }
 
     getLink(): string {
