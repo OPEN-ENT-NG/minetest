@@ -13,7 +13,6 @@ export interface IWorld {
     title: string;
 
     address: string;
-
     port?: number;
 }
 
