@@ -1,5 +1,6 @@
 {
   "minetest.allow.access.world.password": "Permettre l'accès du monde via un mot de passe",
+  "minetest.added": "Ajouté",
   "minetest.cancel": "Annuler",
   "minetest.copy.url.address": "Copier l'adresse",
   "minetest.add.image": "Ajouter une image",

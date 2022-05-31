@@ -6,14 +6,13 @@ export interface IWorld {
 
     created_at: string;
     updated_at: string;
+
     password: string;
     status?: boolean;
-
     img?: string;
     title: string;
 
     address: string;
-
     port?: number;
 }
 
