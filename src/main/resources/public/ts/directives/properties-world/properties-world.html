@@ -60,19 +60,19 @@
                 </div>
 
                 <!-- Password -->
-                <div class="cell twelve minetest-lightbox-content-form-input-text">
-                <span class="cell three minetest-lightbox-content-form-input-text-title">
-                    <i18n>minetext.password</i18n>
-                </span>
+                <div ng-show="!vm.world.isExternal" class="cell twelve minetest-lightbox-content-form-input-text">
+                    <span class="cell three minetest-lightbox-content-form-input-text-title">
+                        <i18n>minetext.password</i18n>
+                    </span>
                     <span class="cell seven minetest-lightbox-content-form-input-text-reset-password"
                           ng-show="!vm.showInputPassword" ng-click="vm.resetPassword()">
-                    <i18n>minetest.reset.password</i18n>
-                </span>
+                        <i18n>minetest.reset.password</i18n>
+                    </span>
                     <input type="text" class="cell seven " ng-show="vm.showInputPassword"
                            data-ng-model="vm.worldForm.password"/>
                 </div>
 
-                <div class="cell twelve minetest-lightbox-content-form-input-text">
+                <div ng-show="!vm.world.isExternal" class="cell twelve minetest-lightbox-content-form-input-text">
                     <span class="cell three minetest-lightbox-content-form-input-text-title"></span>
                     <span class="cell seven"><i18n>minetest.reset.password.explanation</i18n></span>
                 </div>
