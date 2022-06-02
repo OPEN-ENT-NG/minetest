@@ -21,6 +21,10 @@
   "minetest.import": "Import",
   "minetest.import.world": "Import world",
   "minetest.info.download.software.link": "Download Minetest software from this link : ",
+  "minetest.invitation.cc.label": "Recipient : ",
+  "minetest.invitation.default.body": "<div>Bonjour,</br></br>Vous êtes invité à participer à la construction d'un monde Minetest. Veuillez suivre les étapes suivantes : </br></br><b>Comment téléchargez le logiciel Minetest ?</b></br></br>Si vous avez déjà utilisé Minetest sur cet ordinateur, vous pouvez passer à la partie suivante : Comment accéder au monde sur lequel on m'a invité.</br><ol><li> Cliquez sur ce lien [mettre lien] et l'archive zip du logiciel Minetest sera téléchargée sur votre ordinateur </li> <li> Accédez à votre explorateur de fichier > Téléchargements et retrouvez l'archive que vous venez de télécharger qui porte le nom 'minetest-5.5.0-win64'</li> <li>Effectuez un clic droit et sélectionner 'Extraire tout'</li> <li>Choisissez l'emplacement du dossier en cliquant sur 'Parcourir...' et en sélectionnant par exemple 'Bureau' pour que le dossier contenant le logiciel Minetest se retrouve sur le bureau de votre ordinateur. Vous pouvez valider en cliquant sur 'Sélectionner un dossier' puis 'Extraire'</li> <li>Patientez jusqu'à ce que le téléchargement soit terminé'</li> <li>Une fois terminé, passez à l'étape suivante</li> </ol> </br> <b>Comment ouvrir Minetest ?</b> <ol><li> Rendez-vous sur votre Bureau, ouvrez le dossier qui porte le nom 'minetest-5.5.0-win64'</li> <li>Entrez dans les dossiers suivants: 'minetest-5.5.0-win64' > 'bin' puis vous trouverez un fichier 'minetest' illustré par le logo de l'application, ouvrez le</li> <li>Une nouvelle fenêtre s'est ouverte : vous accédez à Minetest</li> <li> Cliquez sur l'onglet 'Rejoindre une partie'</li> <li>Pour rejoindre un monde auquel vous avez été invité, passez à l'étape suivante.</li></ol></br> <b>Comment rejoindre un monde sur lequel on m'a invité ?</b></br></br> Entrez les informations du monde dans les différentes cases prévues</br><ul type='disc'><li>Adresse : </li><li>Port : </li><li>Nom : </li><li>Mot de passe : </li></ul></br> Puis cliquez sur 'Rejoindre'.</br> Cordialement.",
+  "minetest.invitation.default.subject": "Invite a user to the world",
+  "minetest.invitation.object.label": "Message's object",
   "minetest.info.privileges.link": "For administration functions, please see commands here : ",
   "minetest.invite": "Invite",
   "minetest.last.modification": "Last modification",
@@ -54,6 +58,7 @@
   "minetest.world.open.close.error": "An error occurred opening or closing the world",
   "minetest.world.properties": "Properties",
   "minetest.world.title": "World name",
+  "minetest.world.to.join": "You have a Minetest's world to join",
   "minetest.world.update": "Edit",
   "minetest.world.update.confirm": "World modification completed successfully",
   "minetest.world.update.error": "An error occurred while modifying the world"
