@@ -195,11 +195,14 @@ public class DefaultWorldService implements WorldService {
                 promise.fail(message);
                 return;
             }
-            promise.complete(result.right().getValue());
+            if(body.getString(Field.PASSWORD) != null) {
+                resetPassword(String.valueOf(body.getString(Field.PASSWORD)), body)
+                        .onSuccess(res -> promise.complete(result.right().getValue()))
+                        .onFailure(err -> promise.fail(err.getMessage()));
+            } else {
+                promise.complete(result.right().getValue());
+            }
         }));
-        if(body.getString(Field.PASSWORD) != null) {
-            resetPassword(String.valueOf(body.getString(Field.PASSWORD)), body);
-        }
         return promise.future();
     }
 
