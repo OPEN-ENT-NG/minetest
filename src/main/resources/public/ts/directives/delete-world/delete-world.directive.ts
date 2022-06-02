@@ -20,8 +20,7 @@ class Controller implements ng.IController, IViewModel {
     lightbox: any;
     world: IWorld;
 
-    constructor(private $scope: IScope)
-    {
+    constructor(private $scope: IScope) {
         this.lightbox = {
             delete: false,
         };
@@ -83,4 +82,4 @@ function directive() {
         }
     }
 }
-export const deleteWorld = ng.directive('deleteWorld', directive)
+export const deleteWorld = ng.directive('deleteWorld', directive);

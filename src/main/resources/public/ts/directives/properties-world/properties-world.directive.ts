@@ -8,6 +8,8 @@ interface IViewModel {
     openPropertiesLightbox(): void;
     closePropertiesLightbox(): void;
     updateWorld(): Promise<void>;
+    resetPassword(): void;
+    showInputPassword: boolean;
     updateImportWorld(): Promise<void>;
 
     lightbox: any;
@@ -21,13 +23,12 @@ class Controller implements ng.IController, IViewModel {
     lightbox: any;
     world: IWorld;
     worldForm: IWorld;
+    showInputPassword;
 
     constructor(private $scope: IScope) {
-        {
-            this.lightbox = {
-                properties: false,
-            };
-        }
+        this.lightbox = {
+            properties: false,
+        };
     }
 
     $onInit() {
@@ -38,6 +39,7 @@ class Controller implements ng.IController, IViewModel {
 
     openPropertiesLightbox(): void {
         this.lightbox.properties = true;
+        this.showInputPassword = false;
         let world: IWorld = this.world;
         this.worldForm = Object.assign({}, world);
     }
@@ -57,6 +59,12 @@ class Controller implements ng.IController, IViewModel {
         })
     }
 
+    resetPassword(): void {
+        this.worldForm.password = "";
+        this.showInputPassword = !this.showInputPassword;
+    }
+
+
     async updateImportWorld(): Promise<void> {
         minetestService.updateImportWorld(this.worldForm)
             .then(() => {
@@ -64,7 +72,7 @@ class Controller implements ng.IController, IViewModel {
                 this.closePropertiesLightbox();
                 this.$scope.$eval(this.$scope['vm']['onUpdateWorld']);
             }).catch(() => {
-                toasts.warning('minetest.world.update.error');
+            toasts.warning('minetest.world.update.error');
         })
     }
 }
@@ -88,4 +96,4 @@ function directive() {
         }
     }
 }
-export const propertiesWorld = ng.directive('propertiesWorld', directive)
+export const propertiesWorld = ng.directive('propertiesWorld', directive);

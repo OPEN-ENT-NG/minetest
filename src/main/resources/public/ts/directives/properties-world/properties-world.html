@@ -16,34 +16,69 @@
         </section>
 
         <div class="minetest-lightbox-content">
-        <!-- Image -->
-        <section class="minetest-lightbox-content-upload">
-            <div class="minetest-lightbox-content-upload-box">
-                <image-select id="img" class="initialFloat cell" default="/img/illustrations/image-default.svg"
-                              ng-model="vm.worldForm.img"/>
-            </div>
-        </section>
 
-        <!-- Content -->
-        <section class="minetest-lightbox-content-form">
-            <div class="cell twelve minetest-lightbox-content-form-input-text">
-                <span class="cell four minetest-lightbox-content-form-input-text-title"><i18n>minetest.world.title</i18n></span>
-                <input type="text" class="six cell" data-ng-model="vm.worldForm.title" />
-            </div>
+            <!-- Image -->
+            <section class="minetest-lightbox-content-upload">
+                <div class="minetest-lightbox-content-upload-box">
+                    <image-select id="img" class="initialFloat cell" default="/img/illustrations/image-default.svg"
+                                  ng-model="vm.worldForm.img"/>
+                </div>
+            </section>
 
-            <div class="cell twelve minetest-lightbox-content-form-input-text">
-                <span class="cell four minetest-lightbox-content-form-input-text-title"><i18n>minetest.url.address</i18n></span>
-                <input ng-show="!vm.world.isExternal" type="text" class="six cell" data-ng-model="vm.worldForm.address" readonly/>
-                <input ng-show="vm.world.isExternal" type="text" class="six cell" data-ng-model="vm.worldForm.address"/>
-            </div>
+            <!-- Content -->
 
-            <div class="cell twelve minetest-lightbox-content-form-input-text">
-                <span class="cell four minetest-lightbox-content-form-input-text-title"><i18n>minetest.port</i18n></span>
-                <input ng-show="!vm.world.isExternal" type="text" class="six cell" data-ng-model="vm.worldForm.port" readonly/>
-                <input ng-show="vm.world.isExternal" type="text" class="six cell" data-ng-model="vm.worldForm.port"/>
-            </div>
+            <!-- Form -->
+            <section class="minetest-lightbox-content-form">
+                <div class="cell twelve minetest-lightbox-content-form-input-text">
+                    <!-- Title -->
+                    <span class="cell three minetest-lightbox-content-form-input-text-title">
+                       <i18n>minetest.world.title</i18n>
+                    </span>
+                    <input type="text" class="seven cell" data-ng-model="vm.worldForm.title"/>
+                </div>
 
-        </section>
+                <!-- Address -->
+                <div class="cell twelve minetest-lightbox-content-form-input-text">
+                    <span class="cell three minetest-lightbox-content-form-input-text-title">
+                        <i18n>minetest.url.address</i18n>
+                    </span>
+                    <input ng-show="!vm.world.isExternal" type="text" class="seven cell"
+                           data-ng-model="vm.worldForm.address" readonly/>
+                    <input ng-show="vm.world.isExternal" type="text" class="seven cell"
+                           data-ng-model="vm.worldForm.address"/>
+                </div>
+
+                <!-- Port -->
+                <div class="cell twelve minetest-lightbox-content-form-input-text">
+                    <span class="cell three minetest-lightbox-content-form-input-text-title">
+                        <i18n>minetest.port</i18n>
+                    </span>
+                    <input ng-show="!vm.world.isExternal" type="text" class="seven cell"
+                           data-ng-model="vm.worldForm.port" readonly/>
+                    <input ng-show="vm.world.isExternal" type="text" class="seven cell"
+                           data-ng-model="vm.worldForm.port"/>
+                </div>
+
+                <!-- Password -->
+                <div ng-show="!vm.world.isExternal" class="cell twelve minetest-lightbox-content-form-input-text">
+                    <span class="cell three minetest-lightbox-content-form-input-text-title">
+                        <i18n>minetext.password</i18n>
+                    </span>
+                    <span class="cell seven minetest-lightbox-content-form-input-text-reset-password"
+                          ng-show="!vm.showInputPassword" ng-click="vm.resetPassword()">
+                        <i18n>minetest.reset.password</i18n>
+                    </span>
+                    <input type="text" class="cell seven " ng-show="vm.showInputPassword"
+                           data-ng-model="vm.worldForm.password"/>
+                </div>
+
+                <div ng-show="!vm.world.isExternal" class="cell twelve minetest-lightbox-content-form-input-text">
+                    <span class="cell three minetest-lightbox-content-form-input-text-title"></span>
+                    <span class="cell seven"><i18n>minetest.reset.password.explanation</i18n></span>
+                </div>
+
+            </section>
+
         </div>
 
         <!-- button action update -->

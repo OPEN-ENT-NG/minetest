@@ -165,17 +165,25 @@ public class DefaultWorldService implements WorldService {
         JsonObject worldQuery = new JsonObject().put(Field._ID, worldId);
         JsonObject worldData = new JsonObject();
 
+        worldData.put(Field.TITLE, body.getString(Field.TITLE))
+                .put(Field.UPDATED_AT, body.getString(Field.UPDATED_AT));
+
         if (body.getValue(Field.IMG) != null) {
             worldData.put(Field.IMG, body.getValue(Field.IMG));
         }
-        if (body.getValue(Field.ADDRESS) != null) {
-            worldData.put(Field.ADDRESS, body.getValue(Field.ADDRESS));
+
+        if (body.getString(Field.PASSWORD) != null) {
+            worldData.put(Field.PASSWORD, body.getString(Field.PASSWORD));
         }
-        if (body.getValue(Field.PORT) != null) {
-            worldData.put(Field.PORT, body.getValue(Field.PORT));
+
+        if (Boolean.TRUE.equals(body.getBoolean(Field.ISEXTERNAL))) {
+            if (body.getString(Field.ADDRESS) != null) {
+                worldData.put(Field.ADDRESS, body.getString(Field.ADDRESS));
+            }
+            if (body.getString(Field.PORT) != null) {
+                worldData.put(Field.PORT, body.getString(Field.PORT));
+            }
         }
-        worldData.put(Field.TITLE, body.getValue(Field.TITLE))
-                .put(Field.UPDATED_AT, body.getValue(Field.UPDATED_AT));
 
         JsonObject world = new JsonObject().put("$set", worldData);
 
@@ -187,7 +195,13 @@ public class DefaultWorldService implements WorldService {
                 promise.fail(message);
                 return;
             }
-            promise.complete(result.right().getValue());
+            if(body.getString(Field.PASSWORD) != null) {
+                resetPassword(String.valueOf(body.getString(Field.PASSWORD)), body)
+                        .onSuccess(res -> promise.complete(result.right().getValue()))
+                        .onFailure(err -> promise.fail(err.getMessage()));
+            } else {
+                promise.complete(result.right().getValue());
+            }
         }));
         return promise.future();
     }
@@ -230,6 +244,19 @@ public class DefaultWorldService implements WorldService {
             }
             promise.complete(result.right().getValue());
         }));
+        return promise.future();
+    }
+
+    @Override
+    public Future<JsonObject> resetPassword(String newPassword, JsonObject body) {
+        Promise<JsonObject> promise = Promise.promise();
+
+        body.put(Field.ID,body.getString(Field._ID)).put(Field.PASSWORD, newPassword);
+
+        minetestService.action(body, MinestestServiceAction.RESET_PASSWORD)
+                .onSuccess(promise::complete)
+                .onFailure(err -> promise.fail(err.getMessage()));
+
         return promise.future();
     }
 
