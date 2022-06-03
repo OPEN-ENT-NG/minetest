@@ -22,6 +22,7 @@
   "minetest.import": "Importer",
   "minetest.import.world": "Importer un monde",
   "minetest.info.download.software.link": "Téléchargez le logiciel Minetest à partir de ce lien : ",
+  "minetest.info.privileges.link": "Pour les fonctions d'administration, merci de consulter les commandes ici : ",
   "minetest.invite": "Inviter",
   "minetest.last.modification": "Dernière modification",
   "minetest.modify": "Modifié le",

@@ -23,6 +23,8 @@ Specific configuration that must be seen :
   "config": {
     ...
     "minetest-download": "${minetestDownload}",
+    "minetest-link": "${minetestLink}",
+    "minetest-wiki": "${minetestWiki}",
     "minetest-server": "${minetestServer}",
     "minetest-python-server-port": "${minetestPythonServerPort}",
     "minetest-port-range": "${minetestPortRange}"

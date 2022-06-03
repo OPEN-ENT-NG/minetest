@@ -11,6 +11,13 @@
                     [[vm.getLink()]]
                 </a>
             </span>
+            <br>
+            <span ng-show="vm.worlds.all.length > 0" class="minetest-head-download">
+                <i18n class="minetest-head-download-text">minetest.info.privileges.link</i18n>
+                <a href=[[vm.getWiki()]] target=_blank>
+                    [[vm.getWiki()]]
+                </a>
+            </span>
         </div>
         <div class="minetest-head" data-ng-show="vm.worlds.all.length > 0">
             <!-- button import first world -->
