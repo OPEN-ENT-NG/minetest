@@ -17,6 +17,7 @@ import org.entcore.common.mongodb.MongoDbResult;
 import org.entcore.common.user.UserInfos;
 
 import java.util.List;
+import java.util.UUID;
 
 public class DefaultWorldService implements WorldService {
 
@@ -57,14 +58,10 @@ public class DefaultWorldService implements WorldService {
                 .compose(res ->  {
                     int newPort = res;
                     body.put(Field.PORT, newPort);
+                    body.put(Field._ID, UUID.randomUUID().toString());
                     return createMongo(body);
                 })
-                .compose(res -> getMongo(userInfos.getUserId(), null,null,null,null,
-                        null, null))
-                .compose(res -> {
-                    JsonObject worldCreated = res.getJsonObject(res.size() - 1);
-                    return minetestService.action(worldCreated, MinestestServiceAction.CREATE);
-                })
+                .compose(res -> minetestService.action(body, MinestestServiceAction.CREATE))
                 .onSuccess(promise::complete)
                 .onFailure(err -> promise.fail(err.getMessage()));
         return promise.future();
