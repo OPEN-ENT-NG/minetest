@@ -35,6 +35,8 @@ Specific configuration that must be seen :
 In your springboard, you must include these variables :
 <pre>
 minetestDownload = ${String}
+minetestLink = ${String}
+minetestWiki = ${String}
 minetestServer = ${String}
 minetestPythonServerPort = Integer
 minetestPortRange = ${String}
