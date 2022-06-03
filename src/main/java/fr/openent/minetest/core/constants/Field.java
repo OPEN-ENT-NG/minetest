@@ -32,7 +32,8 @@ public class Field {
 
     // Config
     public static final String MINETEST_DOWNLOAD = "minetest-download";
-    public static final String MINETESTDOWNLOAD = "minetestDownload";
+    public static final String MINETEST_LINK = "minetest-link";
+    public static final String MINETEST_WIKI = "minetest-wiki";
     public static final String MINETEST_SERVER = "minetest-server";
     public static final String MINETEST_PORT_RANGE = "minetest-port-range";
     public static final String MINETEST_PYTHON_SERVER_PORT = "minetest-python-server-port";

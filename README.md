@@ -23,6 +23,8 @@ Specific configuration that must be seen :
   "config": {
     ...
     "minetest-download": "${minetestDownload}",
+    "minetest-link": "${minetestLink}",
+    "minetest-wiki": "${minetestWiki}",
     "minetest-server": "${minetestServer}",
     "minetest-python-server-port": "${minetestPythonServerPort}",
     "minetest-port-range": "${minetestPortRange}"
@@ -33,6 +35,8 @@ Specific configuration that must be seen :
 In your springboard, you must include these variables :
 <pre>
 minetestDownload = ${String}
+minetestLink = ${String}
+minetestWiki = ${String}
 minetestServer = ${String}
 minetestPythonServerPort = Integer
 minetestPortRange = ${String}
