@@ -31,7 +31,7 @@
   "minetest.port": "Port",
   "minetest.properties": "Properties",
   "minetest.reset.password": "Reset password",
-  "minetest.reset.password.explanation": "You can re-mail the world to let users know the new password",
+  "minetest.reset.password.explanation": "You could re-mail the world to let users know the new password",
   "minetest.share": "Share",
   "minetest.the": "the",
   "minetest.title": "Minetest",
