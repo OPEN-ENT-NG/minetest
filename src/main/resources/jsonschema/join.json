@@ -1,0 +1,29 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://jsonschema.net",
+  "type": "object",
+  "properties": {
+    "whitelist": {
+      "type": "array"
+    },
+    "id": {
+      "type": "string"
+    },
+    "port": {
+      "type": "integer"
+    },
+    "subject": {
+      "type": "string"
+    },
+    "password": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "whitelist",
+    "id",
+    "port",
+    "subject",
+    "password"
+  ]
+}
