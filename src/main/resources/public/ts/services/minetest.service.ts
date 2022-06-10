@@ -18,6 +18,8 @@ export interface IMinetestService {
 
     updateStatus(worldBody: IWorld): Promise<AxiosResponse>;
 
+    invite(worldBody: IWorld): Promise<AxiosResponse>;
+
     delete(world: IWorld): Promise<AxiosResponse>;
 
     deleteImportWorld(world: IWorld): Promise<AxiosResponse>;
@@ -57,6 +59,10 @@ export const minetestService: IMinetestService = {
 
     updateStatus: (worldBody: IWorld): Promise<AxiosResponse> => {
         return http.put(`/minetest/worlds/status/${worldBody._id}`, worldBody);
+    },
+
+    invite: (worldBody: IWorld): Promise<AxiosResponse> => {
+        return http.put(`/minetest/join`, worldBody);
     },
 
     delete: (world: IWorld): Promise<AxiosResponse> => {

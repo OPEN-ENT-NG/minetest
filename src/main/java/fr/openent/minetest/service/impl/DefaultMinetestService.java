@@ -30,13 +30,13 @@ public class DefaultMinetestService implements MinetestService {
     public Future<JsonObject> action(JsonObject body, MinestestServiceAction action) {
         Promise<JsonObject> promise = Promise.promise();
 
-        for(String name : body.fieldNames()){
+        for (String name : body.fieldNames()){
             body.put(name,body.getValue(name).toString());
         }
 
         client.postAbs(serverPythonUrl + "/" + action.toString())
                 .sendJsonObject(body , resp -> {
-                    if(resp.failed() || resp.result().statusCode() != 200) {
+                    if (resp.failed() || resp.result().statusCode() != 200) {
                         answerFailure(action, promise, resp);
                         return;
                     }

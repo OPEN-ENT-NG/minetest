@@ -2,16 +2,13 @@ import {
     appPrefix,
     model,
     ng,
-    Shareable,
     ShareAction,
     ShareInfos,
     ShareVisible,
-    http, Model, idiom, _, Me
+    http, idiom, _, Me
 } from "entcore";
+import {IWorld} from "../../models";
 
-export interface ShareableWithId extends Shareable {
-    _id: string
-}
 export interface SharePanelScope {
     display: {
         workflowAllowSharebookmarks: boolean,
@@ -20,7 +17,7 @@ export interface SharePanelScope {
         }
     }
     sharingModel: ShareInfos & { edited: any[], changed?: boolean, sharebookmarks?: any }
-    resources: ShareableWithId[] | ShareableWithId
+    resources: IWorld
     maxResults: number
     translate: any
     actions: ShareAction[]
@@ -123,10 +120,6 @@ export const searchInvitees = ng.directive('searchInvitees', ['$rootScope', ($ro
                 }
             }
 
-            if (!($scope.resources instanceof Array) && !$scope.resources.myRights && !($scope.resources instanceof Model)) {
-                throw new TypeError('Resources in share panel must be instance of Array or implement Rights interface');
-            }
-            if (!($scope.resources instanceof Array)) { $scope.resources = [$scope.resources]; }
 
             // Get directory workflow to manage allowSharebookmarks workflow
             async function loadDirectoryWorkflow() {
@@ -141,7 +134,7 @@ export const searchInvitees = ng.directive('searchInvitees', ['$rootScope', ($ro
                 let startSearch = Me.session.functions.ADMIN_LOCAL ? searchTerm.substr(0, 3) : '';
                 if (!usersCache[startSearch] && !(usersCache[startSearch] && usersCache[startSearch].loading)) {
                     usersCache[startSearch] = { loading: true };
-                    let id = $scope.resources[0]._id;
+                    let id = $scope.resources._id;
                     let path = '/' + appPrefix + '/share/json/' + id + '?search=' + startSearch;
                     if (!startSearch) {
                         path = '/' + appPrefix + '/share/json/' + id;

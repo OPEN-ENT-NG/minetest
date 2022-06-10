@@ -14,6 +14,9 @@ export interface IWorld {
 
     address: string;
     port?: number;
+
+    whitelist?: string[];
+    subject?: string;
 }
 
 export interface IImportWorld {

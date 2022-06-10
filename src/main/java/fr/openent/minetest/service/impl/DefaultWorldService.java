@@ -96,7 +96,7 @@ public class DefaultWorldService implements WorldService {
 
         Integer newPort = minetestConfig.minetestMinPort();
 
-        for(Object world: res) {
+        for (Object world: res) {
             JsonObject worldJson = (JsonObject) world;
             if (Boolean.TRUE.equals(worldJson.getBoolean(Field.ISEXTERNAL))) {
                 if (!worldJson.getString(Field.PORT).isEmpty()) {
@@ -105,14 +105,14 @@ public class DefaultWorldService implements WorldService {
                 return promise.future();
             }
             int port = worldJson.getInteger(Field.PORT);
-            if(port > newPort) {
+            if (port > newPort) {
                 break;
             }
             else {
                 newPort ++;
             }
         }
-        if(newPort > minetestConfig.minetestMaxPort()) {
+        if (newPort > minetestConfig.minetestMaxPort()) {
             String message = String.format("[Minetest@%s::createWorld]: The maximum port limit was reach. " +
                     "Please, contact the administrator to extend the port range.", this.getClass().getSimpleName());
             log.error(message);
@@ -192,7 +192,7 @@ public class DefaultWorldService implements WorldService {
                 })
                 .compose(res -> {
                     StringBuilder whitelistInFile = new StringBuilder();
-                    for(Object login : body.getJsonArray(Field.WHITELIST)){
+                    for (Object login : body.getJsonArray(Field.WHITELIST)){
                         whitelistInFile.append(login).append("\n");
                     }
                     body.put(Field.WHITELIST, whitelistInFile.toString());
@@ -206,24 +206,24 @@ public class DefaultWorldService implements WorldService {
 
     private Future<JsonArray> reformatWhitelist(JsonArray whitelistId, UserInfos owner, JsonArray whitelistIdAndLogin) {
         Promise<JsonArray> promise = Promise.promise();
-        if(!whitelistId.contains(owner.getUserId()))
+        if (!whitelistId.contains(owner.getUserId()))
             whitelistId.add(owner.getUserId());
         JsonArray whitelistMinetest = new JsonArray();
-        for(Object id : whitelistId){
+        for (Object id : whitelistId){
             UserUtils.getUserInfos(eb,(String) id, user -> {
                 String loginToInsert = reformatLogin(user.getLogin());
                 //Check duplicate login
                 int i = 1;
-                while(whitelistMinetest.contains(loginToInsert)){
+                while (whitelistMinetest.contains(loginToInsert)){
                     Character lastCharacter = loginToInsert.charAt(loginToInsert.length() - 1);
-                    if(Character.isDigit(lastCharacter)) {
+                    if (Character.isDigit(lastCharacter)) {
                         i = Integer.parseInt(String.valueOf(lastCharacter)) + 1;
                     }
                     loginToInsert = loginToInsert.substring(0,Math.min(loginToInsert.length(), 19) - 1) + i;
                 }
                 whitelistMinetest.add(loginToInsert);
                 whitelistIdAndLogin.add(new JsonObject().put(Field.ID,id).put(Field.LOGIN, loginToInsert));
-                if(whitelistMinetest.size() == whitelistId.size())
+                if (whitelistMinetest.size() == whitelistId.size())
                     promise.complete(whitelistMinetest);
             });
         }

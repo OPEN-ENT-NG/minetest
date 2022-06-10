@@ -12,6 +12,7 @@ interface IViewModel {
     setStatus(world: IWorld): string;
     getLink(): string;
     getWiki(): string;
+    getDownload(): string;
     refreshWorldList(): Promise<void>;
 
     world: IWorld;
@@ -94,6 +95,10 @@ class Controller implements ng.IController, IViewModel {
 
     getWiki(): string {
         return window.minetestWiki;
+    }
+
+    getDownload(): string {
+        return window.minetestDownload;
     }
 
     async refreshWorldList(): Promise<void> {

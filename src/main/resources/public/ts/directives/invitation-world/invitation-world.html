@@ -13,18 +13,18 @@
         </h2>
         <div>
             <div style="margin-top:5%">
-                <search-invitees resources="vm.roomToInvit" on-change="vm.updateInvitees(data)"></search-invitees>
+                <search-invitees resources="vm.world" on-change="vm.updateInvitees(data)"></search-invitees>
                 <label style="display: flex;">
                     <i18n style="font-weight: bold">minetest.invitation.object.label</i18n>
                     <input type="text" class="eight" ng-model="vm.mail.subject" i18n-placeholder="minetest.world.to.join"/>
                 </label>
-                <editor ng-model="vm.mail.body"></editor>
-            </div>
-            <div class="action-buttons">
-                <button class="cell cancel" ng-click="vm.closeInvitationLightbox()"><i18n>minetest.cancel</i18n></button>
-                <button class="cell" ng-click="vm.sendInvitation(vm.selectedWorld)"><i18n>minetetest.send</i18n></button>
+                <div class="row horizontal-spacing">
+                    <div class="twelve cell escape_cke" bind-html="vm.mail.body"></div>
+                </div>
             </div>
         </div>
+        <button class="custom-button right-magnet" ng-click="vm.sendInvitation()"><i18n>minetest.send</i18n></button>
+        <button class="custom-cancel right-magnet" ng-click="vm.closeInvitationLightbox()"><i18n>minetest.cancel</i18n></button>
     </lightbox>
 
 </div>

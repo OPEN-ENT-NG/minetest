@@ -51,8 +51,8 @@
   "minetest.world.create.confirm": "World creation completed successfully",
   "minetest.world.create.error": "An error occurred while creating the world",
   "minetest.world.delete.confirm": "Delete world successfully",
-  "minetest.world.delete.error": "Une erreur est survenue lors de la suppression du monde",
-  "minetest.world.delete.selected": "An error occurred while deleting the world",
+  "minetest.world.delete.error": "An error occurred while deleting the world",
+  "minetest.world.delete.selected": "Delete the selected world",
   "minetest.world.empty.state": "You haven't created a world yet",
   "minetest.world.external": "World outside ENT",
   "minetest.world.close": "Close the world",
@@ -67,5 +67,8 @@
   "minetest.world.to.join": "You have a Minetest's world to join",
   "minetest.world.update": "Edit",
   "minetest.world.update.confirm": "World modification completed successfully",
-  "minetest.world.update.error": "An error occurred while modifying the world"
+  "minetest.world.update.error": "An error occurred while modifying the world",
+  "minetest.send": "Send",
+  "minetest.world.invite.confirm": "Invitation to the world is a success",
+  "minetest.world.invite.error": "An error occurred while invited to the world"
 }
