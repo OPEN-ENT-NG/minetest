@@ -1,0 +1,24 @@
+<div class="followWorld">
+
+    <!-- button follow world -->
+    <button data-ng-click="vm.openFollowLightbox()">
+        <i18n>minetest.follow.world</i18n>
+    </button>
+
+    <!-- popup modal to import world -->
+    <lightbox class="minetest-lightbox" show="vm.lightbox.follow" on-close="vm.closeFollowLightbox()">
+
+        <!-- Title -->
+        <section class="minetest-lightbox-head">
+            <h3>
+                <i18n>minetest.follow.invitation</i18n>
+            </h3>
+        </section>
+
+        <div class="minetest-lightbox-content">
+            <!-- Content -->
+
+        </div>
+        
+    </lightbox>
+</div>

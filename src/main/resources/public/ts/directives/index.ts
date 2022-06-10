@@ -7,3 +7,4 @@ export * from './properties-world/properties-world.directive';
 export * from './invitation-world/invitation-world.directive';
 export * from './recipient-list/recipient-list.directive';
 export * from './end-user-typing/end-user-typing.directive';
+export * from './follow-world/follow-world.directive';
