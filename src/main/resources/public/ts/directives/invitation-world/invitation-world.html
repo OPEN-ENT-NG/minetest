@@ -1,4 +1,4 @@
-<div class="invitationWorld">
+<div class="minetestInvitation">
 
     <!-- button invitation world -->
     <button data-ng-click="vm.openInvitationLightbox()">
@@ -9,7 +9,7 @@
     <lightbox show="vm.lightbox.invitation" on-close="vm.closeInvitationLightbox()">
         <!-- title -->
         <h2>
-            <i18n>minetest.invitation.default.subject</i18n>
+            <i18n>minetest.invitation.default.title</i18n>
         </h2>
         <div>
             <div style="margin-top:5%">
@@ -19,6 +19,7 @@
                             restriction= false
                             update-found-items="vm.updateFoundUsers(search, model, founds)">
                     </recipient-list>
+                    <div class="vertical-spacing"><i18n>minetest.invitation.information</i18n></div>
                 </div>
                 <label style="display: flex;">
                     <i18n style="font-weight: bold">minetest.invitation.object.label</i18n>

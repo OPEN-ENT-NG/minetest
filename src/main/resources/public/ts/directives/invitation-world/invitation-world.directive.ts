@@ -88,13 +88,20 @@ class Controller implements ng.IController, IViewModel {
 
     initMail(): void {
         this.mail.subject = idiom.translate('minetest.invitation.default.subject');
-        this.mail.body = idiom.translate('minetest.invitation.default.body.1')
-                .replace("<mettre lien>", this.downloadLink) +
-            idiom.translate('minetest.invitation.default.body.address') + this.world.address +
-            idiom.translate('minetest.invitation.default.body.port') + this.world.port +
-            idiom.translate('minetest.invitation.default.body.name') + "user_login" +
-            idiom.translate('minetest.invitation.default.body.password') + this.world.password +
-            idiom.translate('minetest.invitation.default.body.end');
+        if (!this.world.password) {
+            this.mail.body = idiom.translate('minetest.invitation.default.body.1')
+                    .replace("<mettre lien>", this.downloadLink) +
+                idiom.translate('minetest.invitation.default.body.address') + this.world.address +
+                idiom.translate('minetest.invitation.default.body.port') + this.world.port +
+                idiom.translate('minetest.invitation.default.body.end');
+        } else
+            this.mail.body = idiom.translate('minetest.invitation.default.body.1')
+                    .replace("<mettre lien>", this.downloadLink) +
+                idiom.translate('minetest.invitation.default.body.address') + this.world.address +
+                idiom.translate('minetest.invitation.default.body.port') + this.world.port +
+                idiom.translate('minetest.invitation.default.body.name') + "user_login" +
+                idiom.translate('minetest.invitation.default.body.password') + this.world.password +
+                idiom.translate('minetest.invitation.default.body.end');
         this.mail.invitees = [];
     }
 
