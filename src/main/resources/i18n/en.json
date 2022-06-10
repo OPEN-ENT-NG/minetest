@@ -70,5 +70,8 @@
   "minetest.world.update.error": "An error occurred while modifying the world",
   "minetest.send": "Send",
   "minetest.world.invite.confirm": "Invitation to the world is a success",
-  "minetest.world.invite.error": "An error occurred while invited to the world"
+  "minetest.world.invite.error": "An error occurred while invited to the world",
+  "chip.more1": "and",
+  "chip.more2": "more",
+  "minetest.share.search.help": "Ex : Sabine, Dupont, Students ..."
 }

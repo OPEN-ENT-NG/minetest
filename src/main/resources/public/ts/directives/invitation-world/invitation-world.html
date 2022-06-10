@@ -13,7 +13,13 @@
         </h2>
         <div>
             <div style="margin-top:5%">
-                <search-invitees resources="vm.world" on-change="vm.updateInvitees(data)"></search-invitees>
+                <div class="row receivers">
+                    <recipient-list
+                            ng-model="vm.mail.invitees"
+                            restriction= false
+                            update-found-items="vm.updateFoundUsers(search, model, founds)">
+                    </recipient-list>
+                </div>
                 <label style="display: flex;">
                     <i18n style="font-weight: bold">minetest.invitation.object.label</i18n>
                     <input type="text" class="eight" ng-model="vm.mail.subject" i18n-placeholder="minetest.world.to.join"/>

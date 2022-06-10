@@ -1,7 +1,7 @@
-import {idiom, ng, toasts} from "entcore";
+import {_, idiom, ng, toasts} from "entcore";
 import {IScope} from "angular";
 import {RootsConst} from "../../core/constants/roots.const";
-import {IWorld} from "../../models";
+import {IWorld, User, Users} from "../../models";
 import {minetestService} from "../../services";
 
 
@@ -74,6 +74,17 @@ class Controller implements ng.IController, IViewModel {
             toasts.warning('minetest.world.invite.error');
         })
     }
+
+    updateFoundUsers = async (search, model, founds) => {
+        let include = [];
+        const exclude = model || [];
+        new Users().findUser(search, include, exclude)
+            .then((users) => {
+                Object.assign(founds, users, { length: users.length });
+            }).catch(() => {
+            toasts.warning('minetest.world.invite.error');
+        })
+    };
 
     initMail(): void {
         this.mail.subject = idiom.translate('minetest.invitation.default.subject');

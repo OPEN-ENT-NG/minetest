@@ -70,5 +70,8 @@
   "minetest.world.update.error": "Une erreur est survenue lors de la modification du monde",
   "minetest.send": "Envoyer",
   "minetest.world.invite.confirm": "Invitation au monde effectuée avec succès",
-  "minetest.world.invite.error": "Une erreur est survenue lors de l'invitation au monde"
+  "minetest.world.invite.error": "Une erreur est survenue lors de l'invitation au monde",
+  "chip.more1": "et",
+  "chip.more2": "de plus",
+  "minetest.share.search.help": "Ex : Sabine, Dupont, Eleves ..."
 }

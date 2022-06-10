@@ -18,6 +18,12 @@ export interface IMinetestService {
 
     updateStatus(worldBody: IWorld): Promise<AxiosResponse>;
 
+    getSharebookmarks(): Promise<AxiosResponse>;
+
+    getSharebookmark(id: string): Promise<AxiosResponse>;
+
+    getVisibleUsers(search: string): Promise<AxiosResponse>;
+
     invite(worldBody: IWorld): Promise<AxiosResponse>;
 
     delete(world: IWorld): Promise<AxiosResponse>;
@@ -61,8 +67,21 @@ export const minetestService: IMinetestService = {
         return http.put(`/minetest/worlds/status/${worldBody._id}`, worldBody);
     },
 
+    getSharebookmarks: (): Promise<AxiosResponse> => {
+        return http.get('/directory/sharebookmark/all');
+    },
+
+    getSharebookmark: (id: string): Promise<AxiosResponse> => {
+        return http.get('/directory/sharebookmark/' + id);
+    },
+
+    //mettre conversation si zimbra n'existe pas
+    getVisibleUsers: (search: string): Promise<AxiosResponse> => {
+        return http.get('/zimbra/visible?search=' + search);
+    },
+
     invite: (worldBody: IWorld): Promise<AxiosResponse> => {
-        return http.put(`/minetest/join`, worldBody);
+        return http.put(`/minetest/world/join`, worldBody);
     },
 
     delete: (world: IWorld): Promise<AxiosResponse> => {

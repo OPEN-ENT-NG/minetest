@@ -6,3 +6,5 @@ export * from './current-world/current-world.directive';
 export * from './properties-world/properties-world.directive';
 export * from './invitation-world/invitation-world.directive';
 export * from './search-invitees/search-invitees';
+export * from './search-invitees/recipient-list';
+export * from './search-invitees/end-user-typing';
