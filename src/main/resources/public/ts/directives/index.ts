@@ -5,6 +5,5 @@ export * from './delete-world/delete-world.directive';
 export * from './current-world/current-world.directive';
 export * from './properties-world/properties-world.directive';
 export * from './invitation-world/invitation-world.directive';
-export * from './search-invitees/search-invitees';
-export * from './search-invitees/recipient-list';
-export * from './search-invitees/end-user-typing';
+export * from './recipient-list/recipient-list.directive';
+export * from './end-user-typing/end-user-typing.directive';

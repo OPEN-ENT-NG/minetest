@@ -2,6 +2,7 @@ import {model, ng, idiom as lang} from 'entcore';
 import {IWorld, Worlds} from "../models";
 import {minetestService} from "../services";
 import {IScope} from "angular";
+import {safeApply} from "../utils/safe-apply.utils";
 
 declare let window: any;
 
@@ -59,7 +60,7 @@ class Controller implements ng.IController, IViewModel {
 
     async initData(): Promise<void> {
         await this.getWorld();
-        this.$scope.$apply();
+        safeApply(this.$scope);
     }
 
     async getWorld(): Promise<void> {
@@ -103,7 +104,7 @@ class Controller implements ng.IController, IViewModel {
 
     async refreshWorldList(): Promise<void> {
         await this.getWorld();
-        this.$scope.$apply();
+        safeApply(this.$scope);
     }
 }
 

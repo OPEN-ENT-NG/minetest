@@ -6,7 +6,7 @@
     "whitelist": {
       "type": "array"
     },
-    "id": {
+    "_id": {
       "type": "string"
     },
     "port": {
@@ -21,7 +21,7 @@
   },
   "required": [
     "whitelist",
-    "id",
+    "_id",
     "port",
     "subject",
     "password"

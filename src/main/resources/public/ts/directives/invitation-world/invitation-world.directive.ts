@@ -3,6 +3,7 @@ import {IScope} from "angular";
 import {RootsConst} from "../../core/constants/roots.const";
 import {IWorld, User, Users} from "../../models";
 import {minetestService} from "../../services";
+import {safeApply} from "../../utils/safe-apply.utils";
 
 
 interface IViewModel {
@@ -67,24 +68,14 @@ class Controller implements ng.IController, IViewModel {
         this.world.subject = this.mail.subject;
         minetestService.invite(this.world)
             .then(() => {
-                toasts.confirm('minetest.world.invite.confirm');
                 this.closeInvitationLightbox();
-                this.$scope.$eval(this.$scope['vm']['onDeleteWorld']());
+                toasts.confirm('minetest.world.invite.confirm');
+                safeApply(this.$scope);
+                this.$scope.$eval(this.$scope['vm']['onInvitationWorld']());
             }).catch(() => {
             toasts.warning('minetest.world.invite.error');
-        })
+        });
     }
-
-    updateFoundUsers = async (search, model, founds) => {
-        let include = [];
-        const exclude = model || [];
-        new Users().findUser(search, include, exclude)
-            .then((users) => {
-                Object.assign(founds, users, { length: users.length });
-            }).catch(() => {
-            toasts.warning('minetest.world.invite.error');
-        })
-    };
 
     initMail(): void {
         this.mail.subject = idiom.translate('minetest.invitation.default.subject');

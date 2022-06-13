@@ -75,9 +75,8 @@ export const minetestService: IMinetestService = {
         return http.get('/directory/sharebookmark/' + id);
     },
 
-    //mettre conversation si zimbra n'existe pas
     getVisibleUsers: (search: string): Promise<AxiosResponse> => {
-        return http.get('/zimbra/visible?search=' + search);
+        return http.get('/conversation/visible?search=' + search);
     },
 
     invite: (worldBody: IWorld): Promise<AxiosResponse> => {

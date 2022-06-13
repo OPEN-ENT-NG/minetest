@@ -1,24 +1,8 @@
-/*
- * Copyright (c) Région Ile-de-France, Région Nouvelle-Aquitaine, CGI, 2016.
- * This file is part of OPEN ENT NG. OPEN ENT NG is a versatile ENT Project based on the JVM and ENT Core Project.
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as
- * published by the Free Software Foundation (version 3 of the License).
- * For the sake of explanation, any module that communicate over native
- * Web protocols, such as HTTP, with OPEN ENT NG is outside the scope of this
- * license and could be license under its own terms. This is merely considered
- * normal use of OPEN ENT NG, and does not fall under the heading of "covered work".
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- */
-
-import {ng, _, model, toasts} from "entcore";
-import http from 'axios';
-import {User} from "../../models";
+import {ng, _, toasts} from "entcore";
+import {User, Users} from "../../models";
 import {minetestService} from "../../services";
+import {safeApply} from "../../utils/safe-apply.utils";
+import {RootsConst} from "../../core/constants/roots.const";
 
 
 /**
@@ -26,49 +10,20 @@ import {minetestService} from "../../services";
  * 4 items are in the list, only 2 of them will be shown.
  * @param ngModel The list of items to display in chips.
  * @param ngChange Called when the items list changed.
- * @param updateFoundItems (search, model, founds) Called to update the dropDown content according to
- * the search input.
  * @example
  * <recipient-list
  ng-model="<model>"
- ng-change="<function>()"
- update-found-items="<function>(search, model, founds)">
+ ng-change="<function>()">
  </recipient-list>
  */
 export const recipientList = ng.directive("recipientList", () => {
     return {
         restrict: "E",
-        template: `
-            <div class="twelve flex-row align-center" ng-click="unfoldChip()">
-                <contact-chip class="block relative removable" 
-                    ng-model="item"
-                    action="deleteItem(item)"
-                    ng-repeat="item in ngModel | limitTo : (needChipDisplay() ? 2 : ngModel.length)">
-                </contact-chip>
-                <label class="chip selected" ng-if="needChipDisplay()" ng-click="giveFocus()">
-                    <span class="cell">... <i18n>chip.more1</i18n> [[ngModel.length - 2]] <i18n>chip.more2</i18n></span>
-                </label>
-                <img skin-src="/img/illustrations/loading.gif" width="30px" heigh="30px" ng-if="loading"/>
-                <form class="input-help" ng-submit="update(true)">
-                    <input class="chip-input right-magnet" type="text" ng-model="searchText" end-user-typing="update()" 
-                    autocomplete="off" ng-class="{ move: searchText.length > 0 }" 
-                    i18n-placeholder="minetest.share.search.help"
-                    />                   
-                </form>
-                <drop-down
-                    options="itemsFound"
-                    ng-change="addItem()"
-                    on-close="clearSearch()"
-                    ng-model="currentReceiver">
-                </drop-down>
-            </div>
-        `,
-
+        templateUrl: `${RootsConst.directive}recipient-list/recipient-list.html`,
         scope: {
             ngModel: "=",
             ngChange: "&",
             restriction: "=",
-            updateFoundItems: "&"
         },
 
         link: (scope, element) => {
@@ -103,7 +58,7 @@ export const recipientList = ng.directive("recipientList", () => {
                     scope.searchText.length === 0
                 ) {
                     // BackSpace
-                    var nb = scope.ngModel.length;
+                    const nb = scope.ngModel.length;
                     if (nb > 0) scope.deleteItem(scope.ngModel[nb - 1]);
                 }
             });
@@ -129,7 +84,7 @@ export const recipientList = ng.directive("recipientList", () => {
             scope.update = async (force?: boolean) => {
                 if (force) {
                     await scope.doSearch();
-                    scope.$apply('itemsFound');
+                    safeApply(scope);
                 } else {
                     if (
                         (scope.restriction && scope.searchText.length < 3) ||
@@ -138,7 +93,7 @@ export const recipientList = ng.directive("recipientList", () => {
                         scope.itemsFound.splice(0, scope.itemsFound.length);
                     } else {
                         await scope.doSearch();
-                        scope.$apply('itemsFound');
+                        safeApply(scope);
                     }
                 }
             };
@@ -164,16 +119,15 @@ export const recipientList = ng.directive("recipientList", () => {
                 return true;
             };
 
-            scope.addItem = async (mail?:User) => {
+            scope.addItem = async (user?:User) => {
                 scope.focused = true;
                 element.find('input').focus();
                 if (!scope.ngModel) {
                     scope.ngModel = [];
                 }
-                if(mail && _.findWhere(scope.ngModel, {id: mail.id}) == undefined ){
-                    scope.ngModel.push(mail);
-                }
-                else if (scope.currentReceiver.type === 'sharebookmark') {
+                if(user && _.findWhere(scope.ngModel, {id: user.id}) == undefined ){
+                    scope.ngModel.push(user);
+                } else if (scope.currentReceiver.type === 'sharebookmark') {
                     scope.loading = true;
                     minetestService.getSharebookmark(scope.currentReceiver.id.toString())
                         .then((response) => {
@@ -193,9 +147,9 @@ export const recipientList = ng.directive("recipientList", () => {
                 }
                 setTimeout(function(){
                     scope.itemsFound.splice(scope.itemsFound.indexOf(scope.currentReceiver), 1);
-                    scope.$apply('itemsFound');
+                    safeApply(scope);
                 }, 0);
-                scope.$apply("ngModel");
+                safeApply(scope);
                 scope.$eval(scope.ngChange);
             };
 
@@ -203,36 +157,31 @@ export const recipientList = ng.directive("recipientList", () => {
                 scope.ngModel = _.reject(scope.ngModel, function(i) {
                     return i === item;
                 });
-                scope.$apply("ngModel");
+                safeApply(scope);
                 scope.$eval(scope.ngChange);
                 if (scope.itemsFound.length > 0)
                     scope.doSearch();
             };
 
             scope.clearSearch = () => {
-                let myUser =new User(scope.searchText, scope.searchText);
-                if(scope.searchText) {
-                    scope.addItem((myUser));
-                }
                 scope.itemsFound = [];
                 scope.searchText = "";
                 scope.addedFavorites = [];
-                scope.$apply();
+                safeApply(scope);
             };
 
             scope.doSearch = async () => {
-                scope.updateFoundItems({
-                    search: scope.searchText,
-                    model: scope.ngModel,
-                    founds: scope.itemsFound
-                })
-                    .then(() => {
+                let include = [];
+                const exclude = scope.ngModel || [];
+                await new Users().findUser(scope.searchText, include, exclude)
+                    .then((users) => {
+                        Object.assign(scope.itemsFound, users, { length: users.length });
                         scope.itemsFound = _.reject(scope.itemsFound, function (element) {
                             return _.findWhere(scope.addedFavorites, { id: element.id });
                         });
                     }).catch(() => {
-                    toasts.warning('minetest.world.invite.error');
-                })
+                        toasts.warning('minetest.world.invite.error');
+                    });
             };
 
             // Focus when items list changes

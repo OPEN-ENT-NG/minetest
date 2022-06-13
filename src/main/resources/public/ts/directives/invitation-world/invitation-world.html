@@ -14,11 +14,7 @@
         <div>
             <div style="margin-top:5%">
                 <div class="row receivers">
-                    <recipient-list
-                            ng-model="vm.mail.invitees"
-                            restriction= false
-                            update-found-items="vm.updateFoundUsers(search, model, founds)">
-                    </recipient-list>
+                    <recipient-list ng-model="vm.mail.invitees" restriction= false></recipient-list>
                     <div class="vertical-spacing"><i18n>minetest.invitation.information</i18n></div>
                 </div>
                 <label style="display: flex;">

@@ -1,0 +1,23 @@
+<div class="twelve flex-row align-center" ng-click="unfoldChip()">
+    <contact-chip class="block relative removable"
+                  ng-model="item"
+                  action="deleteItem(item)"
+                  ng-repeat="item in ngModel | limitTo : (needChipDisplay() ? 2 : ngModel.length)">
+    </contact-chip>
+    <label class="chip selected" ng-if="needChipDisplay()" ng-click="giveFocus()">
+        <span class="cell">... <i18n>chip.more1</i18n> [[ngModel.length - 2]] <i18n>chip.more2</i18n></span>
+    </label>
+    <img skin-src="/img/illustrations/loading.gif" width="30px" heigh="30px" ng-if="loading"/>
+    <form class="input-help" ng-submit="update(true)">
+        <input class="chip-input right-magnet" type="text" ng-model="searchText" end-user-typing="update()"
+               autocomplete="off" ng-class="{ move: searchText.length > 0 }"
+               i18n-placeholder="minetest.share.search.help"
+        />
+    </form>
+    <drop-down
+            options="itemsFound"
+            ng-change="addItem()"
+            on-close="clearSearch()"
+            ng-model="currentReceiver">
+    </drop-down>
+</div>

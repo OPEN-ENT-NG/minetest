@@ -18,6 +18,14 @@ export class User implements Selectable {
         this.id = id;
     }
 
+    toString() {
+        return (
+            (this.displayName || "") +
+            (this.name || "") +
+            (this.profile ? " (" + lang.translate(this.profile) + ")" : "")
+        );
+    }
+
 }
 
 export class Users {
@@ -35,7 +43,6 @@ export class Users {
                 });
                 newArr = Mix.castArrayAs(User, bookmarks);
                 search = search.split(' ').join('');
-                // /conversation/visible existe
                 await minetestService.getVisibleUsers(search)
                     .then((users) => {
                         users.data.groups.forEach(group => {
@@ -53,22 +60,25 @@ export class Users {
             toasts.warning('minetest.world.invite.error');
             throw err;
         });
+        return newArr;
     }
 
     async findUser(search, include, exclude): Promise<User[]> {
         const startText = search.substr(0, 10);
+        let result = [];
         if (!this.searchCachedMap[startText]) {
             this.searchCachedMap[startText] = [];
             await this.sync(startText)
                 .then((res) => {
                     this.searchCachedMap[startText] = res;
-                    return this.reformatResults(search, startText, include, exclude);
+                    result = this.reformatResults(search, startText, include, exclude);
                 }).catch(() => {
                 toasts.warning('minetest.world.invite.error');
-            })
+            });
         } else {
-            return this.reformatResults(search, startText, include, exclude);
+            result = this.reformatResults(search, startText, include, exclude);
         }
+        return result;
     }
 
     private reformatResults(search, startText: string, include, exclude) {

@@ -20,10 +20,7 @@ import org.entcore.common.mongodb.MongoDbResult;
 import org.entcore.common.user.UserInfos;
 import org.entcore.common.user.UserUtils;
 
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -182,58 +179,77 @@ public class DefaultWorldService implements WorldService {
     @Override
     public Future<JsonObject> join(UserInfos user, JsonObject body, HttpServerRequest request) {
         Promise<JsonObject> promise = Promise.promise();
-        JsonArray whitelistIdAndLogin = new JsonArray();
+        JsonArray whitelistMinetest = new JsonArray();
+        JsonArray whitelistDetails = new JsonArray();
         String password = (String) body.remove(Field.PASSWORD);
 
-        reformatWhitelist(body.getJsonArray(Field.WHITELIST), user, whitelistIdAndLogin)
-                .compose(whitelistMinetest -> {
-                    body.put(Field.WHITELIST,whitelistMinetest);
-                    return update(body.getString(Field.ID), body);
+        reformatWhitelist(body.getJsonArray(Field.WHITELIST), user, whitelistMinetest, whitelistDetails)
+                .compose(res -> {
+                    body.put(Field.WHITELIST, whitelistDetails);
+                    return update(body.getString(Field._ID), body);
                 })
                 .compose(res -> {
                     StringBuilder whitelistInFile = new StringBuilder();
-                    for (Object login : body.getJsonArray(Field.WHITELIST)){
+                    for (Object login : whitelistMinetest){
                         whitelistInFile.append(login).append("\n");
                     }
                     body.put(Field.WHITELIST, whitelistInFile.toString());
+                    body.put(Field.PASSWORD, password);
+                    body.put(Field.ID, body.getString(Field._ID));
                     return minetestService.action(body,MinestestServiceAction.WHITELIST);
                 })
-                .compose(res -> sendMail(user,whitelistIdAndLogin, body, request, password))
+                .compose(res -> sendMail(user,whitelistDetails, body, request, password))
                 .onSuccess(promise::complete)
                 .onFailure(err -> promise.fail(err.getMessage()));
         return promise.future();
     }
 
-    private Future<JsonArray> reformatWhitelist(JsonArray whitelistId, UserInfos owner, JsonArray whitelistIdAndLogin) {
+    private Future<JsonArray> reformatWhitelist(JsonArray whitelist, UserInfos owner,
+                                                JsonArray whitelistMinetest, JsonArray whitelistDetails) {
         Promise<JsonArray> promise = Promise.promise();
-        if (!whitelistId.contains(owner.getUserId()))
-            whitelistId.add(owner.getUserId());
-        JsonArray whitelistMinetest = new JsonArray();
-        for (Object id : whitelistId){
-            UserUtils.getUserInfos(eb,(String) id, user -> {
+        for (Object u : whitelist){
+            JsonObject userInfos = (JsonObject) u;
+            UserUtils.getUserInfos(eb, userInfos.getString(Field.ID), user -> {
                 String loginToInsert = reformatLogin(user.getLogin());
-                //Check duplicate login
-                int i = 1;
-                while (whitelistMinetest.contains(loginToInsert)){
-                    Character lastCharacter = loginToInsert.charAt(loginToInsert.length() - 1);
-                    if (Character.isDigit(lastCharacter)) {
-                        i = Integer.parseInt(String.valueOf(lastCharacter)) + 1;
-                    }
-                    loginToInsert = loginToInsert.substring(0,Math.min(loginToInsert.length(), 19) - 1) + i;
+                checkDuplicates(whitelistDetails, whitelistMinetest, userInfos, loginToInsert);
+                if (whitelistMinetest.size() == whitelist.size()) {
+                    //insert the owner in the whitelist
+                    JsonObject ownerInfos = new JsonObject()
+                            .put(Field.ID, owner.getUserId())
+                            .put(Field.LOGIN, owner.getLogin())
+                            .put(Field.DISPLAY_NAME, owner.getUsername());
+                    loginToInsert = reformatLogin(owner.getLogin());
+                    checkDuplicates(whitelistDetails, whitelistMinetest, ownerInfos, loginToInsert);
+                    promise.complete(new JsonArray());
                 }
-                whitelistMinetest.add(loginToInsert);
-                whitelistIdAndLogin.add(new JsonObject().put(Field.ID,id).put(Field.LOGIN, loginToInsert));
-                if (whitelistMinetest.size() == whitelistId.size())
-                    promise.complete(whitelistMinetest);
             });
         }
         return promise.future();
     }
 
+    private void checkDuplicates(JsonArray whitelistDetails, JsonArray whitelistMinetest, JsonObject userInfos,
+                                 String loginToInsert) {
+        //Check duplicate login
+        int i = 1;
+        while (whitelistMinetest.contains(loginToInsert)){
+            Character lastCharacter = loginToInsert.charAt(loginToInsert.length() - 1);
+            if (Character.isDigit(lastCharacter)) {
+                i = Integer.parseInt(String.valueOf(lastCharacter)) + 1;
+            }
+            loginToInsert = loginToInsert.substring(0,Math.min(loginToInsert.length(), 19) - 1) + i;
+        }
+        whitelistMinetest.add(loginToInsert);
+        JsonObject userToInsert = new JsonObject()
+                .put(Field.ID, userInfos.getString(Field.ID))
+                .put(Field.LOGIN, loginToInsert)
+                .put(Field.DISPLAY_NAME, userInfos.getString(Field.DISPLAY_NAME));
+        whitelistDetails.add(userToInsert);
+    }
+
     private Future<JsonObject> sendMail(UserInfos owner, JsonArray whitelistIdAndLogin, JsonObject body,
                                         HttpServerRequest request, String password) {
         Promise<JsonObject> promise = Promise.promise();
-        JsonArray listMails = createMailList(owner, whitelistIdAndLogin, body, request, password, promise);
+        JsonArray listMails = createMailList(owner, whitelistIdAndLogin, body, request, password);
         // Prepare futures to get message responses
         List<Future> mails = new ArrayList<>();
         // Code to send mails
@@ -264,7 +280,7 @@ public class DefaultWorldService implements WorldService {
     }
 
     private JsonArray createMailList(UserInfos owner, JsonArray whitelistIdAndLogin, JsonObject body,
-                                     HttpServerRequest request, String password, Promise<JsonObject> promise) {
+                                     HttpServerRequest request, String password) {
         JsonArray listMails = new JsonArray();
         I18n i18n = I18n.getInstance();
         String host = getHost(request);
