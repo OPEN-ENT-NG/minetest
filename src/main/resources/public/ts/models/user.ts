@@ -2,6 +2,7 @@
 
 import { Mix, Selectable, Eventer } from "entcore-toolkit";
 import {minetestService} from "../services";
+import {AxiosResponse} from "axios";
 
 export class User implements Selectable {
     displayName: string;
@@ -25,7 +26,6 @@ export class User implements Selectable {
             (this.profile ? " (" + lang.translate(this.profile) + ")" : "")
         );
     }
-
 }
 
 export class Users {
@@ -36,7 +36,7 @@ export class Users {
         let newArr = [];
         let bookmarks = [];
         await minetestService.getSharebookmarks()
-            .then(async (sharebooks) => {
+            .then(async (sharebooks: AxiosResponse) => {
                 bookmarks = _.map(sharebooks.data, function(bookmark) {
                     bookmark.type = 'sharebookmark';
                     return bookmark;
@@ -44,7 +44,7 @@ export class Users {
                 newArr = Mix.castArrayAs(User, bookmarks);
                 search = search.split(' ').join('');
                 await minetestService.getVisibleUsers(search)
-                    .then((users) => {
+                    .then((users: AxiosResponse) => {
                         users.data.groups.forEach(group => {
                             group.isGroup = true;
                             newArr.push(Mix.castAs(User, group));
@@ -69,7 +69,7 @@ export class Users {
         if (!this.searchCachedMap[startText]) {
             this.searchCachedMap[startText] = [];
             await this.sync(startText)
-                .then((res) => {
+                .then((res: User[]) => {
                     this.searchCachedMap[startText] = res;
                     result = this.reformatResults(search, startText, include, exclude);
                 }).catch(() => {
