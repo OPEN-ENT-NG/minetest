@@ -269,9 +269,7 @@ public class DefaultWorldService implements WorldService {
         }
         // Try to send effectively mails with code below and get results
         CompositeFuture.all(mails)
-                .onSuccess(success -> {
-                    promise.complete(new JsonObject());
-                })
+                .onSuccess(success -> promise.complete(new JsonObject()))
                 .onFailure(fail -> {
                     log.error("[Minetest@sendMail] Failed to send mail : " + fail.getCause());
                     promise.fail(fail.getCause());
@@ -291,7 +289,7 @@ public class DefaultWorldService implements WorldService {
         for (Object u : whitelistIdAndLogin) {
             JsonObject user = (JsonObject) u;
             String mailBody = i18n.translate("minetest.invitation.default.body.1", host, acceptLanguage)
-                    .replaceAll("<mettre lien>", this.minetestConfig.minetestDownload()) +
+                    .replace("<mettre lien>", this.minetestConfig.minetestDownload()) +
                     i18n.translate("minetest.invitation.default.body.address", host, acceptLanguage) + path +
                     i18n.translate("minetest.invitation.default.body.port", host, acceptLanguage) + body.getString(Field.PORT) +
                     i18n.translate("minetest.invitation.default.body.name", host, acceptLanguage) + user.getString(Field.LOGIN) +
@@ -365,7 +363,13 @@ public class DefaultWorldService implements WorldService {
                 promise.fail(message);
                 return;
             }
-            promise.complete(result.right().getValue());
+            if(body.getString(Field.PASSWORD) != null) {
+                resetPassword(String.valueOf(body.getString(Field.PASSWORD)), body)
+                        .onSuccess(res -> promise.complete(result.right().getValue()))
+                        .onFailure(err -> promise.fail(err.getMessage()));
+            } else {
+                promise.complete(result.right().getValue());
+            }
         }));
         return promise.future();
     }
