@@ -1,10 +1,11 @@
 import {_, idiom, ng, toasts} from "entcore";
 import {IScope} from "angular";
 import {RootsConst} from "../../core/constants/roots.const";
-import {IWorld, User, Users} from "../../models";
+import {IWorld} from "../../models";
 import {minetestService} from "../../services";
 import {safeApply} from "../../utils/safe-apply.utils";
 
+declare let window: any;
 
 interface IViewModel {
     openInvitationLightbox(): void;
@@ -49,6 +50,7 @@ class Controller implements ng.IController, IViewModel {
     }
 
     $onInit() {
+       this.downloadLink = window.minetestDownload;
     }
 
     $onDestroy() {
@@ -71,7 +73,6 @@ class Controller implements ng.IController, IViewModel {
                 this.closeInvitationLightbox();
                 toasts.confirm('minetest.world.invite.confirm');
                 safeApply(this.$scope);
-                this.$scope.$eval(this.$scope['vm']['onInvitationWorld']());
             }).catch(() => {
             toasts.warning('minetest.world.invite.error');
         });
@@ -81,13 +82,13 @@ class Controller implements ng.IController, IViewModel {
         this.mail.subject = idiom.translate('minetest.invitation.default.subject');
         if (!this.world.password) {
             this.mail.body = idiom.translate('minetest.invitation.default.body.1')
-                    .replace("<mettre lien>", this.downloadLink) +
+                    .replaceAll("<mettre lien>", this.downloadLink) +
                 idiom.translate('minetest.invitation.default.body.address') + this.world.address +
                 idiom.translate('minetest.invitation.default.body.port') + this.world.port +
                 idiom.translate('minetest.invitation.default.body.end');
         } else
             this.mail.body = idiom.translate('minetest.invitation.default.body.1')
-                    .replace("<mettre lien>", this.downloadLink) +
+                    .replaceAll("<mettre lien>", this.downloadLink) +
                 idiom.translate('minetest.invitation.default.body.address') + this.world.address +
                 idiom.translate('minetest.invitation.default.body.port') + this.world.port +
                 idiom.translate('minetest.invitation.default.body.name') + "user_login" +
@@ -103,9 +104,7 @@ function directive() {
         restrict: 'E',
         templateUrl: `${RootsConst.directive}invitation-world/invitation-world.html`,
         scope: {
-            world: '=',
-            downloadLink: '=',
-            onInvitationWorld: '&'
+            world: '='
         },
         controllerAs: 'vm',
         bindToController: true,
