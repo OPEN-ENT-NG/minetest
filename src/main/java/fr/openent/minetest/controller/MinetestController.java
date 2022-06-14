@@ -91,10 +91,9 @@ public class MinetestController extends ControllerHelper {
     public void putWorld(final HttpServerRequest request) {
         String worldId = request.getParam("id");
         RequestUtils.bodyToJson(request, pathPrefix + Field.WORLD, body
-                -> UserUtils.getUserInfos(eb, request, user
-                -> worldService.update(user, worldId, body)
+                -> worldService.update(worldId, body)
                 .onSuccess(res -> renderJson(request, body))
-                .onFailure(err -> renderError(request))));
+                .onFailure(err -> renderError(request)));
     }
 
     @Put("/worlds/import/:id")
@@ -103,10 +102,9 @@ public class MinetestController extends ControllerHelper {
     public void putImportWorld(final HttpServerRequest request) {
         String worldId = request.getParam("id");
         RequestUtils.bodyToJson(request, pathPrefix + Field.IMPORT_WORLD, body
-                -> UserUtils.getUserInfos(eb, request, user
-                -> worldService.update(user, worldId, body)
+                -> worldService.update(worldId, body)
                 .onSuccess(res -> renderJson(request, body))
-                .onFailure(err -> renderError(request))));
+                .onFailure(err -> renderError(request)));
     }
 
     @Put("/worlds/status/:id")
@@ -118,6 +116,17 @@ public class MinetestController extends ControllerHelper {
                 -> worldService.updateStatus(user, body)
                             .onSuccess(res -> renderJson(request, body))
                             .onFailure(err -> renderError(request))));
+    }
+
+    @Put("/world/join")
+    @ApiDoc("Update status world")
+    @SecuredAction(value = "", type = ActionType.AUTHENTICATED)
+    public void joinWorld(final HttpServerRequest request) {
+        RequestUtils.bodyToJson(request, pathPrefix + Field.JOIN, body
+                -> UserUtils.getUserInfos(eb, request, user
+                -> worldService.join(user, body, request)
+                .onSuccess(res -> renderJson(request, body))
+                .onFailure(err -> renderError(request))));
     }
 
     @Delete("/worlds")

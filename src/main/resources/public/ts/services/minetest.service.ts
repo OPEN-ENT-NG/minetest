@@ -18,6 +18,14 @@ export interface IMinetestService {
 
     updateStatus(worldBody: IWorld): Promise<AxiosResponse>;
 
+    getSharebookmarks(): Promise<AxiosResponse>;
+
+    getSharebookmark(id: string): Promise<AxiosResponse>;
+
+    getVisibleUsers(search: string): Promise<AxiosResponse>;
+
+    invite(worldBody: IWorld): Promise<AxiosResponse>;
+
     delete(world: IWorld): Promise<AxiosResponse>;
 
     deleteImportWorld(world: IWorld): Promise<AxiosResponse>;
@@ -57,6 +65,22 @@ export const minetestService: IMinetestService = {
 
     updateStatus: (worldBody: IWorld): Promise<AxiosResponse> => {
         return http.put(`/minetest/worlds/status/${worldBody._id}`, worldBody);
+    },
+
+    getSharebookmarks: (): Promise<AxiosResponse> => {
+        return http.get('/directory/sharebookmark/all');
+    },
+
+    getSharebookmark: (id: string): Promise<AxiosResponse> => {
+        return http.get('/directory/sharebookmark/' + id);
+    },
+
+    getVisibleUsers: (search: string): Promise<AxiosResponse> => {
+        return http.get('/conversation/visible?search=' + search);
+    },
+
+    invite: (worldBody: IWorld): Promise<AxiosResponse> => {
+        return http.put(`/minetest/world/join`, worldBody);
     },
 
     delete: (world: IWorld): Promise<AxiosResponse> => {

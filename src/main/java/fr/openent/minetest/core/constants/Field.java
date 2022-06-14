@@ -19,6 +19,7 @@ public class Field {
     public static final String TITLE = "title";
     public static final String WORLD = "world";
     public static final String IMPORT_WORLD = "import_world";
+    public static final String JOIN = "join";
     public static final String PORT = "port";
     public static final String FILEID = "fileId";
     public static final String METADATA = "metadata";
@@ -29,6 +30,10 @@ public class Field {
     public static final String ADDRESS = "address";
     public static final String ISEXTERNAL = "isExternal";
     public static final String PASSWORD = "password";
+    public static final String WHITELIST = "whitelist";
+    public static final String LOGIN = "login";
+    public static final String DISPLAY_NAME = "displayName";
+    public static final String SUBJECT = "subject";
 
     // Config
     public static final String MINETEST_DOWNLOAD = "minetest-download";

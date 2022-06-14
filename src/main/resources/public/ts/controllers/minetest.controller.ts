@@ -2,6 +2,7 @@ import {model, ng, idiom as lang} from 'entcore';
 import {IWorld, Worlds} from "../models";
 import {minetestService} from "../services";
 import {IScope} from "angular";
+import {safeApply} from "../utils/safe-apply.utils";
 
 declare let window: any;
 
@@ -12,6 +13,7 @@ interface IViewModel {
     setStatus(world: IWorld): string;
     getLink(): string;
     getWiki(): string;
+    getDownload(): string;
     refreshWorldList(): Promise<void>;
 
     world: IWorld;
@@ -58,7 +60,7 @@ class Controller implements ng.IController, IViewModel {
 
     async initData(): Promise<void> {
         await this.getWorld();
-        this.$scope.$apply();
+        safeApply(this.$scope);
     }
 
     async getWorld(): Promise<void> {
@@ -96,9 +98,13 @@ class Controller implements ng.IController, IViewModel {
         return window.minetestWiki;
     }
 
+    getDownload(): string {
+        return window.minetestDownload;
+    }
+
     async refreshWorldList(): Promise<void> {
         await this.getWorld();
-        this.$scope.$apply();
+        safeApply(this.$scope);
     }
 }
 

@@ -1,0 +1,40 @@
+<div class="minetestInvitation">
+
+    <!-- button invitation world -->
+    <button data-ng-click="vm.openInvitationLightbox()">
+        <i18n>minetest.invite</i18n>
+    </button>
+
+    <!-- popup modal to invit users -->
+    <lightbox show="vm.lightbox.invitation" on-close="vm.closeInvitationLightbox()">
+        <!-- title -->
+        <h2>
+            <i18n>minetest.invitation.default.title</i18n>
+        </h2>
+        <div>
+            <div style="margin-top:5%">
+                <label>
+                    <i18n style="font-weight: bold">minetest.invitation.search.users.groups.fav</i18n>
+                </label>
+                <div class="row receivers">
+                    <recipient-list ng-model="vm.mail.invitees" restriction= false></recipient-list>
+                    <div class="vertical-spacing"><i18n>minetest.invitation.information</i18n></div>
+                </div>
+                <label style="display: flex;">
+                    <i18n style="font-weight: bold">minetest.invitation.object.label</i18n>
+                    <input type="text" class="eight" ng-model="vm.mail.subject" i18n-placeholder="minetest.world.to.join"/>
+                </label>
+                <div class="row horizontal-spacing">
+                    <div class="twelve cell escape_cke" bind-html="vm.mail.body"></div>
+                </div>
+            </div>
+        </div>
+        <button class="custom-button right-magnet" ng-click="vm.sendInvitation()">
+            <i18n>minetest.send</i18n>
+        </button>
+        <button class="custom-cancel right-magnet" ng-click="vm.closeInvitationLightbox()">
+            <i18n>minetest.cancel</i18n>
+        </button>
+    </lightbox>
+
+</div>

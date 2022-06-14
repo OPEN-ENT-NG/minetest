@@ -1,6 +1,8 @@
 package fr.openent.minetest.service;
 
+import io.netty.handler.codec.http.HttpRequest;
 import io.vertx.core.Future;
+import io.vertx.core.http.HttpServerRequest;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import org.entcore.common.user.UserInfos;
@@ -30,12 +32,11 @@ public interface WorldService {
     /**
      * Update World
      *
-     * @param user {@link UserInfos}
      * @param body Data to store
      * @param worldId World identifier
      * @return Future {@link Future<JsonObject>} containing new world
      */
-    Future<JsonObject> update(UserInfos user, String worldId, JsonObject body);
+    Future<JsonObject> update(String worldId, JsonObject body);
 
     /**
      * Update Status
@@ -45,6 +46,16 @@ public interface WorldService {
      * @return Future {@link Future<JsonObject>} containing new world
      */
     Future<JsonObject> updateStatus(UserInfos user, JsonObject body);
+
+    /**
+     * Update whitelist of a world
+     *
+     * @param user {@link UserInfos}
+     * @param body Data to update
+     * @param request request
+     * @return Future {@link Future<JsonObject>} containing array of invitees
+     */
+    Future<JsonObject> join(UserInfos user, JsonObject body, HttpServerRequest request);
 
     /**
      * Delete World

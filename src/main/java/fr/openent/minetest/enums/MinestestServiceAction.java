@@ -5,8 +5,8 @@ public enum MinestestServiceAction {
     DELETE("delete"),
     OPEN("open"),
     RESET_PASSWORD("resetPassword"),
-    CLOSE("close");
-
+    CLOSE("close"),
+    WHITELIST("whitelist");
 
     private final String action;
 

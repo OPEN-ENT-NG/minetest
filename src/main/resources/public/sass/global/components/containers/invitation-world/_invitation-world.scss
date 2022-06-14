@@ -1,0 +1,62 @@
+.minetestInvitation {
+  .custom-cancel {
+    color: $minetest-orange;
+    background: $minetest-grey;
+    font-size: 14px;
+  }
+
+  .custom-cancel:hover {
+    background: $minetest-orange;
+    color: $minetest-white;
+    font-size: 14px;
+  }
+
+  .custom-button {
+    background: $minetest-orange;
+    color: $minetest-white;
+    font-size: 14px;
+  }
+
+  .custom-button:hover {
+    background-color: $minetest-dark-orange;
+    box-shadow: none;
+    color: $minetest-white;
+    font-size: 14px;
+  }
+
+  .custom-button[disabled=disabled] {
+    color: #b1b6bf;
+    background: #8c939e;
+    cursor: default;
+  }
+}
+
+.receivers{
+  margin-bottom: 21px;
+}
+.recipients{
+  margin-bottom: 0px !important;
+  .drop-down-label{
+    border-bottom: none !important;
+    margin-bottom: 0px !important;
+  }
+  hr{
+    width: calc(100% - 20px );
+    right: 0;
+    display: inline-block;
+    border: 1px #aaa solid;
+    padding: 0px;
+  }
+  .drop-down-label:hover{
+    hr{
+      border: 1px solid #FF8500;
+    }
+  }
+  hr.not-empty{
+    border: 0.5px solid #FF8500;
+  }
+  label{
+    padding: 0px !important;
+    vertical-align: super;
+  }
+}
