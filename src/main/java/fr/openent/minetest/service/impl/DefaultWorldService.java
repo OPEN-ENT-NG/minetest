@@ -16,6 +16,7 @@ import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
+import io.vertx.ext.auth.User;
 import org.entcore.common.mongodb.MongoDbResult;
 import org.entcore.common.user.UserInfos;
 import org.entcore.common.user.UserUtils;
@@ -211,15 +212,11 @@ public class DefaultWorldService implements WorldService {
             JsonObject userInfos = (JsonObject) u;
             UserUtils.getUserInfos(eb, userInfos.getString(Field.ID), user -> {
                 String loginToInsert = reformatLogin(user.getLogin());
-                checkDuplicates(whitelistDetails, whitelistMinetest, userInfos, loginToInsert);
+                checkDuplicates(whitelistDetails, whitelistMinetest, user, loginToInsert);
                 if (whitelistMinetest.size() == whitelist.size()) {
                     //insert the owner in the whitelist
-                    JsonObject ownerInfos = new JsonObject()
-                            .put(Field.ID, owner.getUserId())
-                            .put(Field.LOGIN, owner.getLogin())
-                            .put(Field.DISPLAY_NAME, owner.getUsername());
                     loginToInsert = reformatLogin(owner.getLogin());
-                    checkDuplicates(whitelistDetails, whitelistMinetest, ownerInfos, loginToInsert);
+                    checkDuplicates(whitelistDetails, whitelistMinetest, owner, loginToInsert);
                     promise.complete(new JsonArray());
                 }
             });
@@ -227,7 +224,7 @@ public class DefaultWorldService implements WorldService {
         return promise.future();
     }
 
-    private void checkDuplicates(JsonArray whitelistDetails, JsonArray whitelistMinetest, JsonObject userInfos,
+    private void checkDuplicates(JsonArray whitelistDetails, JsonArray whitelistMinetest, UserInfos userInfos,
                                  String loginToInsert) {
         //Check duplicate login
         int i = 1;
@@ -240,9 +237,11 @@ public class DefaultWorldService implements WorldService {
         }
         whitelistMinetest.add(loginToInsert);
         JsonObject userToInsert = new JsonObject()
-                .put(Field.ID, userInfos.getString(Field.ID))
+                .put(Field.ID, userInfos.getUserId())
                 .put(Field.LOGIN, loginToInsert)
-                .put(Field.DISPLAY_NAME, userInfos.getString(Field.DISPLAY_NAME));
+                .put(Field.DISPLAY_NAME, userInfos.getUsername())
+                .put(Field.FIRST_NAME, userInfos.getFirstName())
+                .put(Field.LAST_NAME, userInfos.getLastName());
         whitelistDetails.add(userToInsert);
     }
 
@@ -259,13 +258,13 @@ public class DefaultWorldService implements WorldService {
             // Send mail via Conversation app if it exists or else with Zimbra
             eb.request("org.entcore.conversation", listMails.getJsonObject(i),
                     (Handler<AsyncResult<Message<JsonObject>>>) messageEvent -> {
-                if (!"ok".equals(messageEvent.result().body().getString("status"))) {
-                    log.error("[Minetest@sendMail] Failed to send mail : " + messageEvent.cause());
-                    future.handle(Future.failedFuture(messageEvent.cause()));
-                } else {
-                    future.handle(Future.succeededFuture(messageEvent.result().body()));
-                }
-            });
+                        if (!"ok".equals(messageEvent.result().body().getString("status"))) {
+                            log.error("[Minetest@sendMail] Failed to send mail : " + messageEvent.cause());
+                            future.handle(Future.failedFuture(messageEvent.cause()));
+                        } else {
+                            future.handle(Future.succeededFuture(messageEvent.result().body()));
+                        }
+                    });
         }
         // Try to send effectively mails with code below and get results
         CompositeFuture.all(mails)
@@ -363,13 +362,7 @@ public class DefaultWorldService implements WorldService {
                 promise.fail(message);
                 return;
             }
-            if(body.getString(Field.PASSWORD) != null) {
-                resetPassword(String.valueOf(body.getString(Field.PASSWORD)), body)
-                        .onSuccess(res -> promise.complete(result.right().getValue()))
-                        .onFailure(err -> promise.fail(err.getMessage()));
-            } else {
-                promise.complete(result.right().getValue());
-            }
+            promise.complete(result.right().getValue());
         }));
         return promise.future();
     }
@@ -430,7 +423,7 @@ public class DefaultWorldService implements WorldService {
 
     @Override
     public Future<JsonArray> getMongo(String ownerId, String ownerName, String createdAt, String updatedAt,
-                                 String img, String name, JsonObject sortJson) {
+                                      String img, String name, JsonObject sortJson) {
         Promise<JsonArray> promise = Promise.promise();
 
         JsonObject worldQuery = new JsonObject();
