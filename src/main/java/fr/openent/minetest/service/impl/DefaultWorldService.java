@@ -199,7 +199,7 @@ public class DefaultWorldService implements WorldService {
                     body.put(Field.ID, body.getString(Field._ID));
                     return minetestService.action(body,MinestestServiceAction.WHITELIST);
                 })
-                .compose(res -> sendMail(user,whitelistDetails, body, request, password))
+                .compose(res -> sendMail(user, whitelistDetails, body, request, password))
                 .onSuccess(promise::complete)
                 .onFailure(err -> promise.fail(err.getMessage()));
         return promise.future();
@@ -347,8 +347,8 @@ public class DefaultWorldService implements WorldService {
             if (body.getString(Field.ADDRESS) != null) {
                 worldData.put(Field.ADDRESS, body.getString(Field.ADDRESS));
             }
-            if (body.getString(Field.PORT) != null) {
-                worldData.put(Field.PORT, body.getString(Field.PORT));
+            if (body.getInteger(Field.PORT) != null) {
+                worldData.put(Field.PORT, body.getInteger(Field.PORT));
             }
         }
 

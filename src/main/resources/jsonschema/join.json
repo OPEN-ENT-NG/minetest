@@ -23,7 +23,6 @@
     "whitelist",
     "_id",
     "port",
-    "subject",
-    "password"
+    "subject"
   ]
 }

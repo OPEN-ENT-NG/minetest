@@ -9,9 +9,9 @@ export interface IWorld {
 
     password: string;
     status?: boolean;
+
     img?: string;
     title: string;
-
     address: string;
     port?: number;
 
@@ -31,9 +31,12 @@ export interface IImportWorld {
     img?: string;
     title: string;
     address: string;
-    port: string;
+    port: number;
 
     isExternal: boolean;
+
+    whitelist?: string[];
+    subject?: string;
 }
 
 export class Worlds {

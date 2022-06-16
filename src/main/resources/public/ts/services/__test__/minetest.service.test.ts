@@ -30,7 +30,7 @@ describe('MinetestService', () => {
 
             title: "monde1",
             address: "world.fr",
-            port: "30000",
+            port: 30000,
 
             isExternal: true
         }
