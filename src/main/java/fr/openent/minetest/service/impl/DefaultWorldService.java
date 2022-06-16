@@ -97,8 +97,8 @@ public class DefaultWorldService implements WorldService {
         for (Object world: res) {
             JsonObject worldJson = (JsonObject) world;
             if (Boolean.TRUE.equals(worldJson.getBoolean(Field.ISEXTERNAL))) {
-                if (!worldJson.getString(Field.PORT).isEmpty()) {
-                    promise.complete(Integer.parseInt(worldJson.getString(Field.PORT)));
+                if (!worldJson.getInteger(Field.PORT).toString().isEmpty()) {
+                    promise.complete(worldJson.getInteger(Field.PORT));
                 }
                 return promise.future();
             }
