@@ -16,7 +16,6 @@ import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
-import io.vertx.ext.auth.User;
 import org.entcore.common.mongodb.MongoDbResult;
 import org.entcore.common.user.UserInfos;
 import org.entcore.common.user.UserUtils;
@@ -290,12 +289,11 @@ public class DefaultWorldService implements WorldService {
         String acceptLanguage = I18n.acceptLanguage(request);
         String path = body.getString(Field.ADDRESS)
                 .replace("http://","").replace("https://","");
-        // Generate list of mails to send
         for (Object u : whitelistIdAndLogin) {
             JsonObject user = (JsonObject) u;
             String passwordBody = "";
             String loginBody = "";
-            if (Boolean.FALSE.equals(body.getBoolean(Field.ISEXTERNAL))){
+            if (body.getBoolean(Field.ISEXTERNAL) == null) {
                 passwordBody = i18n.translate("minetest.invitation.default.body.password", host, acceptLanguage) + password;
                 loginBody = i18n.translate("minetest.invitation.default.body.name", host, acceptLanguage) + user.getString(Field.LOGIN);
             }
@@ -373,7 +371,7 @@ public class DefaultWorldService implements WorldService {
                 promise.fail(message);
                 return;
             }
-            if(body.getString(Field.PASSWORD) != null) {
+            if (body.getString(Field.PASSWORD) != null) {
                 resetPassword(String.valueOf(body.getString(Field.PASSWORD)), body)
                         .onSuccess(res -> promise.complete(result.right().getValue()))
                         .onFailure(err -> promise.fail(err.getMessage()));
