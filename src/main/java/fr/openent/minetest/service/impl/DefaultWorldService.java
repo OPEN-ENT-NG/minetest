@@ -183,7 +183,7 @@ public class DefaultWorldService implements WorldService {
         Promise<JsonObject> promise = Promise.promise();
         JsonArray whitelistMinetest = new JsonArray();
         JsonArray whitelistDetails = new JsonArray();
-        String password = (Boolean.TRUE.equals(body.getBoolean(Field.ISEXTERNAL))) ? "" : (String) body.remove(Field.PASSWORD);
+        String password = (String) body.remove(Field.PASSWORD);
 
         reformatWhitelist(body.getJsonArray(Field.WHITELIST), user, whitelistMinetest, whitelistDetails)
                 .compose(res -> {
@@ -191,19 +191,19 @@ public class DefaultWorldService implements WorldService {
                     return update(body.getString(Field._ID), body);
                 })
                 .compose(res -> {
-                    StringBuilder whitelistInFile = new StringBuilder();
-                    for (Object login : whitelistMinetest) {
-                        whitelistInFile.append(login).append("\n");
-                    }
-                    body.put(Field.WHITELIST, whitelistInFile.toString());
-                    body.put(Field.ID, body.getString(Field._ID));
                     if (Boolean.TRUE.equals(body.getBoolean(Field.ISEXTERNAL))) {
-                        promise.complete(new JsonObject());
+                        Promise<JsonObject> doNothing = Promise.promise();
+                        doNothing.complete(new JsonObject());
+                        return doNothing.future();
                     } else {
-                        body.put(Field.PASSWORD, password);
+                        StringBuilder whitelistInFile = new StringBuilder();
+                        for (Object login : whitelistMinetest) {
+                            whitelistInFile.append(login).append("\n");
+                        }
+                        body.put(Field.WHITELIST, whitelistInFile.toString());
+                        body.put(Field.ID, body.getString(Field._ID));
                         return minetestService.action(body, MinestestServiceAction.WHITELIST);
                     }
-                    return promise.future();
                 })
                 .compose(res -> sendMail(user, whitelistDetails, body, request, password))
                 .onSuccess(promise::complete)
@@ -288,21 +288,23 @@ public class DefaultWorldService implements WorldService {
         I18n i18n = I18n.getInstance();
         String host = getHost(request);
         String acceptLanguage = I18n.acceptLanguage(request);
-        String path = this.minetestConfig.minetestServer()
+        String path = body.getString(Field.ADDRESS)
                 .replace("http://","").replace("https://","");
         // Generate list of mails to send
         for (Object u : whitelistIdAndLogin) {
             JsonObject user = (JsonObject) u;
-            String passwordBody = (Boolean.TRUE.equals(body.getBoolean(Field.ISEXTERNAL)) ?  "" :
-                    (i18n.translate("minetest.invitation.default.body.password", host, acceptLanguage) + password));
+            String passwordBody = "";
+            String loginBody = "";
+            if (Boolean.FALSE.equals(body.getBoolean(Field.ISEXTERNAL))){
+                passwordBody = i18n.translate("minetest.invitation.default.body.password", host, acceptLanguage) + password;
+                loginBody = i18n.translate("minetest.invitation.default.body.name", host, acceptLanguage) + user.getString(Field.LOGIN);
+            }
 
             String mailBody = i18n.translate("minetest.invitation.default.body.1", host, acceptLanguage)
                     .replace("<mettre lien>", this.minetestConfig.minetestDownload()) +
                     i18n.translate("minetest.invitation.default.body.address", host, acceptLanguage) + path +
-                    i18n.translate("minetest.invitation.default.body.port", host, acceptLanguage) + body.getString(Field.PORT) +
-                    i18n.translate("minetest.invitation.default.body.name", host, acceptLanguage) + user.getString(Field.LOGIN) +
-                    passwordBody +
-                    i18n.translate("minetest.invitation.default.body.end", host, acceptLanguage);
+                    i18n.translate("minetest.invitation.default.body.port", host, acceptLanguage) + body.getInteger(Field.PORT) +
+                    loginBody + passwordBody + i18n.translate("minetest.invitation.default.body.end", host, acceptLanguage);
 
             JsonObject message = new JsonObject()
                     .put("subject", body.getString(Field.SUBJECT))
@@ -371,7 +373,13 @@ public class DefaultWorldService implements WorldService {
                 promise.fail(message);
                 return;
             }
-            promise.complete(result.right().getValue());
+            if(body.getString(Field.PASSWORD) != null) {
+                resetPassword(String.valueOf(body.getString(Field.PASSWORD)), body)
+                        .onSuccess(res -> promise.complete(result.right().getValue()))
+                        .onFailure(err -> promise.fail(err.getMessage()));
+            } else {
+                promise.complete(result.right().getValue());
+            }
         }));
         return promise.future();
     }
