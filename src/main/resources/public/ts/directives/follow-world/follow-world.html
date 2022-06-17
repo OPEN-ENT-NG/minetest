@@ -15,10 +15,39 @@
             </h3>
         </section>
 
-        <div class="minetest-lightbox-content">
+        <section class="minetest-lightbox-content">
             <!-- Content -->
+            <span><i18n>minetest.follow.users.can.access.world</i18n> [[vm.world.title]] </span>
 
-        </div>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th class="one">
+                        <div>
+                            <span><i18n>minetest.last.name</i18n></span>
+                        </div>
+                    </th>
+                    <th class="one">
+                        <div>
+                            <span><i18n>minetest.first.name</i18n></span>
+                        </div>
+                    </th>
+                    <th class="one">
+                        <div>
+                            <span><i18n>minetest.login</i18n></span>
+                        </div>
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="user in vm.world.whitelist">
+                    <td>[[user.lastName]]</td>
+                    <td>[[user.firstName]]</td>
+                    <td>[[user.login]]</td>
+                </tr>
+                </tbody>
+            </table>
+        </section>
         
     </lightbox>
 </div>

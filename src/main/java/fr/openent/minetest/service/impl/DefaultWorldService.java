@@ -233,7 +233,7 @@ public class DefaultWorldService implements WorldService {
                                  String loginToInsert) {
         //Check duplicate login
         int i = 1;
-        while (whitelistMinetest.contains(loginToInsert)){
+        while (whitelistMinetest.contains(loginToInsert)) {
             Character lastCharacter = loginToInsert.charAt(loginToInsert.length() - 1);
             if (Character.isDigit(lastCharacter)) {
                 i = Integer.parseInt(String.valueOf(lastCharacter)) + 1;

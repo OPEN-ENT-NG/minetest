@@ -1,13 +1,18 @@
 import { ng } from "entcore";
 import {RootsConst} from "../../core/constants/roots.const";
 import {IScope} from "angular";
+import {IWorld} from "../../models";
 
 interface IViewModel {
     lightbox: any;
+
+    // props
+    world: IWorld;
 }
 
 class Controller implements ng.IController, IViewModel {
     lightbox: any;
+    world: IWorld;
 
     constructor(private $scope: IScope) {
         {
@@ -37,7 +42,7 @@ function directive() {
         restrict: 'E',
         templateUrl: `${RootsConst.directive}follow-world/follow-world.html`,
         scope: {
-            onFollowWorld: '&'
+            world: '='
         },
         controllerAs: 'vm',
         bindToController: true,
