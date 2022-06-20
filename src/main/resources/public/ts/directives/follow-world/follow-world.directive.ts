@@ -40,7 +40,7 @@ class Controller implements ng.IController, IViewModel {
     }
 
     showTable(): boolean {
-        return !this.world.whitelist || this.world.owner_login != this.world.whitelist[0];
+        return this.world.whitelist && this.world.whitelist.length > 1;
     }
 }
 
