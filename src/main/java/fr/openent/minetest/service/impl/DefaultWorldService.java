@@ -199,12 +199,13 @@ public class DefaultWorldService implements WorldService {
                         for (Object login : whitelistMinetest) {
                             whitelistInFile.append(login).append("\n");
                         }
-                        body.put(Field.WHITELIST, whitelistInFile.toString());
-                        body.put(Field.ID, body.getString(Field._ID));
-                        return minetestService.action(body, MinestestServiceAction.WHITELIST);
+                        JsonObject copyBody = body.copy();
+                        copyBody.put(Field.WHITELIST, whitelistInFile.toString());
+                        copyBody.put(Field.ID, body.getString(Field._ID));
+                        return minetestService.action(copyBody, MinestestServiceAction.WHITELIST);
                     }
                 })
-                .compose(res -> sendMail(user, whitelistDetails, body, request, password))
+                .compose(res -> sendMail(user, body, request, password))
                 .onSuccess(promise::complete)
                 .onFailure(err -> promise.fail(err.getMessage()));
         return promise.future();
@@ -233,7 +234,7 @@ public class DefaultWorldService implements WorldService {
                                  String loginToInsert) {
         //Check duplicate login
         int i = 1;
-        while (whitelistMinetest.contains(loginToInsert)){
+        while (whitelistMinetest.contains(loginToInsert)) {
             Character lastCharacter = loginToInsert.charAt(loginToInsert.length() - 1);
             if (Character.isDigit(lastCharacter)) {
                 i = Integer.parseInt(String.valueOf(lastCharacter)) + 1;
@@ -250,10 +251,9 @@ public class DefaultWorldService implements WorldService {
         whitelistDetails.add(userToInsert);
     }
 
-    private Future<JsonObject> sendMail(UserInfos owner, JsonArray whitelistIdAndLogin, JsonObject body,
-                                        HttpServerRequest request, String password) {
+    private Future<JsonObject> sendMail(UserInfos owner, JsonObject body, HttpServerRequest request, String password) {
         Promise<JsonObject> promise = Promise.promise();
-        JsonArray listMails = createMailList(owner, whitelistIdAndLogin, body, request, password);
+        JsonArray listMails = createMailList(owner, body, request, password);
         // Prepare futures to get message responses
         List<Future> mails = new ArrayList<>();
         // Code to send mails
@@ -281,14 +281,14 @@ public class DefaultWorldService implements WorldService {
         return promise.future();
     }
 
-    private JsonArray createMailList(UserInfos owner, JsonArray whitelistIdAndLogin, JsonObject body,
-                                     HttpServerRequest request, String password) {
+    private JsonArray createMailList(UserInfos owner, JsonObject body, HttpServerRequest request, String password) {
         JsonArray listMails = new JsonArray();
         I18n i18n = I18n.getInstance();
         String host = getHost(request);
         String acceptLanguage = I18n.acceptLanguage(request);
         String path = body.getString(Field.ADDRESS)
                 .replace("http://","").replace("https://","");
+        JsonArray whitelistIdAndLogin = body.getJsonArray(Field.WHITELIST);
         for (Object u : whitelistIdAndLogin) {
             JsonObject user = (JsonObject) u;
             String passwordBody = "";

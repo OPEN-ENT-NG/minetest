@@ -69,7 +69,8 @@ class Controller implements ng.IController, IViewModel {
         this.world.whitelist = this.mail.invitees;
         this.world.subject = this.mail.subject;
         minetestService.invite(this.world)
-            .then(() => {
+            .then((world:IWorld) => {
+                this.world.whitelist = world.whitelist;
                 this.closeInvitationLightbox();
                 toasts.confirm('minetest.world.invite.confirm');
                 safeApply(this.$scope);

@@ -24,7 +24,7 @@ export interface IMinetestService {
 
     getVisibleUsers(search: string): Promise<AxiosResponse>;
 
-    invite(worldBody: IWorld): Promise<AxiosResponse>;
+    invite(worldBody: IWorld): Promise<IWorld>;
 
     delete(world: IWorld): Promise<AxiosResponse>;
 
@@ -38,8 +38,7 @@ export const minetestService: IMinetestService = {
 
     get: async (userId: string, userName: string): Promise<IWorld[]> => {
         try {
-            const {data} =
-            await http.get(`/minetest/worlds?owner_id=${userId}` + `&owner_name=${userName}`);
+            const {data} = await http.get(`/minetest/worlds?owner_id=${userId}` + `&owner_name=${userName}`);
             return data;
         } catch (err) {
             throw err;
@@ -79,8 +78,13 @@ export const minetestService: IMinetestService = {
         return http.get('/conversation/visible?search=' + search);
     },
 
-    invite: (worldBody: IWorld): Promise<AxiosResponse> => {
-        return http.put(`/minetest/world/join`, worldBody);
+    invite: async (worldBody: IWorld): Promise<IWorld> => {
+        try {
+            const {data} = await http.put(`/minetest/world/join`, worldBody);
+            return data;
+        } catch (err) {
+            throw err;
+        }
     },
 
     delete: (world: IWorld): Promise<AxiosResponse> => {

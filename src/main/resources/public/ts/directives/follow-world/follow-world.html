@@ -1,0 +1,61 @@
+<div class="minetestFollow">
+
+    <!-- button follow world -->
+    <button data-ng-click="vm.openFollowLightbox()" on-follow-world="vm.refreshWorldList()">
+        <i18n>minetest.follow.world</i18n>
+    </button>
+
+    <!-- popup modal to import world -->
+    <lightbox class="minetest-lightbox" show="vm.lightbox.follow" on-close="vm.closeFollowLightbox()">
+
+        <!-- Title -->
+        <section class="minetest-lightbox-head">
+            <h3>
+                <i18n>minetest.follow.invitation</i18n>
+            </h3>
+        </section>
+
+        <section class="minetest-lightbox-content-table">
+            <!-- Content -->
+            <div class="minetest-lightbox-content-title">
+                <i18n>minetest.follow.users.can.access.world</i18n>
+                <span class="bold">[[vm.world.title]]</span>
+            </div>
+
+            <div ng-show="!vm.showTable()">
+                <i18n>minetest.follow.user.empty</i18n>
+            </div>
+
+            <div ng-show="vm.showTable()">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th class="one">
+                                <div>
+                                    <span><i18n>minetest.last.name</i18n></span>
+                                </div>
+                            </th>
+                            <th class="one">
+                                <div>
+                                    <span><i18n>minetest.first.name</i18n></span>
+                                </div>
+                            </th>
+                            <th class="one">
+                                <div>
+                                    <span><i18n>minetest.login</i18n></span>
+                                </div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="user in vm.world.whitelist">
+                            <td>[[user.lastName]]</td>
+                            <td>[[user.firstName]]</td>
+                            <td>[[user.login]]</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </lightbox>
+</div>
