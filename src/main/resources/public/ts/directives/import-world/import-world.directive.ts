@@ -51,7 +51,7 @@ class Controller implements ng.IController, IViewModel {
                 this.world.address = "";
             }
             if (this.world.port) {
-                this.world.port = "";
+                this.world.port = undefined;
             }
             if (this.world.img) {
                 this.world.img = "";
@@ -69,7 +69,7 @@ class Controller implements ng.IController, IViewModel {
             img: this.world.img,
             title: this.world.title,
             address: this.world.address,
-            port: this.world.port,
+            port: parseInt(String(this.world.port)),
             isExternal: true
         }
         minetestService.import(this.world)

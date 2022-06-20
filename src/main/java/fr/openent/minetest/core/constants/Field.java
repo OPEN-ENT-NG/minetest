@@ -33,6 +33,8 @@ public class Field {
     public static final String WHITELIST = "whitelist";
     public static final String LOGIN = "login";
     public static final String DISPLAY_NAME = "displayName";
+    public static final String FIRST_NAME = "firstName";
+    public static final String LAST_NAME = "lastName";
     public static final String SUBJECT = "subject";
 
     // Config

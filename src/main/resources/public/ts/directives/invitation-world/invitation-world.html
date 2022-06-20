@@ -29,7 +29,7 @@
                 </div>
             </div>
         </div>
-        <button class="custom-button right-magnet" ng-click="vm.sendInvitation()">
+        <button class="custom-button right-magnet" data-ng-disabled="vm.mail.invitees.length < 1" ng-click="vm.sendInvitation()">
             <i18n>minetest.send</i18n>
         </button>
         <button class="custom-cancel right-magnet" ng-click="vm.closeInvitationLightbox()">

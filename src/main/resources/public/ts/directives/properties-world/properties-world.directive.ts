@@ -66,6 +66,7 @@ class Controller implements ng.IController, IViewModel {
 
 
     async updateImportWorld(): Promise<void> {
+        this.worldForm.port = parseInt(String(this.worldForm.port));
         minetestService.updateImportWorld(this.worldForm)
             .then(() => {
                 toasts.confirm('minetest.world.update.confirm');
