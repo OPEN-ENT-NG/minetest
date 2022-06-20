@@ -1,4 +1,4 @@
-import {model, moment, ng, toasts} from "entcore";
+import {idiom, model, moment, ng, toasts} from "entcore";
 import {RootsConst} from "../../core/constants/roots.const";
 import {IScope} from "angular";
 import {IImportWorld} from "../../models";
@@ -24,6 +24,7 @@ class Controller implements ng.IController, IViewModel {
         {
             this.lightbox = {
                 import: false,
+                portAlert: idiom.translate('minetest.world.port.valid')
             };
         }
     }
@@ -62,10 +63,8 @@ class Controller implements ng.IController, IViewModel {
 
     isPortValid(): boolean {
         let port = (this.world.port).toString();
-        let portValid = new RegExp(/[0-9]/);
-        if (!portValid.test(port))
-            alert('minetest.world.port.valid');
-        else return;
+        let portValid = new RegExp(/\d{1,5}/);
+        return portValid.test(port);
     }
 
     async importWorld(): Promise<void> {

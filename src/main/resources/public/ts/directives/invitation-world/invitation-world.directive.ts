@@ -66,7 +66,7 @@ class Controller implements ng.IController, IViewModel {
     }
 
     async sendInvitation(): Promise<void> {
-        this.world.whitelist = this.mail.invitees;
+        this.world.whitelist = this.world.whitelist ? this.world.whitelist.concat(this.mail.invitees) : this.mail.invitees;
         this.world.subject = this.mail.subject;
         minetestService.invite(this.world)
             .then((world:IWorld) => {

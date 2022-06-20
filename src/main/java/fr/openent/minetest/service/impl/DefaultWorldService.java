@@ -59,8 +59,15 @@ public class DefaultWorldService implements WorldService {
         //add user Login
         body.put(Field.OWNER_LOGIN, loginMinetest);
 
-        //add loginMinetest to whitelist
-        body.put(Field.WHITELIST, new JsonArray().add(loginMinetest));
+        //add user in the whitelist
+        JsonObject userToInsert = new JsonObject()
+                .put(Field.ID, userInfos.getUserId())
+                .put(Field.LOGIN, loginMinetest)
+                .put(Field.DISPLAY_NAME, userInfos.getUsername())
+                .put(Field.FIRST_NAME, userInfos.getFirstName())
+                .put(Field.LAST_NAME, userInfos.getLastName())
+                .put(Field.WHITELIST, false);
+        body.put(Field.WHITELIST, new JsonArray().add(userToInsert));
 
         //add link to minetest server
         body.put(Field.LINK, minetestConfig.minetestServer());
@@ -214,20 +221,51 @@ public class DefaultWorldService implements WorldService {
     private Future<JsonArray> reformatWhitelist(JsonArray whitelist, UserInfos owner,
                                                 JsonArray whitelistMinetest, JsonArray whitelistDetails) {
         Promise<JsonArray> promise = Promise.promise();
-        for (Object u : whitelist){
-            JsonObject userInfos = (JsonObject) u;
-            UserUtils.getUserInfos(eb, userInfos.getString(Field.ID), user -> {
-                String loginToInsert = reformatLogin(user.getLogin());
-                checkDuplicates(whitelistDetails, whitelistMinetest, user, loginToInsert);
-                if (whitelistMinetest.size() == whitelist.size()) {
-                    //insert the owner in the whitelist
-                    loginToInsert = reformatLogin(owner.getLogin());
-                    checkDuplicates(whitelistDetails, whitelistMinetest, owner, loginToInsert);
-                    promise.complete(new JsonArray());
-                }
-            });
+        JsonArray newWhiteList = new JsonArray();
+        createOldNewWhiteList(whitelist, whitelistMinetest, whitelistDetails, newWhiteList);
+        if(newWhiteList.size() > 0) {
+            for (int i = 0; i < newWhiteList.size(); i++) {
+                JsonObject userInfos = newWhiteList.getJsonObject(i);
+                int finalI = i;
+                UserUtils.getUserInfos(eb, userInfos.getString(Field.ID), user -> {
+                    String loginToInsert = reformatLogin(user.getLogin());
+                    checkDuplicates(whitelistDetails, whitelistMinetest, user, loginToInsert);
+                    if (finalI == newWhiteList.size() - 1) {
+                        promise.complete(new JsonArray());
+                    }
+                });
+            }
+        } else {
+            promise.complete(new JsonArray());
         }
         return promise.future();
+    }
+
+    private void createOldNewWhiteList(JsonArray whitelist, JsonArray whitelistMinetest, JsonArray whitelistDetails,
+                                          JsonArray newWhiteList) {
+        for (Object u : whitelist) {
+            JsonObject userInfos = (JsonObject) u;
+            if(userInfos.containsKey(Field.LOGIN)){
+                //Already invited
+                userInfos.put(Field.WHITELIST, true);
+                userInfos.remove("$$hashKey");
+                whitelistDetails.add(userInfos);
+                whitelistMinetest.add(userInfos.getString(Field.LOGIN));
+            } else {
+                Object find = whitelistDetails.stream().
+                        filter(p -> ((JsonObject)p).getString(Field.ID).equals(userInfos.getString(Field.ID))).
+                        findAny().orElse(null);
+                if (find != null) {
+                    //the owner wants to reinvite the user
+                    JsonObject findJson = (JsonObject) find;
+                    whitelistDetails.remove(findJson);
+                    findJson.put(Field.WHITELIST, false);
+                    whitelistDetails.add(findJson);
+                } else {
+                    newWhiteList.add(userInfos);
+                }
+            }
+        }
     }
 
     private void checkDuplicates(JsonArray whitelistDetails, JsonArray whitelistMinetest, UserInfos userInfos,
@@ -247,7 +285,8 @@ public class DefaultWorldService implements WorldService {
                 .put(Field.LOGIN, loginToInsert)
                 .put(Field.DISPLAY_NAME, userInfos.getUsername())
                 .put(Field.FIRST_NAME, userInfos.getFirstName())
-                .put(Field.LAST_NAME, userInfos.getLastName());
+                .put(Field.LAST_NAME, userInfos.getLastName())
+                .put(Field.WHITELIST, false);
         whitelistDetails.add(userToInsert);
     }
 
@@ -291,31 +330,33 @@ public class DefaultWorldService implements WorldService {
         JsonArray whitelistIdAndLogin = body.getJsonArray(Field.WHITELIST);
         for (Object u : whitelistIdAndLogin) {
             JsonObject user = (JsonObject) u;
-            String passwordBody = "";
-            String loginBody = "";
-            if (body.getBoolean(Field.ISEXTERNAL) == null) {
-                passwordBody = i18n.translate("minetest.invitation.default.body.password", host, acceptLanguage) + password;
-                loginBody = i18n.translate("minetest.invitation.default.body.name", host, acceptLanguage) + user.getString(Field.LOGIN);
+            if(!user.getBoolean(Field.WHITELIST)) {
+                String passwordBody = "";
+                String loginBody = "";
+                if (body.getBoolean(Field.ISEXTERNAL) == null) {
+                    passwordBody = i18n.translate("minetest.invitation.default.body.password", host, acceptLanguage) + password;
+                    loginBody = i18n.translate("minetest.invitation.default.body.name", host, acceptLanguage) + user.getString(Field.LOGIN);
+                }
+
+                String mailBody = i18n.translate("minetest.invitation.default.body.1", host, acceptLanguage)
+                        .replace("<mettre lien>", this.minetestConfig.minetestDownload()) +
+                        i18n.translate("minetest.invitation.default.body.address", host, acceptLanguage) + path +
+                        i18n.translate("minetest.invitation.default.body.port", host, acceptLanguage) + body.getInteger(Field.PORT) +
+                        loginBody + passwordBody + i18n.translate("minetest.invitation.default.body.end", host, acceptLanguage);
+
+                JsonObject message = new JsonObject()
+                        .put("subject", body.getString(Field.SUBJECT))
+                        .put("body", mailBody)
+                        .put("to", new JsonArray().add(user.getString(Field.ID)))
+                        .put("cci", new JsonArray());
+
+                JsonObject action = new JsonObject()
+                        .put("action", "send")
+                        .put("userId", owner.getUserId())
+                        .put("username", owner.getUsername())
+                        .put("message", message);
+                listMails.add(action);
             }
-
-            String mailBody = i18n.translate("minetest.invitation.default.body.1", host, acceptLanguage)
-                    .replace("<mettre lien>", this.minetestConfig.minetestDownload()) +
-                    i18n.translate("minetest.invitation.default.body.address", host, acceptLanguage) + path +
-                    i18n.translate("minetest.invitation.default.body.port", host, acceptLanguage) + body.getInteger(Field.PORT) +
-                    loginBody + passwordBody + i18n.translate("minetest.invitation.default.body.end", host, acceptLanguage);
-
-            JsonObject message = new JsonObject()
-                    .put("subject", body.getString(Field.SUBJECT))
-                    .put("body", mailBody)
-                    .put("to", new JsonArray().add(user.getString(Field.ID)))
-                    .put("cci", new JsonArray());
-
-            JsonObject action = new JsonObject()
-                    .put("action", "send")
-                    .put("userId", owner.getUserId())
-                    .put("username", owner.getUsername())
-                    .put("message", message);
-            listMails.add(action);
         }
         return listMails;
     }
