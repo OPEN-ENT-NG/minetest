@@ -45,8 +45,8 @@
         </div>
 
         <!-- button import world -->
-        <button class="custom-button right-magnet"
-                data-ng-disabled="!vm.world.title || !vm.world.address || !vm.world.port || !vm.isPortValid()" ng-click="vm.importWorld()">
+        <button class="custom-button right-magnet" ng-click="vm.importWorld()"
+                data-ng-disabled="!vm.world.title || !vm.world.address || !vm.world.port || !vm.isPortValid()">
             <i18n>minetest.import</i18n>
         </button>
     </lightbox>
