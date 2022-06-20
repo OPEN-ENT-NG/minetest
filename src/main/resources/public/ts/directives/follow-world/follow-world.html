@@ -1,7 +1,7 @@
 <div class="minetestFollow">
 
     <!-- button follow world -->
-    <button data-ng-click="vm.openFollowLightbox()">
+    <button data-ng-click="vm.openFollowLightbox()" on-follow-world="vm.refreshWorldList()">
         <i18n>minetest.follow.world</i18n>
     </button>
 
@@ -22,11 +22,11 @@
                 <span class="bold">[[vm.world.title]]</span>
             </div>
 
-            <div ng-show="!vm.world.whitelist">
+            <div ng-show="!vm.showTable()">
                 <i18n>minetest.follow.user.empty</i18n>
             </div>
 
-            <div ng-show="vm.world.whitelist">
+            <div ng-show="vm.showTable()">
                 <table class="table">
                     <thead>
                         <tr>
@@ -56,8 +56,6 @@
                     </tbody>
                 </table>
             </div>
-
         </section>
-        
     </lightbox>
 </div>

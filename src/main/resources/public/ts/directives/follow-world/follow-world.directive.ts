@@ -8,6 +8,8 @@ interface IViewModel {
 
     // props
     world: IWorld;
+
+    showTable(): boolean;
 }
 
 class Controller implements ng.IController, IViewModel {
@@ -30,10 +32,15 @@ class Controller implements ng.IController, IViewModel {
 
     openFollowLightbox(): void {
         this.lightbox.follow = true;
+        this.$scope.$eval(this.$scope['vm']['onFollowWorld']);
     }
 
     closeFollowLightbox(): void {
         this.lightbox.follow = false;
+    }
+
+    showTable(): boolean {
+        return !this.world.whitelist || this.world.owner_login != this.world.whitelist[0];
     }
 }
 
@@ -42,7 +49,8 @@ function directive() {
         restrict: 'E',
         templateUrl: `${RootsConst.directive}follow-world/follow-world.html`,
         scope: {
-            world: '='
+            world: '=',
+            $onFollowWorld: '&'
         },
         controllerAs: 'vm',
         bindToController: true,

@@ -39,7 +39,7 @@
   "minetest.invitation.default.title": "Inviter des utilisateurs dans le monde",
   "minetest.invitation.default.subject": "Vous êtes invité à un monde Minetest",
   "minetest.invitation.object.label": "Objet du message",
-  "minetest.invitation.information": "Le message d'invitation va être transmis à tous les utilisateurs sélectionnés. Seuls les identifiants ENT de ceux qui auront reçus cette invitation pourront accéder au monde Minetest.",
+  "minetest.invitation.information": "Le message d'invitation va être transmis à tous les utilisateurs sélectionnés. Seuls les identifiants ENT de ceux qui auront reçu cette invitation pourront accéder au monde Minetest.",
   "minetest.invitation.search.users.groups.fav": "Rechercher des utilisateurs, des groupes et mes favoris de partage",
   "minetest.invite": "Inviter",
   "minetest.invite.user.world": "Inviter un utilisateur dans le monde",
