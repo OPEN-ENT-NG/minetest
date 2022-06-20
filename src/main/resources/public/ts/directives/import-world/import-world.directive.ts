@@ -13,6 +13,7 @@ interface IViewModel {
 
     lightbox: any;
     world: IImportWorld;
+    isPortValid(): boolean;
 }
 
 class Controller implements ng.IController, IViewModel {
@@ -57,6 +58,14 @@ class Controller implements ng.IController, IViewModel {
                 this.world.img = "";
             }
         }
+    }
+
+    isPortValid(): boolean {
+        let port = (this.world.port).toString();
+        let portValid = new RegExp(/[0-9]/);
+        if (!portValid.test(port))
+            alert('minetest.world.port.valid');
+        else return;
     }
 
     async importWorld(): Promise<void> {
