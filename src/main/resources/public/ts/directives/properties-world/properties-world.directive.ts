@@ -1,8 +1,9 @@
-import {ng, toasts} from "entcore";
+import {idiom, moment, ng, toasts} from "entcore";
 import {RootsConst} from "../../core/constants/roots.const";
 import {IScope} from "angular";
 import {IWorld} from "../../models";
 import {minetestService} from "../../services";
+import {DateUtils} from "../../utils/date.utils";
 
 interface IViewModel {
     openPropertiesLightbox(): void;
@@ -11,6 +12,7 @@ interface IViewModel {
     resetPassword(): void;
     showInputPassword: boolean;
     updateImportWorld(): Promise<void>;
+    isPortValid(): boolean;
 
     lightbox: any;
 
@@ -28,6 +30,7 @@ class Controller implements ng.IController, IViewModel {
     constructor(private $scope: IScope) {
         this.lightbox = {
             properties: false,
+            portAlert: idiom.translate('minetest.world.port.valid')
         };
     }
 
@@ -49,6 +52,8 @@ class Controller implements ng.IController, IViewModel {
     }
 
     async updateWorld(): Promise<void> {
+        this.worldForm.updated_at = DateUtils.format(moment().startOf('minute'),
+            DateUtils.FORMAT["DAY/MONTH/YEAR-HOUR-MIN"]);
         minetestService.update(this.worldForm)
             .then(() => {
                 toasts.confirm('minetest.world.update.confirm');
@@ -56,6 +61,7 @@ class Controller implements ng.IController, IViewModel {
                 this.$scope.$eval(this.$scope['vm']['onUpdateWorld']());
             }).catch(() => {
             toasts.warning('minetest.world.update.error');
+            this.closePropertiesLightbox();
         })
     }
 
@@ -64,8 +70,16 @@ class Controller implements ng.IController, IViewModel {
         this.showInputPassword = !this.showInputPassword;
     }
 
+    isPortValid(): boolean {
+        let port = (this.worldForm.port).toString();
+        let portValid = new RegExp(/\d{1,5}/);
+        return portValid.test(port);
+    }
+
 
     async updateImportWorld(): Promise<void> {
+        this.worldForm.updated_at = DateUtils.format(moment().startOf('minute'),
+            DateUtils.FORMAT["DAY/MONTH/YEAR-HOUR-MIN"]);
         this.worldForm.port = parseInt(String(this.worldForm.port));
         minetestService.updateImportWorld(this.worldForm)
             .then(() => {
@@ -74,6 +88,7 @@ class Controller implements ng.IController, IViewModel {
                 this.$scope.$eval(this.$scope['vm']['onUpdateWorld']);
             }).catch(() => {
             toasts.warning('minetest.world.update.error');
+            this.closePropertiesLightbox();
         })
     }
 }

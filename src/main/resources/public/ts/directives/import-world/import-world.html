@@ -20,7 +20,7 @@
             <section class="minetest-lightbox-content-upload">
                 <div class="minetest-lightbox-content-upload-box">
                     <image-select id="img" class="initialFloat cell" default="/img/illustrations/image-default.svg"
-                                  ng-model="vm.world.img"/>
+                                  ng-model="vm.world.img"></image-select>
                 </div>
             </section>
 
@@ -38,15 +38,15 @@
 
                 <div class="cell twelve minetest-lightbox-content-form-input-text">
                     <span class="cell four minetest-lightbox-content-form-input-text-title"><i18n>minetest.port</i18n></span>
-                    <input type="text" class="six cell" data-ng-model="vm.world.port" />
+                    <input type="text" class="six cell" data-ng-model="vm.world.port" pattern="\d{1,5}" title="[[vm.lightbox.portAlert]]" />
                 </div>
 
             </section>
         </div>
 
         <!-- button import world -->
-        <button class="custom-button right-magnet"
-                data-ng-disabled="!vm.world.title || !vm.world.address || !vm.world.port" ng-click="vm.importWorld()">
+        <button class="custom-button right-magnet" ng-click="vm.importWorld()"
+                data-ng-disabled="!vm.world.title || !vm.world.address || !vm.world.port || !vm.isPortValid()">
             <i18n>minetest.import</i18n>
         </button>
     </lightbox>

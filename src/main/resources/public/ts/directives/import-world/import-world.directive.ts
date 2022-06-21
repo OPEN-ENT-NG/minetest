@@ -1,4 +1,4 @@
-import {model, moment, ng, toasts} from "entcore";
+import {idiom, model, moment, ng, toasts} from "entcore";
 import {RootsConst} from "../../core/constants/roots.const";
 import {IScope} from "angular";
 import {IImportWorld} from "../../models";
@@ -13,6 +13,7 @@ interface IViewModel {
 
     lightbox: any;
     world: IImportWorld;
+    isPortValid(): boolean;
 }
 
 class Controller implements ng.IController, IViewModel {
@@ -23,6 +24,7 @@ class Controller implements ng.IController, IViewModel {
         {
             this.lightbox = {
                 import: false,
+                portAlert: idiom.translate('minetest.world.port.valid')
             };
         }
     }
@@ -59,6 +61,12 @@ class Controller implements ng.IController, IViewModel {
         }
     }
 
+    isPortValid(): boolean {
+        let port = (this.world.port).toString();
+        let portValid = new RegExp(/\d{1,5}/);
+        return portValid.test(port);
+    }
+
     async importWorld(): Promise<void> {
         this.world = {
             owner_id:  model.me.userId,
@@ -79,6 +87,7 @@ class Controller implements ng.IController, IViewModel {
                 this.$scope.$eval(this.$scope['vm']['onImportWorld']());
             }).catch(() => {
             toasts.warning('minetest.world.import.error');
+            this.closeImportLightbox();
         })
     }
 }

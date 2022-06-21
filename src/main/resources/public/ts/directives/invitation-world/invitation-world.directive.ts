@@ -1,9 +1,10 @@
-import {_, idiom, ng, toasts} from "entcore";
+import {_, idiom, moment, ng, toasts} from "entcore";
 import {IScope} from "angular";
 import {RootsConst} from "../../core/constants/roots.const";
 import {IWorld} from "../../models";
 import {minetestService} from "../../services";
 import {safeApply} from "../../utils/safe-apply.utils";
+import {DateUtils} from "../../utils/date.utils";
 
 declare let window: any;
 
@@ -66,7 +67,9 @@ class Controller implements ng.IController, IViewModel {
     }
 
     async sendInvitation(): Promise<void> {
-        this.world.whitelist = this.mail.invitees;
+        this.world.updated_at = DateUtils.format(moment().startOf('minute'),
+            DateUtils.FORMAT["DAY/MONTH/YEAR-HOUR-MIN"]);
+        this.world.whitelist = this.world.whitelist ? this.world.whitelist.concat(this.mail.invitees) : this.mail.invitees;
         this.world.subject = this.mail.subject;
         minetestService.invite(this.world)
             .then((world:IWorld) => {
@@ -76,6 +79,7 @@ class Controller implements ng.IController, IViewModel {
                 safeApply(this.$scope);
             }).catch(() => {
             toasts.warning('minetest.world.invite.error');
+            this.closeInvitationLightbox();
         });
     }
 

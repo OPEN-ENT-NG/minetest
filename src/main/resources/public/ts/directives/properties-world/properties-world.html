@@ -56,7 +56,7 @@
                     <input ng-show="!vm.world.isExternal" type="text" class="seven cell"
                            data-ng-model="vm.worldForm.port" readonly/>
                     <input ng-show="vm.world.isExternal" type="text" class="seven cell"
-                           data-ng-model="vm.worldForm.port"/>
+                           data-ng-model="vm.worldForm.port" pattern="\d{1,5}" title="[[vm.lightbox.portAlert]]"/>
                 </div>
 
                 <!-- Password -->
@@ -90,7 +90,7 @@
         </button>
         <button ng-show="vm.world.isExternal" class="custom-button right-magnet" ng-click="vm.updateImportWorld()"
                 data-ng-disabled="vm.worldForm.title.length < 1 || vm.worldForm.address.length < 1
-                || vm.worldForm.port.length < 1">
+                || vm.worldForm.port.length < 1 || !vm.isPortValid()">
             <i18n>minetest.world.update</i18n>
         </button>
     </lightbox>

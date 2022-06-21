@@ -45,14 +45,14 @@ class Controller implements ng.IController, IViewModel {
     }
 
     resetForm(): void {
-        if(this.world) {
-            if(this.world.title) {
+        if (this.world) {
+            if (this.world.title) {
                 this.world.title = "";
             }
-            if(this.world.password) {
+            if (this.world.password) {
                 this.world.password = "";
             }
-            if(this.world.img) {
+            if (this.world.img) {
                 this.world.img = "";
             }
         }
@@ -84,6 +84,7 @@ class Controller implements ng.IController, IViewModel {
                 this.$scope.$eval(this.$scope['vm']['onCreateWorld']());
             }).catch(() => {
             toasts.warning('minetest.world.create.error');
+            this.closeCreateLightbox();
         })
     }
 }
