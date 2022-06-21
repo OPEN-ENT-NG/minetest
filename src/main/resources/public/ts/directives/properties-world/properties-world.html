@@ -56,7 +56,7 @@
                     <input ng-show="!vm.world.isExternal" type="text" class="seven cell"
                            data-ng-model="vm.worldForm.port" readonly/>
                     <input ng-show="vm.world.isExternal" type="text" class="seven cell"
-                           data-ng-model="vm.worldForm.port"/>
+                           data-ng-model="vm.worldForm.port" pattern="\d{1,5}" title="[[vm.lightbox.portAlert]]"/>
                 </div>
 
                 <!-- Password -->

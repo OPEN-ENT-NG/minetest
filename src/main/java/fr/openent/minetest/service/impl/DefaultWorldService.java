@@ -370,16 +370,6 @@ public class DefaultWorldService implements WorldService {
     public Future<JsonObject> update(String worldId, JsonObject body) {
         Promise<JsonObject> promise = Promise.promise();
 
-        if (body.getBoolean(Field.ISEXTERNAL) == null) {
-            JsonArray whitelist = body.getJsonArray("whitelist");
-            for (Object u : whitelist) {
-                JsonObject userInfos = (JsonObject) u;
-                if (userInfos.containsKey(Field.LOGIN)) {
-                    userInfos.remove("$$hashKey");
-                }
-            }
-        }
-
         JsonObject worldQuery = new JsonObject().put(Field._ID, worldId);
         JsonObject worldData = new JsonObject();
 
@@ -400,6 +390,13 @@ public class DefaultWorldService implements WorldService {
         }
 
         if (body.getJsonArray(Field.WHITELIST) != null) {
+                JsonArray whitelist = body.getJsonArray("whitelist");
+                for (Object u : whitelist) {
+                    JsonObject userInfos = (JsonObject) u;
+                    if (userInfos.containsKey(Field.LOGIN)) {
+                        userInfos.remove("$$hashKey");
+                    }
+                }
             worldData.put(Field.WHITELIST, body.getJsonArray(Field.WHITELIST));
         }
 
