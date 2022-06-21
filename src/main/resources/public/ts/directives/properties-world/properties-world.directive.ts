@@ -1,4 +1,4 @@
-import {moment, ng, toasts} from "entcore";
+import {idiom, moment, ng, toasts} from "entcore";
 import {RootsConst} from "../../core/constants/roots.const";
 import {IScope} from "angular";
 import {IWorld} from "../../models";
@@ -30,6 +30,7 @@ class Controller implements ng.IController, IViewModel {
     constructor(private $scope: IScope) {
         this.lightbox = {
             properties: false,
+            portAlert: idiom.translate('minetest.world.port.valid')
         };
     }
 
