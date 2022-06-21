@@ -125,7 +125,7 @@ export const recipientList = ng.directive("recipientList", () => {
                 if (!scope.ngModel) {
                     scope.ngModel = [];
                 }
-                if(user && _.findWhere(scope.ngModel, {id: user.id}) == undefined ){
+                if (user && _.findWhere(scope.ngModel, {id: user.id}) == undefined ){
                     scope.ngModel.push(user);
                 } else if (scope.currentReceiver.type === 'sharebookmark') {
                     scope.loading = true;

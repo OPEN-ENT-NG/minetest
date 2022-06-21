@@ -12,6 +12,7 @@ interface IViewModel {
     resetPassword(): void;
     showInputPassword: boolean;
     updateImportWorld(): Promise<void>;
+    isPortValid(): boolean;
 
     lightbox: any;
 
@@ -59,12 +60,19 @@ class Controller implements ng.IController, IViewModel {
                 this.$scope.$eval(this.$scope['vm']['onUpdateWorld']());
             }).catch(() => {
             toasts.warning('minetest.world.update.error');
+            this.closePropertiesLightbox();
         })
     }
 
     resetPassword(): void {
         this.worldForm.password = "";
         this.showInputPassword = !this.showInputPassword;
+    }
+
+    isPortValid(): boolean {
+        let port = (this.worldForm.port).toString();
+        let portValid = new RegExp(/\d{1,5}/);
+        return portValid.test(port);
     }
 
 
@@ -79,6 +87,7 @@ class Controller implements ng.IController, IViewModel {
                 this.$scope.$eval(this.$scope['vm']['onUpdateWorld']);
             }).catch(() => {
             toasts.warning('minetest.world.update.error');
+            this.closePropertiesLightbox();
         })
     }
 }

@@ -191,7 +191,7 @@ public class DefaultWorldService implements WorldService {
         JsonArray whitelistDetails = new JsonArray();
         String password = (String) body.remove(Field.PASSWORD);
 
-        reformatWhitelist(body.getJsonArray(Field.WHITELIST), user, whitelistMinetest, whitelistDetails)
+        reformatWhitelist(body.getJsonArray(Field.WHITELIST), whitelistMinetest, whitelistDetails)
                 .compose(res -> {
                     body.put(Field.WHITELIST, whitelistDetails);
                     return update(body.getString(Field._ID), body);
@@ -218,12 +218,12 @@ public class DefaultWorldService implements WorldService {
         return promise.future();
     }
 
-    private Future<JsonArray> reformatWhitelist(JsonArray whitelist, UserInfos owner,
-                                                JsonArray whitelistMinetest, JsonArray whitelistDetails) {
+    private Future<JsonArray> reformatWhitelist(JsonArray whitelist, JsonArray whitelistMinetest,
+                                                JsonArray whitelistDetails) {
         Promise<JsonArray> promise = Promise.promise();
         JsonArray newWhiteList = new JsonArray();
         createOldNewWhiteList(whitelist, whitelistMinetest, whitelistDetails, newWhiteList);
-        if(newWhiteList.size() > 0) {
+        if (newWhiteList.size() > 0) {
             for (int i = 0; i < newWhiteList.size(); i++) {
                 JsonObject userInfos = newWhiteList.getJsonObject(i);
                 int finalI = i;
@@ -245,7 +245,7 @@ public class DefaultWorldService implements WorldService {
                                           JsonArray newWhiteList) {
         for (Object u : whitelist) {
             JsonObject userInfos = (JsonObject) u;
-            if(userInfos.containsKey(Field.LOGIN)){
+            if (userInfos.containsKey(Field.LOGIN)) {
                 //Already invited
                 userInfos.put(Field.WHITELIST, true);
                 userInfos.remove("$$hashKey");
@@ -330,7 +330,7 @@ public class DefaultWorldService implements WorldService {
         JsonArray whitelistIdAndLogin = body.getJsonArray(Field.WHITELIST);
         for (Object u : whitelistIdAndLogin) {
             JsonObject user = (JsonObject) u;
-            if(!user.getBoolean(Field.WHITELIST)) {
+            if (Boolean.FALSE.equals(user.getBoolean(Field.WHITELIST))) {
                 String passwordBody = "";
                 String loginBody = "";
                 if (body.getBoolean(Field.ISEXTERNAL) == null) {
@@ -369,6 +369,16 @@ public class DefaultWorldService implements WorldService {
     @Override
     public Future<JsonObject> update(String worldId, JsonObject body) {
         Promise<JsonObject> promise = Promise.promise();
+
+        if (body.getBoolean(Field.ISEXTERNAL) == null) {
+            JsonArray whitelist = body.getJsonArray("whitelist");
+            for (Object u : whitelist) {
+                JsonObject userInfos = (JsonObject) u;
+                if (userInfos.containsKey(Field.LOGIN)) {
+                    userInfos.remove("$$hashKey");
+                }
+            }
+        }
 
         JsonObject worldQuery = new JsonObject().put(Field._ID, worldId);
         JsonObject worldData = new JsonObject();

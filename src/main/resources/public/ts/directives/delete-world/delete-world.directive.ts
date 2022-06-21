@@ -48,6 +48,7 @@ class Controller implements ng.IController, IViewModel {
                 this.$scope.$eval(this.$scope['vm']['onDeleteWorld']());
             }).catch(() => {
             toasts.warning('minetest.world.delete.error');
+            this.closeDeleteLightbox();
         })
     }
 
@@ -59,6 +60,7 @@ class Controller implements ng.IController, IViewModel {
                 this.$scope.$eval(this.$scope['vm']['onDeleteWorld']());
             }).catch(() => {
             toasts.warning('minetest.world.delete.error');
+            this.closeDeleteLightbox();
         })
     }
 }

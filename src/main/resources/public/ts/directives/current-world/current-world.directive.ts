@@ -62,7 +62,7 @@ class Controller implements ng.IController, IViewModel {
         this.world.updated_at = DateUtils.format(moment().startOf('minute'), DateUtils.FORMAT["DAY/MONTH/YEAR-HOUR-MIN"]);
         minetestService.updateStatus(this.world)
             .then(() => {
-                if(this.world.status) {
+                if (this.world.status) {
                     toasts.confirm('minetest.world.open.confirm');
                 }
                 else

@@ -87,6 +87,7 @@ class Controller implements ng.IController, IViewModel {
                 this.$scope.$eval(this.$scope['vm']['onImportWorld']());
             }).catch(() => {
             toasts.warning('minetest.world.import.error');
+            this.closeImportLightbox();
         })
     }
 }

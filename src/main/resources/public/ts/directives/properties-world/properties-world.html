@@ -90,7 +90,7 @@
         </button>
         <button ng-show="vm.world.isExternal" class="custom-button right-magnet" ng-click="vm.updateImportWorld()"
                 data-ng-disabled="vm.worldForm.title.length < 1 || vm.worldForm.address.length < 1
-                || vm.worldForm.port.length < 1">
+                || vm.worldForm.port.length < 1 || !vm.isPortValid()">
             <i18n>minetest.world.update</i18n>
         </button>
     </lightbox>

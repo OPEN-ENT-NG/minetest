@@ -79,6 +79,7 @@ class Controller implements ng.IController, IViewModel {
                 safeApply(this.$scope);
             }).catch(() => {
             toasts.warning('minetest.world.invite.error');
+            this.closeInvitationLightbox();
         });
     }
 
