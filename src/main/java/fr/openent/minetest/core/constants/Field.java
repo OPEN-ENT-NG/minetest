@@ -37,6 +37,8 @@ public class Field {
     public static final String LAST_NAME = "lastName";
     public static final String SUBJECT = "subject";
 
+    public static final String $$HASHKEY = "$$hashKey";
+
     // Config
     public static final String MINETEST_DOWNLOAD = "minetest-download";
     public static final String MINETEST_LINK = "minetest-link";

@@ -74,25 +74,20 @@ public class DefaultWorldService implements WorldService {
 
         //Put new Id
         body.put(Field._ID, UUID.randomUUID().toString());
-        if (Boolean.TRUE.equals(body.getBoolean(Field.ISEXTERNAL))) {
-            createMongo(body)
-                    .compose(res -> minetestService.action(body, MinestestServiceAction.CREATE))
-                    .onSuccess(promise::complete)
-                    .onFailure(err -> promise.fail(err.getMessage()));
-        } else {
-            //get New Port
-            JsonObject sortByPort = new JsonObject().put(Field.PORT, 1);
-            getMongo(null, null, null, null, null, null, sortByPort)
-                    .compose(this::getNewPort)
-                    .compose(res ->  {
-                        int newPort = res;
-                        body.put(Field.PORT, newPort);
-                        return createMongo(body);
-                    })
-                    .compose(res -> minetestService.action(body, MinestestServiceAction.CREATE))
-                    .onSuccess(promise::complete)
-                    .onFailure(err -> promise.fail(err.getMessage()));
-        } return promise.future();
+
+        //get New Port
+        JsonObject sortByPort = new JsonObject().put(Field.PORT, 1);
+        getMongo(null, null, null, null, null, null, sortByPort)
+                .compose(this::getNewPort)
+                .compose(res ->  {
+                    int newPort = res;
+                    body.put(Field.PORT, newPort);
+                    return createMongo(body);
+                })
+                .compose(res -> minetestService.action(body, MinestestServiceAction.CREATE))
+                .onSuccess(promise::complete)
+                .onFailure(err -> promise.fail(err.getMessage()));
+        return promise.future();
     }
 
     private String reformatLogin(String login) {
@@ -162,7 +157,7 @@ public class DefaultWorldService implements WorldService {
         Promise<JsonObject> promise = Promise.promise();
 
         JsonObject worldId = new JsonObject().put(Field._ID, body.getString(Field._ID));
-        JsonObject status = new JsonObject().put("$set", new JsonObject().put("status", body.getBoolean(Field.STATUS)));
+        JsonObject status = new JsonObject().put("$set", new JsonObject().put(Field.STATUS, body.getBoolean(Field.STATUS)));
 
         updateStatusMongo(worldId, status)
                 .compose(res -> {
@@ -242,13 +237,12 @@ public class DefaultWorldService implements WorldService {
     }
 
     private void createOldNewWhiteList(JsonArray whitelist, JsonArray whitelistMinetest, JsonArray whitelistDetails,
-                                          JsonArray newWhiteList) {
+                                       JsonArray newWhiteList) {
         for (Object u : whitelist) {
             JsonObject userInfos = (JsonObject) u;
             if (userInfos.containsKey(Field.LOGIN)) {
                 //Already invited
                 userInfos.put(Field.WHITELIST, true);
-                userInfos.remove("$$hashKey");
                 whitelistDetails.add(userInfos);
                 whitelistMinetest.add(userInfos.getString(Field.LOGIN));
             } else {
@@ -390,14 +384,12 @@ public class DefaultWorldService implements WorldService {
         }
 
         if (body.getJsonArray(Field.WHITELIST) != null) {
-                JsonArray whitelist = body.getJsonArray("whitelist");
-                for (Object u : whitelist) {
-                    JsonObject userInfos = (JsonObject) u;
-                    if (userInfos.containsKey(Field.LOGIN)) {
-                        userInfos.remove("$$hashKey");
-                    }
-                }
-            worldData.put(Field.WHITELIST, body.getJsonArray(Field.WHITELIST));
+            JsonArray whitelist = body.getJsonArray(Field.WHITELIST);
+            for (Object u : whitelist) {
+                JsonObject userInfos = (JsonObject) u;
+                userInfos.remove(Field.$$HASHKEY);
+            }
+            worldData.put(Field.WHITELIST, whitelist);
         }
 
         if (body.getBoolean(Field.ISEXTERNAL) != null && Boolean.TRUE.equals(body.getBoolean(Field.ISEXTERNAL))) {
