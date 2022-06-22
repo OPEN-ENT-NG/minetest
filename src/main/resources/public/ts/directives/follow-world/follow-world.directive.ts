@@ -1,20 +1,20 @@
 import { ng } from "entcore";
 import {RootsConst} from "../../core/constants/roots.const";
 import {IScope} from "angular";
-import {IWorld} from "../../models";
+import {IImportWorld, IWorld} from "../../models";
 
 interface IViewModel {
     lightbox: any;
 
     // props
-    world: IWorld;
+    world: IWorld | IImportWorld;
 
     showTable(): boolean;
 }
 
 class Controller implements ng.IController, IViewModel {
     lightbox: any;
-    world: IWorld;
+    world: IWorld | IImportWorld;
 
     constructor(private $scope: IScope) {
         {
@@ -40,7 +40,10 @@ class Controller implements ng.IController, IViewModel {
     }
 
     showTable(): boolean {
-        return this.world.whitelist && this.world.whitelist.length > 1;
+        if(this.world['isExternal'])
+            return this.world.whitelist != undefined;
+        else
+            return this.world.whitelist && this.world.whitelist.length > 1;
     }
 }
 
