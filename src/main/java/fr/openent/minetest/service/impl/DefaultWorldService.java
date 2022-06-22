@@ -60,14 +60,7 @@ public class DefaultWorldService implements WorldService {
         body.put(Field.OWNER_LOGIN, loginMinetest);
 
         //add user in the whitelist
-        JsonObject userToInsert = new JsonObject()
-                .put(Field.ID, userInfos.getUserId())
-                .put(Field.LOGIN, loginMinetest)
-                .put(Field.DISPLAY_NAME, userInfos.getUsername())
-                .put(Field.FIRST_NAME, userInfos.getFirstName())
-                .put(Field.LAST_NAME, userInfos.getLastName())
-                .put(Field.WHITELIST, false);
-        body.put(Field.WHITELIST, new JsonArray().add(userToInsert));
+        createWhitelist(body, userInfos, loginMinetest);
 
         //add link to minetest server
         body.put(Field.LINK, minetestConfig.minetestServer());
@@ -133,6 +126,11 @@ public class DefaultWorldService implements WorldService {
     public Future<JsonObject> importWorld(JsonObject body, UserInfos user) {
         Promise<JsonObject> promise = Promise.promise();
 
+        String loginMinetest = reformatLogin(user.getLogin());
+
+        //add user in the whitelist
+        createWhitelist(body, user, loginMinetest);
+
         mongoDb.insert(this.collection, body, MongoDbResult.validResultHandler(result -> {
             if (result.isLeft()) {
                 String message = String.format("[Minetest@%s::importWorld]: An error has occurred while importing world: %s",
@@ -144,6 +142,17 @@ public class DefaultWorldService implements WorldService {
             promise.complete();
         }));
         return promise.future();
+    }
+
+    private void createWhitelist(JsonObject body, UserInfos user, String loginMinetest) {
+        JsonObject userToInsert = new JsonObject()
+                .put(Field.ID, user.getUserId())
+                .put(Field.LOGIN, loginMinetest)
+                .put(Field.DISPLAY_NAME, user.getUsername())
+                .put(Field.FIRST_NAME, user.getFirstName())
+                .put(Field.LAST_NAME, user.getLastName())
+                .put(Field.WHITELIST, false);
+        body.put(Field.WHITELIST, new JsonArray().add(userToInsert));
     }
 
     /**
@@ -186,7 +195,7 @@ public class DefaultWorldService implements WorldService {
         JsonArray whitelistDetails = new JsonArray();
         String password = (String) body.remove(Field.PASSWORD);
 
-        reformatWhitelist(body.getJsonArray(Field.WHITELIST), whitelistMinetest, whitelistDetails)
+        reformatWhitelist(body.getJsonArray(Field.WHITELIST), whitelistMinetest, whitelistDetails, user)
                 .compose(res -> {
                     body.put(Field.WHITELIST, whitelistDetails);
                     return update(body.getString(Field._ID), body);
@@ -214,10 +223,10 @@ public class DefaultWorldService implements WorldService {
     }
 
     private Future<JsonArray> reformatWhitelist(JsonArray whitelist, JsonArray whitelistMinetest,
-                                                JsonArray whitelistDetails) {
+                                                JsonArray whitelistDetails, UserInfos owner) {
         Promise<JsonArray> promise = Promise.promise();
         JsonArray newWhiteList = new JsonArray();
-        createOldNewWhiteList(whitelist, whitelistMinetest, whitelistDetails, newWhiteList);
+        createOldNewWhiteList(whitelist, whitelistMinetest, whitelistDetails, newWhiteList, owner);
         if (newWhiteList.size() > 0) {
             for (int i = 0; i < newWhiteList.size(); i++) {
                 JsonObject userInfos = newWhiteList.getJsonObject(i);
@@ -237,12 +246,12 @@ public class DefaultWorldService implements WorldService {
     }
 
     private void createOldNewWhiteList(JsonArray whitelist, JsonArray whitelistMinetest, JsonArray whitelistDetails,
-                                       JsonArray newWhiteList) {
+                                       JsonArray newWhiteList, UserInfos owner) {
         for (Object u : whitelist) {
             JsonObject userInfos = (JsonObject) u;
             if (userInfos.containsKey(Field.LOGIN)) {
-                //Already invited
-                userInfos.put(Field.WHITELIST, true);
+                //Already invited, we don't send a new mail except for the owner
+                userInfos.put(Field.WHITELIST, !userInfos.getString(Field.ID).equals(owner.getUserId()));
                 whitelistDetails.add(userInfos);
                 whitelistMinetest.add(userInfos.getString(Field.LOGIN));
             } else {
@@ -250,7 +259,7 @@ public class DefaultWorldService implements WorldService {
                         filter(p -> ((JsonObject)p).getString(Field.ID).equals(userInfos.getString(Field.ID))).
                         findAny().orElse(null);
                 if (find != null) {
-                    //the owner wants to reinvite the user
+                    //the owner wants to reinvite the user by sending a new mail
                     JsonObject findJson = (JsonObject) find;
                     whitelistDetails.remove(findJson);
                     findJson.put(Field.WHITELIST, false);
