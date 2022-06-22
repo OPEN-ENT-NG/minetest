@@ -62,9 +62,13 @@ class Controller implements ng.IController, IViewModel {
     }
 
     isPortValid(): boolean {
-        let port = (this.world.port).toString();
-        let portValid = new RegExp(/\d{1,5}/);
-        return portValid.test(port);
+        if(this.world && this.world.port) {
+            let port = (this.world.port).toString();
+            let portValid = new RegExp(/\d{1,5}/);
+            return portValid.test(port);
+        } else {
+            return false;
+        }
     }
 
     async importWorld(): Promise<void> {

@@ -71,15 +71,14 @@ class Controller implements ng.IController, IViewModel {
             DateUtils.FORMAT["DAY/MONTH/YEAR-HOUR-MIN"]);
         this.world.whitelist = this.world.whitelist ? this.world.whitelist.concat(this.mail.invitees) : this.mail.invitees;
         this.world.subject = this.mail.subject;
+        this.closeInvitationLightbox();
         minetestService.invite(this.world)
             .then((world:IWorld) => {
                 this.world.whitelist = world.whitelist;
-                this.closeInvitationLightbox();
                 toasts.confirm('minetest.world.invite.confirm');
                 safeApply(this.$scope);
             }).catch(() => {
             toasts.warning('minetest.world.invite.error');
-            this.closeInvitationLightbox();
         });
     }
 

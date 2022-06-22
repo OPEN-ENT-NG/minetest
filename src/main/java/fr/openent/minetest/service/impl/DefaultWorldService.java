@@ -195,7 +195,8 @@ public class DefaultWorldService implements WorldService {
         JsonArray whitelistDetails = new JsonArray();
         String password = (String) body.remove(Field.PASSWORD);
 
-        reformatWhitelist(body.getJsonArray(Field.WHITELIST), whitelistMinetest, whitelistDetails, user)
+        extractUsersFromGroups(body)
+                .compose(res -> reformatWhitelist(res, whitelistMinetest, whitelistDetails, user))
                 .compose(res -> {
                     body.put(Field.WHITELIST, whitelistDetails);
                     return update(body.getString(Field._ID), body);
@@ -222,52 +223,118 @@ public class DefaultWorldService implements WorldService {
         return promise.future();
     }
 
+    private Future<JsonArray> extractUsersFromGroups(JsonObject body) {
+        Promise<JsonArray> promise = Promise.promise();
+        JsonArray whiteListJustUser = new JsonArray();
+        JsonArray whitelist = body.getJsonArray(Field.WHITELIST);
+        for (int i = 0; i < whitelist.size(); i++) {
+            JsonObject element = whitelist.getJsonObject(i);
+            if (element.containsKey(Field.IS_GROUP)){
+                String idGroup = element.getString(Field.ID);
+                JsonObject action = new JsonObject()
+                        .put("action", "list-users")
+                        .put("groupIds", new JsonArray().add(idGroup));
+                int finalI = i;
+                eb.request("directory", action,
+                        (Handler<AsyncResult<Message<JsonObject>>>) messageEvent -> {
+                            if (!"ok".equals(messageEvent.result().body().getString("status"))) {
+                                log.error("[Minetest@extractUsersFromGroups] Failed to search users in group : " + messageEvent.cause());
+                                promise.fail("[Minetest@extractUsersFromGroups] Failed to search users in group : " + messageEvent.cause());
+                            } else {
+                                JsonArray listUsers = messageEvent.result().body().getJsonArray("result");
+                                for (Object u : listUsers){
+                                    whiteListJustUser.add(new JsonObject().put(Field.ID,((JsonObject) u).getString(Field.ID)));
+                                }
+                                if (finalI == whitelist.size() - 1) {
+                                    promise.complete(whiteListJustUser);
+                                }
+                            }
+                        });
+            } else {
+                whiteListJustUser.add(element);
+                if (i == whitelist.size() - 1) {
+                    promise.complete(whiteListJustUser);
+                }
+            }
+        }
+        return promise.future();
+    }
+
     private Future<JsonArray> reformatWhitelist(JsonArray whitelist, JsonArray whitelistMinetest,
                                                 JsonArray whitelistDetails, UserInfos owner) {
         Promise<JsonArray> promise = Promise.promise();
         JsonArray newWhiteList = new JsonArray();
-        createOldNewWhiteList(whitelist, whitelistMinetest, whitelistDetails, newWhiteList, owner);
+        // append data to whitelist JsonArray, whitelistMinetest JsonArray etc...
+        createOldNewWhiteList(whitelist, whitelistMinetest, whitelistDetails, newWhiteList, owner)
+                .compose( res -> getInfosUsers(whitelistMinetest, whitelistDetails, newWhiteList))
+                .onSuccess(promise::complete)
+                .onFailure(err -> promise.fail(err.getMessage()));;
+        return promise.future();
+    }
+
+    private Future<JsonArray> getInfosUsers(JsonArray whitelistMinetest, JsonArray whitelistDetails, JsonArray newWhiteList) {
+        Promise<JsonArray> promise = Promise.promise();
         if (newWhiteList.size() > 0) {
+            List<Future> users = new ArrayList<>();
             for (int i = 0; i < newWhiteList.size(); i++) {
+                Promise<JsonObject> future = Promise.promise();
+                users.add(future.future());
                 JsonObject userInfos = newWhiteList.getJsonObject(i);
-                int finalI = i;
                 UserUtils.getUserInfos(eb, userInfos.getString(Field.ID), user -> {
                     String loginToInsert = reformatLogin(user.getLogin());
                     checkDuplicates(whitelistDetails, whitelistMinetest, user, loginToInsert);
-                    if (finalI == newWhiteList.size() - 1) {
-                        promise.complete(new JsonArray());
-                    }
+                    future.handle(Future.succeededFuture(new JsonObject()));
                 });
             }
+            CompositeFuture.all(users)
+                    .onSuccess(success -> promise.complete(new JsonArray()))
+                    .onFailure(fail -> {
+                        log.error("[Minetest@getInfosUsers] Failed to get users infos : " + fail.getCause());
+                        promise.fail(fail.getCause());
+                    });
         } else {
             promise.complete(new JsonArray());
         }
         return promise.future();
     }
 
-    private void createOldNewWhiteList(JsonArray whitelist, JsonArray whitelistMinetest, JsonArray whitelistDetails,
+    private Future<JsonObject> createOldNewWhiteList(JsonArray whitelist, JsonArray whitelistMinetest, JsonArray whitelistDetails,
                                        JsonArray newWhiteList, UserInfos owner) {
-        for (Object u : whitelist) {
-            JsonObject userInfos = (JsonObject) u;
-            if (userInfos.containsKey(Field.LOGIN)) {
-                //Already invited, we don't send a new mail except for the owner
-                userInfos.put(Field.WHITELIST, !userInfos.getString(Field.ID).equals(owner.getUserId()));
-                whitelistDetails.add(userInfos);
-                whitelistMinetest.add(userInfos.getString(Field.LOGIN));
-            } else {
-                Object find = whitelistDetails.stream().
-                        filter(p -> ((JsonObject)p).getString(Field.ID).equals(userInfos.getString(Field.ID))).
-                        findAny().orElse(null);
-                if (find != null) {
-                    //the owner wants to reinvite the user by sending a new mail
-                    JsonObject findJson = (JsonObject) find;
-                    whitelistDetails.remove(findJson);
-                    findJson.put(Field.WHITELIST, false);
-                    whitelistDetails.add(findJson);
+        Promise<JsonObject> promise = Promise.promise();
+        JsonArray whitelistDetailsId = new JsonArray();
+        for (int i = 0; i < whitelist.size(); i++) {
+            JsonObject userInfos = whitelist.getJsonObject(i);
+            if (!userInfos.containsKey(Field.IS_GROUP)) {
+                if (userInfos.containsKey(Field.LOGIN)) {
+                    //Already invited, we don't send a new mail except for the owner
+                    userInfos.put(Field.WHITELIST, !userInfos.getString(Field.ID).equals(owner.getUserId()));
+                    whitelistDetails.add(userInfos);
+                    whitelistDetailsId.add(userInfos.getString(Field.ID));
+                    whitelistMinetest.add(userInfos.getString(Field.LOGIN));
+                    completePromise(i, whitelist.size(), promise);
                 } else {
-                    newWhiteList.add(userInfos);
+                    if (whitelistDetailsId.contains(userInfos.getString(Field.ID))) {
+                        //the owner wants to reinvite the user by sending a new mail
+                        for (int j = 0; j < whitelistDetails.size(); j++) {
+                            JsonObject w = whitelistDetails.getJsonObject(j);
+                            if(w.getString(Field.ID).equals(userInfos.getString(Field.ID))){
+                                w.put(Field.WHITELIST, false);
+                            }
+                        }
+                        completePromise(i, whitelist.size(), promise);
+                    } else {
+                        newWhiteList.add(userInfos);
+                        completePromise(i, whitelist.size(), promise);
+                    }
                 }
-            }
+            } else completePromise(i, whitelist.size(), promise);
+        }
+        return promise.future();
+    }
+
+    private void completePromise(int i, int whitelist, Promise<JsonObject> promise) {
+        if (i == whitelist - 1) {
+            promise.complete(new JsonObject());
         }
     }
 
@@ -306,11 +373,9 @@ public class DefaultWorldService implements WorldService {
             eb.request("org.entcore.conversation", listMails.getJsonObject(i),
                     (Handler<AsyncResult<Message<JsonObject>>>) messageEvent -> {
                         if (!"ok".equals(messageEvent.result().body().getString("status"))) {
-                            log.error("[Minetest@sendMail] Failed to send mail : " + messageEvent.cause());
-                            future.handle(Future.failedFuture(messageEvent.cause()));
-                        } else {
-                            future.handle(Future.succeededFuture(messageEvent.result().body()));
+                            log.error("[Minetest@sendMail] Failed to send mail : " + messageEvent.result().body().getString("status"));
                         }
+                        future.handle(Future.succeededFuture(new JsonObject()));
                     });
         }
         // Try to send effectively mails with code below and get results

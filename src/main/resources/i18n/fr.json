@@ -73,7 +73,7 @@
   "minetest.world.open": "Ouvrir le monde",
   "minetest.world.open.confirm": "Ouverture du monde effectée avec succès",
   "minetest.world.open.close.error": "Une erreur est survenue de l'ouverture ou de la fermeture du monde",
-  "minetest.world.port.valid": "Votre port ne doit contenir que des chiffres",
+  "minetest.world.port.valid": "Votre port ne doit contenir que des chiffres et ne doit pas excéder 5 chiffres",
   "minetest.world.properties": "Propriétés",
   "minetest.world.title": "Nom du monde",
   "minetest.world.to.join": "Vous avez un monde de Minetest à rejoindre",

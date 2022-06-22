@@ -40,10 +40,7 @@ class Controller implements ng.IController, IViewModel {
     }
 
     showTable(): boolean {
-        if(this.world['isExternal'])
-            return this.world.whitelist != undefined;
-        else
-            return this.world.whitelist && this.world.whitelist.length > 1;
+        return this.world.whitelist && this.world.whitelist.length > 1;
     }
 }
 

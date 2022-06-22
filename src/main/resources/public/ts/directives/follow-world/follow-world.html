@@ -48,7 +48,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr ng-repeat="user in vm.world.whitelist">
+                        <tr ng-repeat="user in vm.world.whitelist | orderBy:'lastName'">
                             <td>[[user.lastName]]</td>
                             <td>[[user.firstName]]</td>
                             <td>[[user.login]]</td>

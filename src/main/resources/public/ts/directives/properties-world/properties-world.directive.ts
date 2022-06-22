@@ -71,9 +71,13 @@ class Controller implements ng.IController, IViewModel {
     }
 
     isPortValid(): boolean {
-        let port = (this.worldForm.port).toString();
-        let portValid = new RegExp(/\d{1,5}/);
-        return portValid.test(port);
+        if(this.worldForm && this.worldForm.port) {
+            let port = (this.worldForm.port).toString();
+            let portValid = new RegExp(/\d{1,5}/);
+            return portValid.test(port);
+        } else {
+            return false;
+        }
     }
 
 
