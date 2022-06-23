@@ -1,5 +1,5 @@
     {
-      "name": "fr.openent~minetest~1.1.0",
+      "name": "fr.openent~minetest~1.1-SNAPSHOT",
       "config": {
         "main" : "fr.openent.minetest.Minetest",
         "port" : 8055,
