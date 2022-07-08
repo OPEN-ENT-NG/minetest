@@ -21,9 +21,9 @@
         </div>
         <div class="minetest-head" data-ng-show="vm.worlds.all.length > 0">
             <!-- button import first world -->
-            <import-world on-import-world="vm.refreshWorldList()"></import-world>
+            <import-world on-import-world="vm.refreshWorldList"></import-world>
             <!-- button create first world -->
-            <create-world on-create-world="vm.refreshWorldList()"></create-world>
+            <create-world on-create-world="vm.refreshWorldList"></create-world>
         </div>
     </div>
 
@@ -39,9 +39,9 @@
         </div>
         <div class="empty-state-button">
             <!-- button import world -->
-            <import-world on-import-world="vm.refreshWorldList()"></import-world>
+            <import-world on-import-world="vm.refreshWorldList"></import-world>
             <!-- button create world -->
-            <create-world on-create-world="vm.refreshWorldList()"></create-world>
+            <create-world on-create-world="vm.refreshWorldList"></create-world>
         </div>
     </div>
 

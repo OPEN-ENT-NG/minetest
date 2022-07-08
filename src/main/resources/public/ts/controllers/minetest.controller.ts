@@ -23,7 +23,6 @@ class Controller implements ng.IController, IViewModel {
     currentWorld: IWorld;
     display: { allowPassword: boolean };
     filter: { creation_date: Date; up_date: Date; guests: any; shared: boolean; title: string };
-    selectedWorld: Array<IWorld>;
     user_id: string;
     user_name: string;
     user_login: string;
@@ -38,7 +37,6 @@ class Controller implements ng.IController, IViewModel {
         this.user_id = model.me.userId;
         this.user_name = model.me.username;
         this.user_login = model.me.login;
-        this.selectedWorld = [];
 
         this.filter = {
             creation_date: null,
@@ -49,7 +47,6 @@ class Controller implements ng.IController, IViewModel {
         };
 
         this.display = { allowPassword: false };
-
         this.worlds = new Worlds();
         this.worlds.all = [];
         this.initData();

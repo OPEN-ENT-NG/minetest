@@ -16,11 +16,13 @@ interface IViewModel {
 
     lightbox: any;
     world: IWorld;
+    newWorld: IWorld;
 }
 
 class Controller implements ng.IController, IViewModel {
     lightbox: any;
     world: IWorld;
+    newWorld: IWorld;
 
     constructor(private $scope: IScope)
     {
@@ -37,6 +39,8 @@ class Controller implements ng.IController, IViewModel {
 
     openCreateLightbox(): void {
         this.lightbox.create = true;
+        let newWorld: IWorld = this.world;
+        this.world = Object.assign({}, newWorld);
     }
 
     closeCreateLightbox(): void {
@@ -65,7 +69,7 @@ class Controller implements ng.IController, IViewModel {
     }
 
     async createWorld(): Promise<void> {
-        this.world = {
+        this.newWorld = {
             owner_id:  model.me.userId,
             owner_name: model.me.username,
             owner_login: model.me.login,
@@ -77,7 +81,7 @@ class Controller implements ng.IController, IViewModel {
             title: this.world.title,
             address: this.formatAddress()
         }
-        minetestService.create(this.world)
+        minetestService.create(this.newWorld)
             .then(() => {
                 toasts.confirm('minetest.world.create.confirm');
                 this.closeCreateLightbox();
