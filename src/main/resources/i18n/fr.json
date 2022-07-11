@@ -54,6 +54,7 @@
   "minetest.reset.password": "Réinitialiser le mot de passe",
   "minetest.reset.password.explanation": "Vous pourrez publiposter de nouveau le monde pour faire part du nouveau mot de passe aux utilisateurs",
   "minetest.share": "Partager",
+  "minetest.shutting.world.automatically": "Fermeture automatique du monde",
   "minetest.the": "le",
   "minetest.title": "Minetest",
   "minetest.title.world": "Titre du monde",

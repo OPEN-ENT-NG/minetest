@@ -25,6 +25,7 @@
 
             <!-- Content -->
             <section class="minetest-lightbox-content-form">
+                <!-- Title -->
                 <div class="minetest-lightbox-content-form-input-text">
                     <span class="minetest-lightbox-content-form-input-text-title">
                         <i18n>minetest.world.title</i18n>
@@ -36,6 +37,7 @@
                     <i18n>minetest.creation.world.description</i18n>
                 </span>
 
+                <!-- Password -->
                 <div class="minetest-lightbox-content-form-input-checkbox">
                     <div class="minetest-lightbox-content-form-input-checkbox-password">
                         <div class="minetest-lightbox-content-form-input-text">
@@ -45,6 +47,16 @@
                             <input type="text" class="six cell" data-ng-model="vm.world.password" />
                         </div>
                     </div>
+                </div>
+
+                <!-- Shutting down world -->
+                <div class="cell twelve minetest-lightbox-content-form-switch">
+                    <span class="cell minetest-lightbox-content-form-input-text-title">
+                        <i18n>minetest.shutting.world.automatically</i18n>
+                    </span>
+                    <switch ng-model="vm.shuttingDown">
+                        <label class="switch"></label>
+                    </switch>
                 </div>
             </section>
         </div>
