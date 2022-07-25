@@ -4,6 +4,7 @@ import {IScope} from "angular";
 import {IWorld} from "../../models";
 import {DateUtils} from "../../utils/date.utils";
 import {minetestService} from "../../services";
+import {AxiosResponse} from "axios";
 
 declare let window: any;
 
@@ -16,11 +17,13 @@ interface IViewModel {
 
     lightbox: any;
     world: IWorld;
+    newWorld: IWorld;
 }
 
 class Controller implements ng.IController, IViewModel {
     lightbox: any;
     world: IWorld;
+    newWorld: IWorld;
 
     constructor(private $scope: IScope)
     {
@@ -37,6 +40,8 @@ class Controller implements ng.IController, IViewModel {
 
     openCreateLightbox(): void {
         this.lightbox.create = true;
+        let newWorld: IWorld = this.world;
+        this.world = Object.assign({}, newWorld);
     }
 
     closeCreateLightbox(): void {
@@ -65,7 +70,7 @@ class Controller implements ng.IController, IViewModel {
     }
 
     async createWorld(): Promise<void> {
-        this.world = {
+        this.newWorld = {
             owner_id:  model.me.userId,
             owner_name: model.me.username,
             owner_login: model.me.login,
@@ -77,15 +82,18 @@ class Controller implements ng.IController, IViewModel {
             title: this.world.title,
             address: this.formatAddress()
         }
-        minetestService.create(this.world)
-            .then(() => {
+        minetestService.create(this.newWorld)
+            .then((world: AxiosResponse) => {
                 toasts.confirm('minetest.world.create.confirm');
+                if (this.$scope.$parent.$eval(this.$scope['vm']['onCreateWorld'])(world.data))
+                    this.$scope.$parent.$eval(this.$scope['vm']['onCreateWorld'])(world.data);
                 this.closeCreateLightbox();
-                this.$scope.$eval(this.$scope['vm']['onCreateWorld']());
-            }).catch(() => {
-            toasts.warning('minetest.world.create.error');
-            this.closeCreateLightbox();
-        })
+            })
+            .catch(e => {
+                toasts.warning('minetest.world.create.error');
+                console.error(e);
+                this.closeCreateLightbox();
+            })
     }
 }
 
@@ -103,7 +111,6 @@ function directive() {
                         element: ng.IAugmentedJQuery,
                         attrs: ng.IAttributes,
                         vm: ng.IController) {
-
         }
     }
 }

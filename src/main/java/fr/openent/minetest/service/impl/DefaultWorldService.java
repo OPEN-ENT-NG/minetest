@@ -128,6 +128,9 @@ public class DefaultWorldService implements WorldService {
 
         String loginMinetest = reformatLogin(user.getLogin());
 
+        //Put new Id
+        body.put(Field._ID, UUID.randomUUID().toString());
+
         //add user in the whitelist
         createWhitelist(body, user, loginMinetest);
 

@@ -9,12 +9,12 @@ declare let window: any;
 interface IViewModel {
     initData(): Promise<void>;
     getWorld(): Promise<void>;
-    setCurrentWorld(): void;
+    setCurrentWorld(world?: IWorld): void;
     setStatus(world: IWorld): string;
     getLink(): string;
     getWiki(): string;
     getDownload(): string;
-    refreshWorldList(): Promise<void>;
+    refreshWorldList(world?: IWorld): any;
 
     world: IWorld;
 }
@@ -23,7 +23,6 @@ class Controller implements ng.IController, IViewModel {
     currentWorld: IWorld;
     display: { allowPassword: boolean };
     filter: { creation_date: Date; up_date: Date; guests: any; shared: boolean; title: string };
-    selectedWorld: Array<IWorld>;
     user_id: string;
     user_name: string;
     user_login: string;
@@ -38,7 +37,6 @@ class Controller implements ng.IController, IViewModel {
         this.user_id = model.me.userId;
         this.user_name = model.me.username;
         this.user_login = model.me.login;
-        this.selectedWorld = [];
 
         this.filter = {
             creation_date: null,
@@ -49,7 +47,6 @@ class Controller implements ng.IController, IViewModel {
         };
 
         this.display = { allowPassword: false };
-
         this.worlds = new Worlds();
         this.worlds.all = [];
         this.initData();
@@ -63,18 +60,19 @@ class Controller implements ng.IController, IViewModel {
         safeApply(this.$scope);
     }
 
-    async getWorld(): Promise<void> {
+    async getWorld(world?: IWorld): Promise<void> {
         this.worlds.all = await minetestService.get(this.user_id, this.user_name);
-        this.setCurrentWorld();
+        if (world) {
+            let currentWorld: IWorld = this.worlds.all.find(w => w._id === world._id)
+            currentWorld ? this.setCurrentWorld(currentWorld) : this.setCurrentWorld();
+        } else this.setCurrentWorld();
     }
 
-    setCurrentWorld(): void {
-        if (this.currentWorld) {
-            let worldId = this.currentWorld._id
-            this.currentWorld = this.worlds.all.filter(w => w._id === worldId)[0]
-        } else {
-            this.currentWorld = this.worlds.all[0]
-        }
+    setCurrentWorld(world?: IWorld): void {
+        this.currentWorld = world || this.currentWorld;
+        if (this.currentWorld) this.currentWorld = this.worlds.all.find(w => w._id === this.currentWorld._id);
+        this.currentWorld = this.currentWorld || this.worlds.all[0];
+        safeApply(this.$scope);
     }
 
     setStatus(world: IWorld): string {
@@ -102,9 +100,11 @@ class Controller implements ng.IController, IViewModel {
         return window.minetestDownload;
     }
 
-    async refreshWorldList(): Promise<void> {
-        await this.getWorld();
-        safeApply(this.$scope);
+    refreshWorldList(): (world?: IWorld) => any {
+        let self: Controller = this;
+        return (world: any): void => {
+            self.getWorld(world);
+        }
     }
 }
 

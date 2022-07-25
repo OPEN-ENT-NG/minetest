@@ -38,12 +38,12 @@ public class DefaultWorldServiceTest {
     }
 
     @Test
-    public void testCreateImportWorld(TestContext context) {
+    public void testCreateImportWorld(TestContext context) throws Exception {
         // Arguments
         UserInfos userInfos = new UserInfos();
+        userInfos.setLogin("login");
 
         JsonObject world = new JsonObject()
-                .put("_id", "5fzef5")
                 .put("owner_id", "ownerId")
                 .put("owner_name", "ownerName")
                 .put("owner_login", "ownerLogin")
@@ -56,22 +56,21 @@ public class DefaultWorldServiceTest {
 
         //Expected data
         String expectedCollection = "world";
-        String expectedWorld = "{\"_id\":\"5fzef5\",\"owner_id\":\"ownerId\",\"owner_name\":\"ownerName\"," +
-                "\"owner_login\":\"ownerLogin\",\"created_at\":\"createdAt\",\"updated_at\":\"updatedAt\"," +
-                "\"title\":\"my world\",\"address\":\"myworld.fr\",\"port\":\"30000\",\"isExternal\":true}";
+        String expectedWorld = "{\"owner_id\":\"ownerId\",\"owner_name\":\"ownerName\",\"owner_login\":\"ownerLogin\"," +
+                "\"created_at\":\"createdAt\",\"updated_at\":\"updatedAt\",\"title\":\"my world\"," +
+                "\"address\":\"myworld.fr\",\"port\":\"30000\",\"isExternal\":true,\"whitelist\":[{\"id\":null," +
+                "\"login\":\"login\",\"displayName\":null,\"firstName\":null,\"lastName\":null,\"whitelist\":false}]}";
+
         Mockito.doAnswer(invocation -> {
             String collection = invocation.getArgument(0);
-            String query = invocation.getArgument(1).toString();
+            JsonObject query = invocation.getArgument(1);
+            query.remove("_id");
             context.assertEquals(collection, expectedCollection);
-            context.assertEquals(query, expectedWorld);
+            context.assertEquals(query.toString(), expectedWorld);
             return null;
         }).when(mongo).insert(Mockito.anyString(), Mockito.any(JsonObject.class), Mockito.any(Handler.class));
 
-        try {
-            Whitebox.invokeMethod(worldService, "importWorld", world, userInfos);
-        } catch (Exception e) {
-            context.assertNull(e);
-        }
+        Whitebox.invokeMethod(worldService, "importWorld", world, userInfos);
     }
 
 }
