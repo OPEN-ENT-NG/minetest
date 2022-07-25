@@ -9,12 +9,12 @@ declare let window: any;
 interface IViewModel {
     initData(): Promise<void>;
     getWorld(): Promise<void>;
-    setCurrentWorld(): void;
+    setCurrentWorld(world?: IWorld): void;
     setStatus(world: IWorld): string;
     getLink(): string;
     getWiki(): string;
     getDownload(): string;
-    refreshWorldList(world?): any;
+    refreshWorldList(world?: IWorld): any;
 
     world: IWorld;
 }
@@ -60,15 +60,15 @@ class Controller implements ng.IController, IViewModel {
         safeApply(this.$scope);
     }
 
-    async getWorld(world?): Promise<void> {
+    async getWorld(world?: IWorld): Promise<void> {
         this.worlds.all = await minetestService.get(this.user_id, this.user_name);
         if (world) {
-            let currentWorld = this.worlds.all.find(w => w._id === world._id)
+            let currentWorld: IWorld = this.worlds.all.find(w => w._id === world._id)
             currentWorld ? this.setCurrentWorld(currentWorld) : this.setCurrentWorld();
         } else this.setCurrentWorld();
     }
 
-    setCurrentWorld(world?): void {
+    setCurrentWorld(world?: IWorld): void {
         this.currentWorld = world || this.currentWorld;
         if (this.currentWorld) this.currentWorld = this.worlds.all.find(w => w._id === this.currentWorld._id);
         this.currentWorld = this.currentWorld || this.worlds.all[0];
@@ -100,7 +100,7 @@ class Controller implements ng.IController, IViewModel {
         return window.minetestDownload;
     }
 
-    refreshWorldList(): (world) => any {
+    refreshWorldList(): (world?: IWorld) => any {
         let self: Controller = this;
         return (world: any): void => {
             self.getWorld(world);
