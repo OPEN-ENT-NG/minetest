@@ -4,6 +4,7 @@ import {IScope} from "angular";
 import {IImportWorld} from "../../models";
 import {minetestService} from "../../services";
 import {DateUtils} from "../../utils/date.utils";
+import {AxiosResponse} from "axios";
 
 interface IViewModel {
     openImportLightbox(): void;
@@ -13,12 +14,14 @@ interface IViewModel {
 
     lightbox: any;
     world: IImportWorld;
+    newImportWorld: IImportWorld;
     isPortValid(): boolean;
 }
 
 class Controller implements ng.IController, IViewModel {
     lightbox: any;
     world: IImportWorld;
+    newImportWorld: IImportWorld;
 
     constructor(private $scope: IScope) {
         {
@@ -37,6 +40,8 @@ class Controller implements ng.IController, IViewModel {
 
     openImportLightbox(): void {
         this.lightbox.import = true;
+        let newImportWorld: IImportWorld = this.world;
+        this.world = Object.assign({}, newImportWorld);
     }
 
     closeImportLightbox(): void {
@@ -72,7 +77,7 @@ class Controller implements ng.IController, IViewModel {
     }
 
     async importWorld(): Promise<void> {
-        this.world = {
+        this.newImportWorld = {
             owner_id:  model.me.userId,
             owner_name: model.me.username,
             owner_login: model.me.login,
@@ -84,11 +89,12 @@ class Controller implements ng.IController, IViewModel {
             port: parseInt(String(this.world.port)),
             isExternal: true
         }
-        minetestService.import(this.world)
-            .then(() => {
+        minetestService.import(this.newImportWorld)
+            .then((world: AxiosResponse) => {
                 toasts.confirm('minetest.world.import.confirm');
+                if (this.$scope.$parent.$eval(this.$scope['vm']['onImportWorld'])(world.data))
+                    this.$scope.$parent.$eval(this.$scope['vm']['onImportWorld'])(world.data);
                 this.closeImportLightbox();
-                this.$scope.$eval(this.$scope['vm']['onImportWorld']());
             }).catch(() => {
             toasts.warning('minetest.world.import.error');
             this.closeImportLightbox();

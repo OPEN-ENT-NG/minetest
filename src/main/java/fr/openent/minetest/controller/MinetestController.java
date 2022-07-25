@@ -69,7 +69,7 @@ public class MinetestController extends ControllerHelper {
     public void postWorld(final HttpServerRequest request) {
         RequestUtils.bodyToJson(request, pathPrefix + Field.WORLD, body
                 -> UserUtils.getUserInfos(eb, request, user
-                -> worldService.create(body,user)
+                -> worldService.create(body, user)
                 .onSuccess(res -> renderJson(request, body))
                 .onFailure(err -> renderError(request))));
     }

@@ -46,10 +46,12 @@ class Controller implements ng.IController, IViewModel {
                 toasts.confirm('minetest.world.delete.confirm');
                 this.closeDeleteLightbox();
                 this.$scope.$eval(this.$scope['vm']['onDeleteWorld']());
-            }).catch(() => {
-            toasts.warning('minetest.world.delete.error');
-            this.closeDeleteLightbox();
-        })
+            })
+            .catch(e => {
+                toasts.warning('minetest.world.delete.error');
+                console.error(e);
+                this.closeDeleteLightbox();
+            })
     }
 
     async deleteImportWorld(): Promise<void> {
@@ -57,7 +59,8 @@ class Controller implements ng.IController, IViewModel {
             .then(() => {
                 toasts.confirm('minetest.world.delete.confirm');
                 this.closeDeleteLightbox();
-                this.$scope.$eval(this.$scope['vm']['onDeleteWorld']());
+                if (this.$scope.$parent.$eval(this.$scope['vm']['onDeleteWorld'])(this.world))
+                    this.$scope.$parent.$eval(this.$scope['vm']['onDeleteWorld'])(this.world);
             }).catch(() => {
             toasts.warning('minetest.world.delete.error');
             this.closeDeleteLightbox();
