@@ -4,6 +4,7 @@ import {IScope} from "angular";
 import {IWorld} from "../../models";
 import {DateUtils} from "../../utils/date.utils";
 import {minetestService} from "../../services";
+import {AxiosResponse} from "axios";
 
 declare let window: any;
 
@@ -82,14 +83,17 @@ class Controller implements ng.IController, IViewModel {
             address: this.formatAddress()
         }
         minetestService.create(this.newWorld)
-            .then(() => {
+            .then((world: AxiosResponse) => {
                 toasts.confirm('minetest.world.create.confirm');
+                if (this.$scope.$parent.$eval(this.$scope['vm']['onCreateWorld'])(world.data))
+                    this.$scope.$parent.$eval(this.$scope['vm']['onCreateWorld'])(world.data);
                 this.closeCreateLightbox();
-                this.$scope.$eval(this.$scope['vm']['onCreateWorld']());
-            }).catch(() => {
-            toasts.warning('minetest.world.create.error');
-            this.closeCreateLightbox();
-        })
+            })
+            .catch(e => {
+                toasts.warning('minetest.world.create.error');
+                console.error(e);
+                this.closeCreateLightbox();
+            })
     }
 }
 
@@ -107,7 +111,6 @@ function directive() {
                         element: ng.IAugmentedJQuery,
                         attrs: ng.IAttributes,
                         vm: ng.IController) {
-
         }
     }
 }

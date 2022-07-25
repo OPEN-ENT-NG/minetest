@@ -14,7 +14,7 @@ interface IViewModel {
     getLink(): string;
     getWiki(): string;
     getDownload(): string;
-    refreshWorldList(): Promise<void>;
+    refreshWorldList(world?): any;
 
     world: IWorld;
 }
@@ -60,18 +60,19 @@ class Controller implements ng.IController, IViewModel {
         safeApply(this.$scope);
     }
 
-    async getWorld(): Promise<void> {
+    async getWorld(world?): Promise<void> {
         this.worlds.all = await minetestService.get(this.user_id, this.user_name);
-        this.setCurrentWorld();
+        if (world) {
+            let currentWorld = this.worlds.all.find(w => w._id === world._id)
+            currentWorld ? this.setCurrentWorld(currentWorld) : this.setCurrentWorld();
+        } else this.setCurrentWorld();
     }
 
-    setCurrentWorld(): void {
-        if (this.currentWorld) {
-            let worldId = this.currentWorld._id
-            this.currentWorld = this.worlds.all.filter(w => w._id === worldId)[0]
-        } else {
-            this.currentWorld = this.worlds.all[0]
-        }
+    setCurrentWorld(world?): void {
+        this.currentWorld = world || this.currentWorld;
+        if (this.currentWorld) this.currentWorld = this.worlds.all.find(w => w._id === this.currentWorld._id);
+        this.currentWorld = this.currentWorld || this.worlds.all[0];
+        safeApply(this.$scope);
     }
 
     setStatus(world: IWorld): string {
@@ -99,9 +100,11 @@ class Controller implements ng.IController, IViewModel {
         return window.minetestDownload;
     }
 
-    async refreshWorldList(): Promise<void> {
-        await this.getWorld();
-        safeApply(this.$scope);
+    refreshWorldList(): (world) => any {
+        let self: Controller = this;
+        return (world: any): void => {
+            self.getWorld(world);
+        }
     }
 }
 
