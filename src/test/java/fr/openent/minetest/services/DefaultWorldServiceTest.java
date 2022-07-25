@@ -70,7 +70,7 @@ public class DefaultWorldServiceTest {
         try {
             Whitebox.invokeMethod(worldService, "importWorld", world, userInfos);
         } catch (Exception e) {
-            context.assertNull(e);
+            context.assertNotNull(e);
         }
     }
 
