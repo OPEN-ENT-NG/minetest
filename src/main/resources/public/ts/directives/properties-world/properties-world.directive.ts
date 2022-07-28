@@ -10,11 +10,12 @@ interface IViewModel {
     closePropertiesLightbox(): void;
     updateWorld(): Promise<void>;
     resetPassword(): void;
-    showInputPassword: boolean;
     updateImportWorld(): Promise<void>;
     isPortValid(): boolean;
 
+    showInputPassword: boolean;
     lightbox: any;
+    shuttingDown: boolean;
 
     // props
     world: IWorld;
@@ -25,7 +26,8 @@ class Controller implements ng.IController, IViewModel {
     lightbox: any;
     world: IWorld;
     worldForm: IWorld;
-    showInputPassword;
+    showInputPassword: boolean;
+    shuttingDown: boolean;
 
     constructor(private $scope: IScope) {
         this.lightbox = {

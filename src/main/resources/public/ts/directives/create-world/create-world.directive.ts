@@ -16,12 +16,14 @@ interface IViewModel {
     formatAddress(): string;
 
     lightbox: any;
+    shuttingDown: boolean;
     world: IWorld;
     newWorld: IWorld;
 }
 
 class Controller implements ng.IController, IViewModel {
     lightbox: any;
+    shuttingDown: boolean;
     world: IWorld;
     newWorld: IWorld;
 
@@ -40,6 +42,7 @@ class Controller implements ng.IController, IViewModel {
 
     openCreateLightbox(): void {
         this.lightbox.create = true;
+        this.shuttingDown = true;
         let newWorld: IWorld = this.world;
         this.world = Object.assign({}, newWorld);
     }

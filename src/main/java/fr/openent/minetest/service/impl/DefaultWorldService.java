@@ -568,6 +568,11 @@ public class DefaultWorldService implements WorldService {
     }
 
     @Override
+    public void shuttingDownWorld(Handler<Either<String, JsonObject>> handler) {
+
+    }
+
+    @Override
     public Future<JsonArray> getMongo(String ownerId, String ownerName, String createdAt, String updatedAt,
                                       String img, String name, JsonObject sortJson) {
         Promise<JsonArray> promise = Promise.promise();
