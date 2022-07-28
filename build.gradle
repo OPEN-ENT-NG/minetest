@@ -67,6 +67,7 @@ dependencies {
     testCompile "io.vertx:vertx-core:$vertxVersion"
     testCompile "io.vertx:testtools:$toolsVersion"
     compile "io.vertx:vertx-web-client:$vertxVersion"
+    compile "fr.wseduc:vertx-cron-timer:$vertxCronTimer"
 }
 
 jar {

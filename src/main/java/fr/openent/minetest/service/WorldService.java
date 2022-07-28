@@ -1,7 +1,9 @@
 package fr.openent.minetest.service;
 
+import fr.wseduc.webutils.Either;
 import io.netty.handler.codec.http.HttpRequest;
 import io.vertx.core.Future;
+import io.vertx.core.Handler;
 import io.vertx.core.http.HttpServerRequest;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
@@ -80,6 +82,13 @@ public interface WorldService {
      * @return returning data
      */
     Future<JsonObject> resetPassword(String newPassword, JsonObject body);
+
+    /**
+     * CRON task that automatically close world at 11pm, except if it's checked false
+     *
+     * @param handler Function handler returning data
+     */
+    void shuttingDownWorld(Handler<Either<String, JsonObject>> handler);
 
     /**
      * Get Worlds with filter

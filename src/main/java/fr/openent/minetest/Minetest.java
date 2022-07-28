@@ -2,6 +2,7 @@ package fr.openent.minetest;
 
 import fr.openent.minetest.config.MinetestConfig;
 import fr.openent.minetest.controller.MinetestController;
+//import fr.openent.minetest.cron.ShuttingDownWorld;
 import fr.openent.minetest.service.ServiceFactory;
 import fr.wseduc.mongodb.MongoDb;
 import org.entcore.common.http.BaseServer;
@@ -22,6 +23,8 @@ public class Minetest extends BaseServer {
 				MongoDb.getInstance());
 
 		addController(new MinetestController(serviceFactory));
+
+//		new CronTrigger(vertx, config.getString("shutting-down-cron")).schedule(new ShuttingDownWorld());
 	}
 
 }

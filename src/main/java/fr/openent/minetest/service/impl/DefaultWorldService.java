@@ -7,6 +7,7 @@ import fr.openent.minetest.service.MinetestService;
 import fr.openent.minetest.service.ServiceFactory;
 import fr.openent.minetest.service.WorldService;
 import fr.wseduc.mongodb.MongoDb;
+import fr.wseduc.webutils.Either;
 import fr.wseduc.webutils.I18n;
 import io.vertx.core.*;
 import io.vertx.core.eventbus.EventBus;
@@ -551,6 +552,11 @@ public class DefaultWorldService implements WorldService {
                 .onFailure(err -> promise.fail(err.getMessage()));
 
         return promise.future();
+    }
+
+    @Override
+    public void shuttingDownWorld(Handler<Either<String, JsonObject>> handler) {
+
     }
 
     @Override
