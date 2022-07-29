@@ -27,7 +27,8 @@ Specific configuration that must be seen :
     "minetest-wiki": "${minetestWiki}",
     "minetest-server": "${minetestServer}",
     "minetest-python-server-port": "${minetestPythonServerPort}",
-    "minetest-port-range": "${minetestPortRange}"
+    "minetest-port-range": "${minetestPortRange}",
+    "minetest-messaging": "${minetestMessaging}"
   }
 }
 </pre>
@@ -40,4 +41,5 @@ minetestWiki = ${String}
 minetestServer = ${String}
 minetestPythonServerPort = Integer
 minetestPortRange = ${String}
+minetestMessaging = ${String}
 </pre>
