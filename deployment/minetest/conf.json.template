@@ -19,6 +19,7 @@
         "minetest-wiki": "${minetestWiki}",
         "minetest-server": "${minetestServer}",
         "minetest-python-server-port": "${minetestPythonServerPort}",
-        "minetest-port-range": "${minetestPortRange}"
+        "minetest-port-range": "${minetestPortRange}",
+        "minetest-messaging": "${minetestMessaging}"
       }
     }

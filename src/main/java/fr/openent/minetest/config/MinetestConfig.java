@@ -12,6 +12,7 @@ public class MinetestConfig {
     private final String minetestPythonServerPort;
     private final Integer minetestMinPort;
     private final Integer minetestMaxPort;
+    private final String minetestMessaging;
 
     public MinetestConfig(JsonObject config) {
         this.minetestDownload = config.getString(Field.MINETEST_DOWNLOAD);
@@ -21,6 +22,7 @@ public class MinetestConfig {
         this.minetestMinPort = Integer.parseInt(config.getString(Field.MINETEST_PORT_RANGE).split("-")[0]);
         this.minetestMaxPort = Integer.parseInt(config.getString(Field.MINETEST_PORT_RANGE).split("-")[1]);
         this.minetestPythonServerPort = config.getString(Field.MINETEST_PYTHON_SERVER_PORT);
+        this.minetestMessaging = config.getString(Field.MINETEST_MESSAGING);
     }
 
     public String minetestDownload() { return minetestDownload; }
@@ -37,4 +39,5 @@ public class MinetestConfig {
 
     public Integer minetestMaxPort() { return minetestMaxPort; }
 
+    public String minetestMessaging() { return minetestMessaging; }
 }

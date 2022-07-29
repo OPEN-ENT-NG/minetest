@@ -2,6 +2,8 @@ import {ng} from 'entcore'
 import http, {AxiosResponse} from 'axios';
 import {IImportWorld, IWorld} from "../models";
 
+declare let window: any;
+
 export interface IMinetestService {
     test(): Promise<AxiosResponse>;
 
@@ -75,7 +77,7 @@ export const minetestService: IMinetestService = {
     },
 
     getVisibleUsers: (search: string): Promise<AxiosResponse> => {
-        return http.get('/conversation/visible?search=' + search);
+        return http.get(`/${window.minetestMessaging}/visible?search=${search}`);
     },
 
     invite: async (worldBody: IWorld): Promise<IWorld> => {

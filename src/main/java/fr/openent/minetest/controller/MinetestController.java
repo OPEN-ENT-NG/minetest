@@ -40,7 +40,8 @@ public class MinetestController extends ControllerHelper {
                     .put(Field.MINETEST_DOWNLOAD, this.minetestConfig.minetestDownload())
                     .put(Field.MINETEST_LINK, this.minetestConfig.minetestLink())
                     .put(Field.MINETEST_WIKI, this.minetestConfig.minetestWiki())
-                    .put(Field.MINETEST_SERVER, this.minetestConfig.minetestServer());
+                    .put(Field.MINETEST_SERVER, this.minetestConfig.minetestServer())
+                    .put(Field.MINETEST_MESSAGING, this.minetestConfig.minetestMessaging());
             renderView(request, config);
             eventStore.createAndStoreEvent(Field.ACCESS, request);
         });
