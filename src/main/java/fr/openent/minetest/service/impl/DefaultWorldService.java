@@ -7,6 +7,7 @@ import fr.openent.minetest.service.MinetestService;
 import fr.openent.minetest.service.ServiceFactory;
 import fr.openent.minetest.service.WorldService;
 import fr.wseduc.mongodb.MongoDb;
+import fr.wseduc.webutils.Either;
 import fr.wseduc.webutils.I18n;
 import io.vertx.core.*;
 import io.vertx.core.eventbus.EventBus;
@@ -220,7 +221,10 @@ public class DefaultWorldService implements WorldService {
                         return minetestService.action(copyBody, MinestestServiceAction.WHITELIST);
                     }
                 })
-                .compose(res -> sendMail(user, body, request, password))
+                .compose(res -> {
+                    JsonArray listMails = createMailList(user, body, request, password);
+                    return sendMail(listMails);
+                })
                 .onSuccess(promise::complete)
                 .onFailure(err -> promise.fail(err.getMessage()));
         return promise.future();
@@ -302,7 +306,7 @@ public class DefaultWorldService implements WorldService {
     }
 
     private Future<JsonObject> createOldNewWhiteList(JsonArray whitelist, JsonArray whitelistMinetest, JsonArray whitelistDetails,
-                                       JsonArray newWhiteList, UserInfos owner) {
+                                                     JsonArray newWhiteList, UserInfos owner) {
         Promise<JsonObject> promise = Promise.promise();
         JsonArray whitelistDetailsId = new JsonArray();
         for (int i = 0; i < whitelist.size(); i++) {
@@ -363,33 +367,43 @@ public class DefaultWorldService implements WorldService {
         whitelistDetails.add(userToInsert);
     }
 
-    private Future<JsonObject> sendMail(UserInfos owner, JsonObject body, HttpServerRequest request, String password) {
+    private Future<JsonObject> sendMail(JsonArray listMails) {
         Promise<JsonObject> promise = Promise.promise();
-        JsonArray listMails = createMailList(owner, body, request, password);
-        // Prepare futures to get message responses
-        List<Future> mails = new ArrayList<>();
-        // Code to send mails
-        for (int i = 0; i < listMails.size(); i++) {
-            Promise<JsonObject> future = Promise.promise();
-            mails.add(future.future());
-            // Send mail via Conversation app if it exists or else with Zimbra
-            eb.request("org.entcore.conversation", listMails.getJsonObject(i),
-                    (Handler<AsyncResult<Message<JsonObject>>>) messageEvent -> {
-                        if (!"ok".equals(messageEvent.result().body().getString("status"))) {
-                            log.error("[Minetest@sendMail] Failed to send mail : " + messageEvent.result().body().getString("status"));
-                        }
-                        future.handle(Future.succeededFuture(new JsonObject()));
-                    });
-        }
-        // Try to send effectively mails with code below and get results
-        CompositeFuture.all(mails)
-                .onSuccess(success -> promise.complete(new JsonObject()))
-                .onFailure(fail -> {
-                    log.error("[Minetest@sendMail] Failed to send mail : " + fail.getCause());
-                    promise.fail(fail.getCause());
-                });
+
+        int j = 0;
+        this.recursiveSendMail(j, listMails, sendEvent -> {
+            if (sendEvent.isRight()) {
+                promise.complete(new JsonObject());
+            } else {
+                log.error("[Minetest@sendMail] Failed to send mails : " + sendEvent.left().getValue());
+                promise.fail(sendEvent.left().getValue());
+            }
+        });
+
         return promise.future();
     }
+    private void recursiveSendMail(int indexMail, JsonArray listMails, Handler<Either<String, JsonObject>> result) {
+        // Send mail via Conversation app if it exists or else with Zimbra
+        eb.request("org.entcore.conversation", listMails.getJsonObject(indexMail),
+                (Handler<AsyncResult<Message<JsonObject>>>) messageEvent -> {
+                    if (messageEvent.result().body().getString("status") == null ||
+                            (messageEvent.result().body().getString("status") != null && !"ok".equals(messageEvent.result().body().getString("status")))) {
+                        log.error("[Minetest@recursiveSendMail] Failed to send mail : " +
+                                (messageEvent.result().body().getString("message") != null ? messageEvent.result().body().getString("message") : ""));
+                    }
+                });
+        if (indexMail == listMails.size() - 1) {
+            result.handle(new Either.Right<>(new JsonObject()));
+        } else {
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            this.recursiveSendMail(indexMail + 1, listMails, result);
+        }
+    }
+
 
     private JsonArray createMailList(UserInfos owner, JsonObject body, HttpServerRequest request, String password) {
         JsonArray listMails = new JsonArray();
