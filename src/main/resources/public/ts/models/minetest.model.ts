@@ -9,6 +9,7 @@ export interface IWorld {
 
     password: string;
     status?: boolean;
+    shuttingDown: boolean;
 
     img?: string;
     title: string;

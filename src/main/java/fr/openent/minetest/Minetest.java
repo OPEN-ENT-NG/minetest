@@ -2,12 +2,15 @@ package fr.openent.minetest;
 
 import fr.openent.minetest.config.MinetestConfig;
 import fr.openent.minetest.controller.MinetestController;
-//import fr.openent.minetest.cron.ShuttingDownWorld;
+import fr.openent.minetest.cron.ShuttingDownWorld;
 import fr.openent.minetest.service.ServiceFactory;
+import fr.wseduc.cron.CronTrigger;
 import fr.wseduc.mongodb.MongoDb;
 import org.entcore.common.http.BaseServer;
 import org.entcore.common.storage.Storage;
 import org.entcore.common.storage.StorageFactory;
+
+import java.text.ParseException;
 
 public class Minetest extends BaseServer {
 	public static final String WORLD_COLLECTION = "world";
@@ -24,7 +27,13 @@ public class Minetest extends BaseServer {
 
 		addController(new MinetestController(serviceFactory));
 
-//		new CronTrigger(vertx, config.getString("shutting-down-cron")).schedule(new ShuttingDownWorld());
+		try {
+			new CronTrigger(vertx, config.getString("shutting-down-cron")).schedule(
+					new ShuttingDownWorld(serviceFactory)
+			);
+		} catch (ParseException e) {
+			log.fatal("Invalid shutting-down-cron cron expression.", e);
+		}
 	}
 
 }

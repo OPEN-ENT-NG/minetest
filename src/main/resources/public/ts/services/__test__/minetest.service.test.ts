@@ -62,7 +62,8 @@ describe('MinetestService', () => {
                     password: "password",
                     title: "monde1",
                     address: "world.fr",
-                    port: 30000
+                    port: 30000,
+                    shuttingDown: true
 
                 }
 
@@ -92,7 +93,8 @@ describe('MinetestService', () => {
             password: "password",
             title: "monde1",
             address: "world.fr",
-            port: 30000
+            port: 30000,
+            shuttingDown: true
 
         }
 

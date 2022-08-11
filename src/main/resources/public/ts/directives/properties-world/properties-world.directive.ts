@@ -15,7 +15,6 @@ interface IViewModel {
 
     showInputPassword: boolean;
     lightbox: any;
-    shuttingDown: boolean;
 
     // props
     world: IWorld;
@@ -27,7 +26,6 @@ class Controller implements ng.IController, IViewModel {
     world: IWorld;
     worldForm: IWorld;
     showInputPassword: boolean;
-    shuttingDown: boolean;
 
     constructor(private $scope: IScope) {
         this.lightbox = {
@@ -47,6 +45,9 @@ class Controller implements ng.IController, IViewModel {
         this.showInputPassword = false;
         let world: IWorld = this.world;
         this.worldForm = Object.assign({}, world);
+        if(this.world.shuttingDown == undefined){
+            this.world.shuttingDown = true;
+        }
     }
 
     closePropertiesLightbox(): void {

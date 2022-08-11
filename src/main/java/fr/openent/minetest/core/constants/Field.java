@@ -26,6 +26,7 @@ public class Field {
     public static final String LINK = "link";
     public static final String MESSAGE = "message";
     public static final String STATUS = "status";
+    public static final String SHUTTINGDOWN = "shuttingDown";
     public static final String DATA = "data";
     public static final String ADDRESS = "address";
     public static final String ISEXTERNAL = "isExternal";

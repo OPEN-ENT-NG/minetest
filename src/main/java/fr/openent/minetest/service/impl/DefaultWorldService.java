@@ -71,7 +71,7 @@ public class DefaultWorldService implements WorldService {
 
         //get New Port
         JsonObject sortByPort = new JsonObject().put(Field.PORT, 1);
-        getMongo(null, null, null, null, null, null, sortByPort)
+        getMongo(null, null, null, null, null, null, null, null, sortByPort)
                 .compose(this::getNewPort)
                 .compose(res ->  {
                     int newPort = res;
@@ -163,10 +163,9 @@ public class DefaultWorldService implements WorldService {
      * Update World status
      *
      * @param body JsonObject containing the data for the world
-     * @param user User Object containing user id
      */
     @Override
-    public Future<JsonObject> updateStatus(UserInfos user, JsonObject body) {
+    public Future<JsonObject> updateStatus(JsonObject body) {
         Promise<JsonObject> promise = Promise.promise();
 
         JsonObject worldId = new JsonObject().put(Field._ID, body.getString(Field._ID));
@@ -568,13 +567,8 @@ public class DefaultWorldService implements WorldService {
     }
 
     @Override
-    public void shuttingDownWorld(Handler<Either<String, JsonObject>> handler) {
-
-    }
-
-    @Override
     public Future<JsonArray> getMongo(String ownerId, String ownerName, String createdAt, String updatedAt,
-                                      String img, String name, JsonObject sortJson) {
+                                      String img, String name, Boolean status, Boolean shuttingDown, JsonObject sortJson) {
         Promise<JsonArray> promise = Promise.promise();
 
         JsonObject worldQuery = new JsonObject();
@@ -596,6 +590,12 @@ public class DefaultWorldService implements WorldService {
         }
         if (name != null) {
             worldQuery.put(Field.TITLE, name);
+        }
+        if (status != null) {
+            worldQuery.put(Field.STATUS, status);
+        }
+        if(shuttingDown != null){
+            worldQuery.put(Field.SHUTTINGDOWN, shuttingDown);
         }
 
         mongoDb.find(this.collection, worldQuery, sortJson, null, MongoDbResult.validResultsHandler(result -> {
