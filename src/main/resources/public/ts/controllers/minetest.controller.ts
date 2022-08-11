@@ -1,4 +1,4 @@
-import {model, ng, idiom as lang} from 'entcore';
+import {model, ng, idiom as lang, _} from 'entcore';
 import {IWorld, Worlds} from "../models";
 import {minetestService} from "../services";
 import {IScope} from "angular";
@@ -15,6 +15,7 @@ interface IViewModel {
     getWiki(): string;
     getDownload(): string;
     refreshWorldList(world?: IWorld): any;
+    filterWorlds(searching: string): any;
 
     world: IWorld;
 }
@@ -104,6 +105,17 @@ class Controller implements ng.IController, IViewModel {
         let self: Controller = this;
         return (world: any): void => {
             self.getWorld(world);
+        }
+    }
+
+    filterWorlds(searching:string): any {
+        if(!!searching){
+            return _.filter(this.worlds.all, function (world) {
+                return world.owner_name.toLowerCase().includes(searching.toLowerCase()) ||
+                    world.title.toLowerCase().includes(searching.toLowerCase());
+            });
+        } else {
+            return this.worlds.all;
         }
     }
 }
