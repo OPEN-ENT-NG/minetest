@@ -21,6 +21,9 @@
                 <i18n>minetest.follow.users.can.access.world</i18n>
                 <span class="bold">[[vm.world.title]]</span>
             </div>
+            <div class="minetest-lightbox-content-title">
+                <i18n>minetest.follow.users.infos</i18n>
+            </div>
 
             <div ng-show="!vm.showTable()">
                 <i18n>minetest.follow.user.empty</i18n>
@@ -40,10 +43,12 @@
                                     <span><i18n>minetest.first.name</i18n></span>
                                 </div>
                             </th>
-                            <th class="one">
+                            <th class="one-small">
                                 <div>
                                     <span><i18n>minetest.login</i18n></span>
                                 </div>
+                            </th>
+                            <th>
                             </th>
                         </tr>
                     </thead>
@@ -52,10 +57,14 @@
                             <td>[[user.lastName]]</td>
                             <td>[[user.firstName]]</td>
                             <td>[[user.login]]</td>
+                            <td><i class="close" ng-click="vm.removeUser(user.login)"></i></td>
                         </tr>
                     </tbody>
                 </table>
             </div>
         </section>
+        <button class="custom-button right-magnet" ng-click="vm.openInvitation()">
+            <i18n>minetest.invite.user</i18n>
+        </button>
     </lightbox>
 </div>

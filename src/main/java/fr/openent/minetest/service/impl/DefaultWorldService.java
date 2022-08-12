@@ -222,8 +222,14 @@ public class DefaultWorldService implements WorldService {
                     }
                 })
                 .compose(res -> {
-                    JsonArray listMails = createMailList(user, body, request, password);
-                    return sendMail(listMails);
+                    if(body.getString(Field.SUBJECT) != null) {
+                        JsonArray listMails = createMailList(user, body, request, password);
+                        return sendMail(listMails);
+                    }else {
+                        Promise<JsonObject> doNothing = Promise.promise();
+                        doNothing.complete(new JsonObject());
+                        return doNothing.future();
+                    }
                 })
                 .onSuccess(promise::complete)
                 .onFailure(err -> promise.fail(err.getMessage()));
