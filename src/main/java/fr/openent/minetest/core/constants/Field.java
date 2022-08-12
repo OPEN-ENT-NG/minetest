@@ -48,4 +48,5 @@ public class Field {
     public static final String MINETEST_PORT_RANGE = "minetest-port-range";
     public static final String MINETEST_PYTHON_SERVER_PORT = "minetest-python-server-port";
     public static final String MINETEST_MESSAGING = "minetest-messaging";
+    public static final String MINETEST_SHUTTING_DOWN_CRON = "shutting-down-cron";
 }

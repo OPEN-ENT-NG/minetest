@@ -2,6 +2,7 @@ package fr.openent.minetest;
 
 import fr.openent.minetest.config.MinetestConfig;
 import fr.openent.minetest.controller.MinetestController;
+import fr.openent.minetest.core.constants.Field;
 import fr.openent.minetest.cron.ShuttingDownWorld;
 import fr.openent.minetest.service.ServiceFactory;
 import fr.wseduc.cron.CronTrigger;
@@ -28,7 +29,7 @@ public class Minetest extends BaseServer {
 		addController(new MinetestController(serviceFactory));
 
 		try {
-			new CronTrigger(vertx, config.getString("shutting-down-cron")).schedule(
+			new CronTrigger(vertx, config.getString(Field.MINETEST_SHUTTING_DOWN_CRON)).schedule(
 					new ShuttingDownWorld(serviceFactory)
 			);
 		} catch (ParseException e) {

@@ -69,6 +69,7 @@ public class ShuttingDownWorld extends ControllerHelper implements Handler<Long>
         if (index == worlds.size() - 1) {
             result.handle(new Either.Right<>(new JsonObject()));
         } else {
+            //Wait 0,5 second in order to not crash the Minetest server by multiple request
             try {
                 Thread.sleep(500);
             } catch (InterruptedException e) {
