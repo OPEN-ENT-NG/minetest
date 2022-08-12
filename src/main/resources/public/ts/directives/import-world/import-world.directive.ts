@@ -78,6 +78,9 @@ class Controller implements ng.IController, IViewModel {
 
     async importWorld(): Promise<void> {
         this.newImportWorld = {
+            myRights: this.world.myRights,
+            owner: {displayName: model.me.username, userId: model.me.userId},
+            shared: this.world.shared,
             owner_id:  model.me.userId,
             owner_name: model.me.username,
             owner_login: model.me.login,

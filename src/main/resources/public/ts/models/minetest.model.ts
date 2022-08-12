@@ -1,3 +1,5 @@
+import {Shareable} from "entcore";
+
 export interface Whitelist {
     id: string,
     login?: string,
@@ -13,11 +15,15 @@ export interface Whitelist {
     structureName?: string
 }
 
-export interface IWorld {
-    _id?: string;
+export class IWorld implements Shareable {
+    _id?: string | number;
     owner_id: string;
     owner_name: string;
     owner_login: string;
+
+    shared: any;
+    owner: { userId: string; displayName: string };
+    myRights: any;
 
     created_at: string;
     updated_at: string;
@@ -35,11 +41,15 @@ export interface IWorld {
     subject?: string;
 }
 
-export interface IImportWorld {
-    _id?: string;
+export class IImportWorld implements Shareable {
+    _id?: string | number;
     owner_id: string;
     owner_name: string;
     owner_login: string;
+
+    shared: any;
+    owner: { userId: string; displayName: string };
+    myRights: any;
 
     created_at: string;
     updated_at: string;
