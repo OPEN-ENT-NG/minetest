@@ -12,6 +12,8 @@ interface IViewModel {
     // props
     world: IWorld | IImportWorld;
 
+    openFollowLightbox(): void;
+    closeFollowLightbox(): void;
     showTable(): boolean;
     removeUser(login:string): Promise<void>;
     openInvitation(): void;
@@ -50,7 +52,7 @@ class Controller implements ng.IController, IViewModel {
 
     openInvitation(): void {
         this.closeFollowLightbox();
-        this.$scope.$eval(this.$scope['vm']['onOpenPopUpInvitation']);
+        this.$scope.$parent.$eval(this.$scope['vm']['onOpenPopUpInvitation']);
     }
 
     async removeUser(login:string): Promise<void> {
@@ -76,7 +78,7 @@ function directive() {
         templateUrl: `${RootsConst.directive}follow-world/follow-world.html`,
         scope: {
             world: '=',
-            $onOpenPopUpInvitation: '&'
+            onOpenPopUpInvitation: '&'
         },
         controllerAs: 'vm',
         bindToController: true,

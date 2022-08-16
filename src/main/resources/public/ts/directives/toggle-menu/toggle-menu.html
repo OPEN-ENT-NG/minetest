@@ -5,7 +5,7 @@
             <properties-world world="vm.world" on-update-world="vm.onUpdateWorld()"></properties-world>
 
             <!-- invitation -->
-            <invitation-world world="vm.world"></invitation-world>
+            <invitation-world world="vm.world" eventer="vm.$emitChildren"></invitation-world>
 
             <!-- follow -->
             <follow-world world="vm.world" on-open-pop-up-invitation="vm.openInvitationLightbox()"></follow-world>
