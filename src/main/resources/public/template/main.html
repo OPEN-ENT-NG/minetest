@@ -27,6 +27,16 @@
         </div>
     </div>
 
+    <!-- Search bar -->
+    <div class="two cell">
+        <input class="twelve"
+               type="text"
+               translate attr="placeholder"
+               ng-model="vm.filter.title"
+               placeholder="search"
+        />
+    </div>
+
     <!-- Empty state -->
     <div class="empty-content" data-ng-show="vm.worlds.all.length === 0">
         <img data-ng-src="/minetest/public/img/illustration_sans_monde.svg" class="two" alt="">
@@ -54,7 +64,7 @@
                 <div class="flex-card card cell f-row flex-row twelve-mobile"
                      data-ng-click="vm.currentWorld = world"
                      ng-class="vm.currentWorld == world ? 'active' : ''"
-                     ng-repeat="world in vm.worlds.all">
+                     ng-repeat="world in vm.filterWorlds(vm.filter.title)">
                     <div class="four icon">
                         <img data-ng-src="/minetest/public/img/pages-default.png"
                              data-ng-if="world.img === null || world.img === undefined || world.img === ''"
