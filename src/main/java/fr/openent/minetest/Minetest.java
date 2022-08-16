@@ -4,12 +4,15 @@ import fr.openent.minetest.config.MinetestConfig;
 import fr.openent.minetest.controller.MinetestController;
 import fr.openent.minetest.core.constants.Field;
 import fr.openent.minetest.cron.ShuttingDownWorld;
+import fr.openent.minetest.controller.ShareWorldController;
 import fr.openent.minetest.service.ServiceFactory;
 import fr.wseduc.cron.CronTrigger;
 import fr.wseduc.mongodb.MongoDb;
+import io.vertx.core.eventbus.EventBus;
 import org.entcore.common.http.BaseServer;
 import org.entcore.common.http.filter.ShareAndOwner;
 import org.entcore.common.mongodb.MongoDbConf;
+import org.entcore.common.share.impl.MongoDbShareService;
 import org.entcore.common.storage.Storage;
 import org.entcore.common.storage.StorageFactory;
 
@@ -31,14 +34,22 @@ public class Minetest extends BaseServer {
 
 		final MongoDbConf conf = MongoDbConf.getInstance();
 		conf.setCollection("world");
-		conf.setResourceIdLabel("_id");
+		conf.setResourceIdLabel("id");
 
 		setDefaultResourceFilter(new ShareAndOwner());
 
 		ServiceFactory serviceFactory = new ServiceFactory(vertx, minetestConfig,
 				MongoDb.getInstance());
 
-		addController(new MinetestController(serviceFactory));
+		final EventBus eb = getEventBus(vertx);
+
+		MinetestController minetestController = new MinetestController(serviceFactory);
+		ShareWorldController shareWorldController = new ShareWorldController();
+
+		addController(minetestController);
+		addController(shareWorldController);
+
+		shareWorldController.setShareService(new MongoDbShareService(eb, MongoDb.getInstance(), Field.WORLD, securedActions, null));
 
 		try {
 			new CronTrigger(vertx, config.getString(Field.MINETEST_SHUTTING_DOWN_CRON)).schedule(

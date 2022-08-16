@@ -1,8 +1,7 @@
-import {ng, Rights} from "entcore";
+import {ng} from "entcore";
 import {RootsConst} from "../../core/constants/roots.const";
 import {IScope} from "angular";
 import {IImportWorld, IWorld} from "../../models";
-import {Mix} from "entcore-toolkit";
 
 interface IViewModel {
     openShareLightbox(): void;
@@ -31,12 +30,6 @@ class Controller implements ng.IController, IViewModel {
     }
 
     openShareLightbox(): void {
-        //generate share rights
-        let world = Mix.castAs(IImportWorld, this.world);
-        world.owner = {userId: world.owner_id, displayName: world.owner_name};
-        world.myRights = new Rights<IWorld | IImportWorld>(world);
-        world._id = 7;
-        this.world = world;
         this.lightbox.share = true;
     }
 

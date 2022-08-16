@@ -575,8 +575,18 @@ public class DefaultWorldService implements WorldService {
 
         JsonObject worldQuery = new JsonObject();
 
+        JsonArray queries = new JsonArray().add(worldQuery);
+        JsonObject query = new JsonObject().put("$or", queries);
+
         if (ownerId != null) {
             worldQuery.put(Field.OWNER_ID, ownerId);
+
+            JsonObject sharedWorlds = new JsonObject().put("shared",
+                    new JsonObject().put("$elemMatch",
+                            new JsonObject().put("userId",ownerId)
+                    )
+            );
+            queries.add(sharedWorlds);
         }
         if (ownerName != null) {
             worldQuery.put(Field.OWNER_NAME, ownerName);
@@ -600,7 +610,7 @@ public class DefaultWorldService implements WorldService {
             worldQuery.put(Field.SHUTTINGDOWN, shuttingDown);
         }
 
-        mongoDb.find(this.collection, worldQuery, sortJson, null, MongoDbResult.validResultsHandler(result -> {
+        mongoDb.find(this.collection, query, sortJson, null, MongoDbResult.validResultsHandler(result -> {
             if (result.isLeft()) {
                 String message = String.format("[Minetest@%s::getWorlds] An error has occured while finding worlds list: %s",
                         this.getClass().getSimpleName(), result.left().getValue());
