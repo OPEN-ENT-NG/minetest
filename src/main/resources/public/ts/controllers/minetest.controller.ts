@@ -14,8 +14,8 @@ interface IViewModel {
     getLink(): string;
     getWiki(): string;
     getDownload(): string;
-    refreshWorldList(world?: IWorld): any;
-    filterWorlds(searching: string): any;
+    refreshWorldList(world?: IWorld): void;
+    filterWorlds(searching: string): IWorld[];
 
     world: IWorld;
 }
@@ -101,19 +101,19 @@ class Controller implements ng.IController, IViewModel {
         return window.minetestDownload;
     }
 
-    refreshWorldList(): (world?: IWorld) => any {
+    refreshWorldList(): (world?: IWorld) => void {
         let self: Controller = this;
         return (world: any): void => {
             self.getWorld(world);
         }
     }
 
-    filterWorlds(searching:string): any {
-        if(!!searching){
-            return _.filter(this.worlds.all, function (world) {
-                return world.owner_name.toLowerCase().includes(searching.toLowerCase()) ||
-                    world.title.toLowerCase().includes(searching.toLowerCase());
-            });
+    filterWorlds(searching:string): IWorld[] {
+        if(searching){
+            return _.filter(this.worlds.all, (world) =>
+                world.owner_name.toLowerCase().includes(searching.toLowerCase()) ||
+                    world.title.toLowerCase().includes(searching.toLowerCase())
+            );
         } else {
             return this.worlds.all;
         }
