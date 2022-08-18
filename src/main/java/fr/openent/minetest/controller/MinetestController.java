@@ -57,9 +57,11 @@ public class MinetestController extends ControllerHelper {
         String updatedAt = request.getParam(Field.UPDATED_AT);
         String img = request.getParam(Field.IMG);
         String title = request.getParam(Field.TITLE);
+        Boolean status = request.getParam(Field.STATUS) != null ? Boolean.parseBoolean(request.getParam(Field.STATUS)) : null;
+        Boolean shuttingDown = request.getParam(Field.SHUTTINGDOWN) != null ? Boolean.parseBoolean(request.getParam(Field.SHUTTINGDOWN)) : null;
 
         UserUtils.getUserInfos(eb, request, user -> worldService.getMongo(ownerId, ownerName, createdAt, updatedAt, img,
-                        title, new JsonObject())
+                        title, status, shuttingDown, new JsonObject())
                 .onSuccess(world -> renderJson(request, world))
                 .onFailure(err -> renderError(request)));
     }
@@ -114,7 +116,7 @@ public class MinetestController extends ControllerHelper {
     public void putStatus(final HttpServerRequest request) {
         RequestUtils.bodyToJson(request, pathPrefix + Field.WORLD, body
                 -> UserUtils.getUserInfos(eb, request, user
-                -> worldService.updateStatus(user, body)
+                -> worldService.updateStatus(body)
                             .onSuccess(res -> renderJson(request, body))
                             .onFailure(err -> renderError(request))));
     }

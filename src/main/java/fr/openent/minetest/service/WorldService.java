@@ -1,6 +1,5 @@
 package fr.openent.minetest.service;
 
-import io.netty.handler.codec.http.HttpRequest;
 import io.vertx.core.Future;
 import io.vertx.core.http.HttpServerRequest;
 import io.vertx.core.json.JsonArray;
@@ -41,11 +40,10 @@ public interface WorldService {
     /**
      * Update Status
      *
-     * @param user {@link UserInfos}
      * @param body Data to store
      * @return Future {@link Future<JsonObject>} containing new world
      */
-    Future<JsonObject> updateStatus(UserInfos user, JsonObject body);
+    Future<JsonObject> updateStatus(JsonObject body);
 
     /**
      * Update whitelist of a world
@@ -89,7 +87,7 @@ public interface WorldService {
      * @return FutureObject containing world {@link JsonObject}
      */
     Future<JsonArray> getMongo(String ownerId, String ownerName, String createdAt, String updatedAt, String img, String name,
-                               JsonObject sortJson);
+                               Boolean status, Boolean shuttingDown, JsonObject sortJson);
 
     /**
      * create world in Mongo

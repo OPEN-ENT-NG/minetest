@@ -26,6 +26,7 @@ public class Field {
     public static final String LINK = "link";
     public static final String MESSAGE = "message";
     public static final String STATUS = "status";
+    public static final String SHUTTINGDOWN = "shuttingDown";
     public static final String DATA = "data";
     public static final String ADDRESS = "address";
     public static final String ISEXTERNAL = "isExternal";
@@ -47,4 +48,5 @@ public class Field {
     public static final String MINETEST_PORT_RANGE = "minetest-port-range";
     public static final String MINETEST_PYTHON_SERVER_PORT = "minetest-python-server-port";
     public static final String MINETEST_MESSAGING = "minetest-messaging";
+    public static final String MINETEST_SHUTTING_DOWN_CRON = "shutting-down-cron";
 }
