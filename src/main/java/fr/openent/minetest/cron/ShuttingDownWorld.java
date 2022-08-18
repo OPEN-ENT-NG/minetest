@@ -15,6 +15,7 @@ import org.entcore.common.controller.ControllerHelper;
 public class ShuttingDownWorld extends ControllerHelper implements Handler<Long>   {
     private static final Logger log = LoggerFactory.getLogger(ShuttingDownWorld.class);
     private final WorldService worldService;
+    private final long TIMER = 500;
 
     public ShuttingDownWorld(ServiceFactory serviceFactory) {
         this.worldService = serviceFactory.worldService();
@@ -28,7 +29,7 @@ public class ShuttingDownWorld extends ControllerHelper implements Handler<Long>
                 .compose(this::updateStatusAllWorld)
                 .onSuccess(res -> log.info("[Minetest@ShuttingDownWorld] Shutting down cron finish successfully"))
                 .onFailure(err -> {
-                    log.error("[Minetest@ShuttingDownWorld] Shutting down cron on failure", err);
+                    log.error("[Minetest@ShuttingDownWorld] Shutting down cron on failure : " + err.getMessage());
                 });
     }
 
@@ -56,7 +57,7 @@ public class ShuttingDownWorld extends ControllerHelper implements Handler<Long>
         Promise<JsonObject> promise = Promise.promise();
         world.put(Field.STATUS, false);
         //Wait 0,5 second in order to not crash the Minetest server by multiple request
-        vertx.setTimer(500, timer ->
+        vertx.setTimer(TIMER, timer ->
                 worldService.updateStatus(world)
                         .onSuccess(promise::complete)
                         .onFailure(err -> {
