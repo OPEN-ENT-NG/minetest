@@ -30,6 +30,7 @@ public class ShuttingDownWorld extends ControllerHelper implements Handler<Long>
                 .onSuccess(res -> log.info("[Minetest@ShuttingDownWorld] Shutting down cron finish successfully"))
                 .onFailure(err -> {
                     log.error("[Minetest@ShuttingDownWorld] Shutting down cron on failure : " + err.getMessage());
+                    err.printStackTrace();
                 });
     }
 
