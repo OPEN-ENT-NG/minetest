@@ -13,6 +13,8 @@ import io.vertx.core.json.JsonObject;
 import org.entcore.common.controller.ControllerHelper;
 import org.entcore.common.events.EventStore;
 import org.entcore.common.events.EventStoreFactory;
+import org.entcore.common.http.filter.ResourceFilter;
+import org.entcore.common.http.filter.SuperAdminFilter;
 import org.entcore.common.user.UserUtils;
 
 import java.util.ArrayList;
@@ -29,6 +31,13 @@ public class MinetestController extends ControllerHelper {
         this.worldService = serviceFactory.worldService();
         this.eventStore = EventStoreFactory.getFactory().getEventStore(fr.openent.minetest.Minetest.class.getSimpleName());
         this.minetestConfig = serviceFactory.minetestConfig();
+    }
+
+    @Get("/config")
+    @SecuredAction(value = "", type = ActionType.RESOURCE)
+    @ResourceFilter(SuperAdminFilter.class)
+    public void getConfig(final HttpServerRequest request) {
+        renderJson(request, config);
     }
 
     @Get("")
