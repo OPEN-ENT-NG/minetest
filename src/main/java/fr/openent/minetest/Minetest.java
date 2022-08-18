@@ -33,7 +33,7 @@ public class Minetest extends BaseServer {
 					new ShuttingDownWorld(serviceFactory)
 			);
 		} catch (ParseException e) {
-			log.fatal("Invalid shutting-down-cron cron expression.", e);
+			log.fatal("[Minetest@Minetest.java] Invalid shutting-down-cron cron expression" + e.getMessage());
 		}
 	}
 

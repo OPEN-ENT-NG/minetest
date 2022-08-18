@@ -3,7 +3,6 @@ package fr.openent.minetest.cron;
 import fr.openent.minetest.core.constants.Field;
 import fr.openent.minetest.service.ServiceFactory;
 import fr.openent.minetest.service.WorldService;
-import fr.wseduc.webutils.Either;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import io.vertx.core.Promise;
@@ -23,60 +22,49 @@ public class ShuttingDownWorld extends ControllerHelper implements Handler<Long>
 
     @Override
     public void handle(Long event) {
-        log.info("shutting down world launched");
+        log.info("[Minetest@ShuttingDownWorld] Shutting down world launched");
         worldService.getMongo(null, null, null, null, null, null,
                         true, true, new JsonObject())
                 .compose(this::updateStatusAllWorld)
-                .onSuccess(res -> log.info("shutting down cron finish successfully"))
+                .onSuccess(res -> log.info("[Minetest@ShuttingDownWorld] Shutting down cron finish successfully"))
                 .onFailure(err -> {
-                    log.error("shutting down cron on failure", err);
+                    log.error("[Minetest@ShuttingDownWorld] Shutting down cron on failure", err);
                 });
     }
 
-    private Future<JsonObject> updateStatusAllWorld(JsonArray res) {
-        Promise<JsonObject> promise = Promise.promise();
-
-        if(res.isEmpty()){
-            promise.complete(new JsonObject());
-        } else{
-            int j = 0;
-            this.recursiveShuttingDownWorld(j, res, event -> {
-                if (event.isRight()) {
-                    promise.complete(new JsonObject());
-                } else {
-                    log.error("[Minetest@updateStatusAllWorld] Failed to update status of all world in cron : " + event.left().getValue());
-                    promise.fail(event.left().getValue());
-                }
-            });
+    private Future<Void> updateStatusAllWorld(JsonArray worlds) {
+        Promise<Void> promise = Promise.promise();
+        if (worlds.isEmpty()) {
+            promise.complete();
+        } else {
+            Future<JsonObject> current = Future.succeededFuture();
+            for (int i = 0; i < worlds.size(); i++) {
+                int finalI = i;
+                current = current.compose(v -> shutDownWorld(worlds.getJsonObject(finalI)).onComplete(Future.succeededFuture()));
+            }
+            current.onSuccess(res -> promise.complete())
+                    .onFailure(err -> {
+                        err.printStackTrace();
+                        log.error("[Minetest@updateStatusAllWorld] Failed to update status of all world in cron : " + err.getMessage());
+                        promise.fail(err.getMessage());
+                    });
         }
-
         return promise.future();
     }
-
-    private void recursiveShuttingDownWorld(int index, JsonArray worlds, Handler<Either<String, JsonObject>> result) {
+    private Future<JsonObject> shutDownWorld(JsonObject world) {
         // update status of the world by closing the port
-        JsonObject world = worlds.getJsonObject(index);
+        Promise<JsonObject> promise = Promise.promise();
         world.put(Field.STATUS, false);
-        worldService.updateStatus(world)
-                .onSuccess(res -> updateNextWorld(index, worlds, result))
-                .onFailure(err -> {
-                    log.error("[Minetest@recursiveShuttingDownWorld] Failed to update status of the world in cron : " + world, err);
-                    updateNextWorld(index, worlds, result);
-                });
+        //Wait 0,5 second in order to not crash the Minetest server by multiple request
+        vertx.setTimer(500, timer ->
+                worldService.updateStatus(world)
+                        .onSuccess(promise::complete)
+                        .onFailure(err -> {
+                            log.error("[Minetest@shutDownWorld] Failed to update status of the world in cron, world : " + world);
+                            log.error("[Minetest@shutDownWorld] Failed to update status of the world in cron, error : " + err.getMessage());
+                            err.printStackTrace();
+                            promise.fail(err.getMessage());
+                        }));
+        return promise.future();
     }
-
-    private void updateNextWorld(int index, JsonArray worlds, Handler<Either<String, JsonObject>> result) {
-        if (index == worlds.size() - 1) {
-            result.handle(new Either.Right<>(new JsonObject()));
-        } else {
-            //Wait 0,5 second in order to not crash the Minetest server by multiple request
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            this.recursiveShuttingDownWorld(index + 1, worlds, result);
-        }
-    }
-
 }
