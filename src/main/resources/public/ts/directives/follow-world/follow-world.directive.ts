@@ -62,12 +62,13 @@ class Controller implements ng.IController, IViewModel {
             return user.login != login;
         });
         minetestService.invite(this.world)
-            .then((world:IWorld) => {
+            .then((world: IWorld) => {
                 this.world.whitelist = world.whitelist;
                 toasts.confirm('minetest.world.invite.modify.confirm');
                 safeApply(this.$scope);
-            }).catch(() => {
-            toasts.warning('minetest.world.invite.modify.error');
+            }).catch((err) => {
+                toasts.warning('minetest.world.invite.modify.error');
+                console.error(err);
         });
     }
 }

@@ -207,9 +207,7 @@ public class DefaultWorldService implements WorldService {
                 })
                 .compose(res -> {
                     if (Boolean.TRUE.equals(body.getBoolean(Field.ISEXTERNAL))) {
-                        Promise<JsonObject> doNothing = Promise.promise();
-                        doNothing.complete(new JsonObject());
-                        return doNothing.future();
+                        return Future.succeededFuture(new JsonObject());
                     } else {
                         StringBuilder whitelistInFile = new StringBuilder();
                         for (Object login : whitelistMinetest) {
@@ -222,13 +220,11 @@ public class DefaultWorldService implements WorldService {
                     }
                 })
                 .compose(res -> {
-                    if(body.getString(Field.SUBJECT) != null) {
+                    if (body.getString(Field.SUBJECT) != null) {
                         JsonArray listMails = createMailList(user, body, request, password);
                         return sendMail(listMails);
-                    }else {
-                        Promise<JsonObject> doNothing = Promise.promise();
-                        doNothing.complete(new JsonObject());
-                        return doNothing.future();
+                    } else {
+                        return Future.succeededFuture(new JsonObject());
                     }
                 })
                 .onSuccess(promise::complete)
@@ -242,7 +238,7 @@ public class DefaultWorldService implements WorldService {
         JsonArray whitelist = body.getJsonArray(Field.WHITELIST);
         for (int i = 0; i < whitelist.size(); i++) {
             JsonObject element = whitelist.getJsonObject(i);
-            if (element.containsKey(Field.IS_GROUP)){
+            if (element.containsKey(Field.IS_GROUP)) {
                 String idGroup = element.getString(Field.ID);
                 JsonObject action = new JsonObject()
                         .put("action", "list-users")

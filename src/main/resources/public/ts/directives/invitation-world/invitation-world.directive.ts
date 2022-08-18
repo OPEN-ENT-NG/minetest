@@ -1,7 +1,7 @@
 import {_, idiom, moment, ng, toasts} from "entcore";
 import {IScope} from "angular";
 import {RootsConst} from "../../core/constants/roots.const";
-import {IWorld} from "../../models";
+import {IWorld, Whitelist} from "../../models";
 import {minetestService} from "../../services";
 import {safeApply} from "../../utils/safe-apply.utils";
 import {DateUtils} from "../../utils/date.utils";
@@ -22,7 +22,7 @@ interface IViewModel {
     mail: {
         subject: string,
         body: string,
-        invitees: string[]
+        invitees: Whitelist[]
     };
 
     downloadLink: string;
@@ -39,7 +39,7 @@ class Controller implements ng.IController, IViewModel {
     mail: {
         subject: string,
         body: string,
-        invitees: string[]
+        invitees: Whitelist[]
     };
     eventer: Subject<ToggleMenuAction>;
 
