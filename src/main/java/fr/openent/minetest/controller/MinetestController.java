@@ -1,5 +1,6 @@
 package fr.openent.minetest.controller;
 
+import fr.openent.minetest.Minetest;
 import fr.openent.minetest.config.MinetestConfig;
 import fr.openent.minetest.core.constants.Field;
 import fr.openent.minetest.service.ServiceFactory;
@@ -100,7 +101,7 @@ public class MinetestController extends ControllerHelper {
 
     @Put("/worlds/:id")
     @ApiDoc("Update world")
-    @SecuredAction(value = "", type = ActionType.AUTHENTICATED)
+    @SecuredAction(value = Minetest.MANAGER_RESOURCE_RIGHT, type = ActionType.RESOURCE)
     public void putWorld(final HttpServerRequest request) {
         String worldId = request.getParam("id");
         RequestUtils.bodyToJson(request, pathPrefix + Field.WORLD, body
@@ -111,7 +112,7 @@ public class MinetestController extends ControllerHelper {
 
     @Put("/worlds/import/:id")
     @ApiDoc("Update import world")
-    @SecuredAction(value = "", type = ActionType.AUTHENTICATED)
+    @SecuredAction(value = Minetest.MANAGER_RESOURCE_RIGHT, type = ActionType.RESOURCE)
     public void putImportWorld(final HttpServerRequest request) {
         String worldId = request.getParam("id");
         RequestUtils.bodyToJson(request, pathPrefix + Field.IMPORT_WORLD, body
@@ -122,7 +123,7 @@ public class MinetestController extends ControllerHelper {
 
     @Put("/worlds/status/:id")
     @ApiDoc("Update status world")
-    @SecuredAction(value = "", type = ActionType.AUTHENTICATED)
+    @SecuredAction(value = Minetest.CONTRIB_RESOURCE_RIGHT, type = ActionType.RESOURCE)
     public void putStatus(final HttpServerRequest request) {
         RequestUtils.bodyToJson(request, pathPrefix + Field.WORLD, body
                 -> UserUtils.getUserInfos(eb, request, user
@@ -133,7 +134,7 @@ public class MinetestController extends ControllerHelper {
 
     @Put("/world/join")
     @ApiDoc("Invite user to the world")
-    @SecuredAction(value = "", type = ActionType.AUTHENTICATED)
+    @SecuredAction(value = Minetest.MANAGER_RESOURCE_RIGHT, type = ActionType.RESOURCE)
     public void joinWorld(final HttpServerRequest request) {
         RequestUtils.bodyToJson(request, pathPrefix + Field.JOIN, body
                 -> UserUtils.getUserInfos(eb, request, user
@@ -144,7 +145,7 @@ public class MinetestController extends ControllerHelper {
 
     @Delete("/worlds")
     @ApiDoc("Delete world")
-    @SecuredAction(value = "", type = ActionType.AUTHENTICATED)
+    @SecuredAction(value = Minetest.MANAGER_RESOURCE_RIGHT, type = ActionType.RESOURCE)
     public void deleteWorld(final HttpServerRequest request) {
         if (!request.params().contains(Field.ID)) {
             badRequest(request);
@@ -159,7 +160,7 @@ public class MinetestController extends ControllerHelper {
 
     @Delete("/worlds/import/:id")
     @ApiDoc("Delete world")
-    @SecuredAction(value = "", type = ActionType.AUTHENTICATED)
+    @SecuredAction(value = Minetest.MANAGER_RESOURCE_RIGHT, type = ActionType.RESOURCE)
     public void deleteImportWorld(final HttpServerRequest request) {
         List<String> ids = new ArrayList<>(Collections.singletonList(
                 request.getParam(Field.ID)
