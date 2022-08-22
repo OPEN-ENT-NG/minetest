@@ -25,8 +25,8 @@
   }
 
   .custom-button[disabled=disabled] {
-    color: #b1b6bf;
-    background: #8c939e;
+    color: $minetest-disable;
+    background: $minetest-dark-disable;
     cursor: default;
   }
 }

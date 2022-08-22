@@ -3,6 +3,7 @@ package fr.openent.minetest;
 import fr.openent.minetest.config.MinetestConfig;
 import fr.openent.minetest.controller.MinetestController;
 import fr.openent.minetest.core.constants.Field;
+import fr.openent.minetest.core.constants.Right;
 import fr.openent.minetest.cron.ShuttingDownWorld;
 import fr.openent.minetest.controller.ShareWorldController;
 import fr.openent.minetest.service.ServiceFactory;
@@ -19,10 +20,10 @@ import org.entcore.common.storage.StorageFactory;
 import java.text.ParseException;
 
 public class Minetest extends BaseServer {
-	public static final String WORLD_COLLECTION = "world";
+	public static final String WORLD_COLLECTION = Field.WORLD;
 
-	public static final String CONTRIB_RESOURCE_RIGHT = "minetest.contrib";
-	public static final String MANAGER_RESOURCE_RIGHT = "minetest.manager";
+	public static final String CONTRIB_RESOURCE_RIGHT = Right.CONTRIB;
+	public static final String MANAGER_RESOURCE_RIGHT = Right.MANAGER;
 
 	@Override
 	public void start() throws Exception {
@@ -33,8 +34,8 @@ public class Minetest extends BaseServer {
 
 
 		final MongoDbConf conf = MongoDbConf.getInstance();
-		conf.setCollection("world");
-		conf.setResourceIdLabel("id");
+		conf.setCollection(Field.WORLD);
+		conf.setResourceIdLabel(Field.ID);
 
 		setDefaultResourceFilter(new ShareAndOwner());
 

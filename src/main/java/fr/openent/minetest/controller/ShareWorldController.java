@@ -41,7 +41,7 @@ public class ShareWorldController extends ControllerHelper {
     public void shareResource(final HttpServerRequest request) {
         UserUtils.getUserInfos(eb, request, user -> {
             if (user != null) {
-                final String id = request.params().get("id");
+                final String id = request.params().get(Field.ID);
                 if (id == null || id.trim().isEmpty()) {
                     badRequest(request, "invalid.id");
                     return;
@@ -53,8 +53,8 @@ public class ShareWorldController extends ControllerHelper {
                 params.put("minetestUri", "/minetest");
 
                 JsonObject pushNotif = new JsonObject()
-                        .put("title", "push.notif.minetest.share")
-                        .put("body", user.getUsername() + " " + I18n.getInstance().translate("minetest.shared.push.notif.body",
+                        .put(Field.TITLE, "push.notif.minetest.share")
+                        .put(Field.BODY, user.getUsername() + " " + I18n.getInstance().translate("minetest.shared.push.notif.body",
                                 getHost(request), I18n.acceptLanguage(request)));
 
                 params.put("pushNotif", pushNotif);

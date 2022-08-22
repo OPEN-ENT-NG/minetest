@@ -431,8 +431,8 @@ public class DefaultWorldService implements WorldService {
                         loginBody + passwordBody + i18n.translate("minetest.invitation.default.body.end", host, acceptLanguage);
 
                 JsonObject message = new JsonObject()
-                        .put("subject", body.getString(Field.SUBJECT))
-                        .put("body", mailBody)
+                        .put(Field.SUBJECT, body.getString(Field.SUBJECT))
+                        .put(Field.BODY, mailBody)
                         .put("to", new JsonArray().add(user.getString(Field.ID)))
                         .put("cci", new JsonArray());
 
@@ -581,9 +581,9 @@ public class DefaultWorldService implements WorldService {
         if (ownerId != null) {
             worldQuery.put(Field.OWNER_ID, ownerId);
 
-            JsonObject sharedWorlds = new JsonObject().put("shared",
+            JsonObject sharedWorlds = new JsonObject().put(Field.SHARED,
                     new JsonObject().put("$elemMatch",
-                            new JsonObject().put("userId",ownerId)
+                            new JsonObject().put(Field.USERID,ownerId)
                     )
             );
             queries.add(sharedWorlds);

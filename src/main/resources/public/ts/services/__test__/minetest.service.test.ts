@@ -21,9 +21,9 @@ describe('MinetestService', () => {
         const data = {response: true};
 
         const importWorld: IImportWorld = {
-            myRights: undefined,
+            myRights: {},
             owner: {displayName: "name", userId: "111"},
-            shared: undefined,
+            shared: [],
             owner_id: "111",
             owner_name: "name",
             owner_login: "111",
@@ -55,9 +55,9 @@ describe('MinetestService', () => {
         const data = {response: true};
 
         const world: IWorld = {
-            myRights: undefined,
+            myRights: {},
             owner: {displayName: "name", userId: "111"},
-            shared: undefined,
+            shared: [],
             owner_id: "111",
             owner_name: "name",
             owner_login: "111",
@@ -89,9 +89,9 @@ describe('MinetestService', () => {
         const mock = new MockAdapter(axios);
         const data = {response: true};
         const world: IWorld = {
-            myRights: undefined,
+            myRights: {},
             owner: {displayName: "name", userId: "111"},
-            shared: undefined,
+            shared: [],
             owner_id: "111",
             owner_name: "name",
             owner_login: "111",

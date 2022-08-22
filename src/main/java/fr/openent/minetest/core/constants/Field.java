@@ -10,6 +10,7 @@ public class Field {
     public static final String _ID = "_id";
     public static final String $IN = "$in";
     public static final String ACCESS = "ACCESS";
+    public static final String USERID = "userId";
     public static final String OWNER_ID = "owner_id";
     public static final String OWNER_NAME = "owner_name";
     public static final String OWNER_LOGIN = "owner_login";
@@ -17,6 +18,7 @@ public class Field {
     public static final String UPDATED_AT = "updated_at";
     public static final String IMG = "img";
     public static final String TITLE = "title";
+    public static final String BODY = "body";
     public static final String WORLD = "world";
     public static final String IMPORT_WORLD = "import_world";
     public static final String JOIN = "join";
@@ -39,6 +41,7 @@ public class Field {
     public static final String SUBJECT = "subject";
     public static final String $$HASHKEY = "$$hashKey";
     public static final String IS_GROUP = "isGroup";
+    public static final String SHARED = "shared";
 
     // Config
     public static final String MINETEST_DOWNLOAD = "minetest-download";
