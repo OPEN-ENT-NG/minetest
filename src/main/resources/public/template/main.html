@@ -86,7 +86,7 @@
         </div>
 
         <!-- toggle menu -->
-        <toggle-menu ng-if="vm.currentWorld" world="vm.currentWorld"
+        <toggle-menu ng-if="vm.currentWorld && vm.currentWorld.myRights.manager" world="vm.currentWorld"
                      on-update-world="vm.refreshWorldList()" on-delete-world="vm.refreshWorldList()">
         </toggle-menu>
     </div>

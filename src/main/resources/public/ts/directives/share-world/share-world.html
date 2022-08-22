@@ -1,0 +1,12 @@
+<div class="minetestShare">
+
+    <!-- button delete world -->
+    <button data-ng-click="vm.openShareLightbox()">
+        <i18n>minetest.share</i18n>
+    </button>
+
+    <!-- popup modal to share world -->
+    <lightbox class="minetest-lightbox" show="vm.lightbox.share" on-close="vm.closeShareLightbox()">
+        <share-panel app-prefix="'minetest'" resources="[vm.world]"></share-panel>
+    </lightbox>
+</div>

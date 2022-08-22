@@ -1,5 +1,3 @@
-import {minetestBehaviours} from "../../minetestBehaviours";
-
 declare let require: any;
 
 export const moment = require('moment');
@@ -17,10 +15,4 @@ export const model = {
         hasWorkflow: jest.fn(() => true),
         hasRight: jest.fn(() => true)
     },
-};
-
-export const Behaviours = {
-    applicationsBehaviours : {
-        minetest : minetestBehaviours
-    }
 };

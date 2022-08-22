@@ -19,7 +19,7 @@
       "type": "string"
     },
     "shared": {
-      "type": "boolean"
+      "type": "array"
     },
     "title": {
       "type": "string"

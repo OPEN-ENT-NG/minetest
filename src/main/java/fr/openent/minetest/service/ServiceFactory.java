@@ -15,7 +15,7 @@ public class ServiceFactory {
 
     public ServiceFactory(Vertx vertx, MinetestConfig minetestConfig, MongoDb mongoDb) {
         this.vertx = vertx;
-        this.minetestConfig = minetestConfig;
+        this.minetestConfig = minetestConfig ;
         this.mongoDb = mongoDb;
     }
 

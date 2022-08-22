@@ -431,8 +431,8 @@ public class DefaultWorldService implements WorldService {
                         loginBody + passwordBody + i18n.translate("minetest.invitation.default.body.end", host, acceptLanguage);
 
                 JsonObject message = new JsonObject()
-                        .put("subject", body.getString(Field.SUBJECT))
-                        .put("body", mailBody)
+                        .put(Field.SUBJECT, body.getString(Field.SUBJECT))
+                        .put(Field.BODY, mailBody)
                         .put("to", new JsonArray().add(user.getString(Field.ID)))
                         .put("cci", new JsonArray());
 
@@ -575,8 +575,18 @@ public class DefaultWorldService implements WorldService {
 
         JsonObject worldQuery = new JsonObject();
 
+        JsonArray queries = new JsonArray().add(worldQuery);
+        JsonObject query = new JsonObject().put("$or", queries);
+
         if (ownerId != null) {
             worldQuery.put(Field.OWNER_ID, ownerId);
+
+            JsonObject sharedWorlds = new JsonObject().put(Field.SHARED,
+                    new JsonObject().put("$elemMatch",
+                            new JsonObject().put(Field.USERID,ownerId)
+                    )
+            );
+            queries.add(sharedWorlds);
         }
         if (ownerName != null) {
             worldQuery.put(Field.OWNER_NAME, ownerName);
@@ -600,7 +610,7 @@ public class DefaultWorldService implements WorldService {
             worldQuery.put(Field.SHUTTINGDOWN, shuttingDown);
         }
 
-        mongoDb.find(this.collection, worldQuery, sortJson, null, MongoDbResult.validResultsHandler(result -> {
+        mongoDb.find(this.collection, query, sortJson, null, MongoDbResult.validResultsHandler(result -> {
             if (result.isLeft()) {
                 String message = String.format("[Minetest@%s::getWorlds] An error has occured while finding worlds list: %s",
                         this.getClass().getSimpleName(), result.left().getValue());

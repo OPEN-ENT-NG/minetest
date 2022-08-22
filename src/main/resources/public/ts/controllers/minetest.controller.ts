@@ -1,4 +1,4 @@
-import {model, ng, idiom as lang, _} from 'entcore';
+import {model, ng, idiom as lang, _, Rights, Behaviours} from 'entcore';
 import {IWorld, Worlds} from "../models";
 import {minetestService} from "../services";
 import {IScope} from "angular";
@@ -63,6 +63,15 @@ class Controller implements ng.IController, IViewModel {
 
     async getWorld(world?: IWorld): Promise<void> {
         this.worlds.all = await minetestService.get(this.user_id, this.user_name);
+        this.worlds.all.forEach( (world: IWorld) => {
+            if (!_.isEmpty(world)) {
+                world.owner = {
+                    userId: world.owner_id,
+                    displayName: world.owner_name
+                };
+                Behaviours.applicationsBehaviours.minetest.resource(world);
+            }
+        });
         if (world) {
             let currentWorld: IWorld = this.worlds.all.find(w => w._id === world._id)
             currentWorld ? this.setCurrentWorld(currentWorld) : this.setCurrentWorld();

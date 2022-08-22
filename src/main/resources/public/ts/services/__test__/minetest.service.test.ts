@@ -21,6 +21,9 @@ describe('MinetestService', () => {
         const data = {response: true};
 
         const importWorld: IImportWorld = {
+            myRights: {},
+            owner: {displayName: "name", userId: "111"},
+            shared: [],
             owner_id: "111",
             owner_name: "name",
             owner_login: "111",
@@ -52,20 +55,23 @@ describe('MinetestService', () => {
         const data = {response: true};
 
         const world: IWorld = {
-                    owner_id: "111",
-                    owner_name: "name",
-                    owner_login: "111",
+            myRights: {},
+            owner: {displayName: "name", userId: "111"},
+            shared: [],
+            owner_id: "111",
+            owner_name: "name",
+            owner_login: "111",
 
-                    created_at: "created_at",
-                    updated_at: "updated_at",
+            created_at: "created_at",
+            updated_at: "updated_at",
 
-                    password: "password",
-                    title: "monde1",
-                    address: "world.fr",
-                    port: 30000,
-                    shuttingDown: true
+            password: "password",
+            title: "monde1",
+            address: "world.fr",
+            port: 30000,
+            shuttingDown: true
 
-                }
+        }
 
         mock.onPut(`/minetest/worlds/import/${world._id}`, world)
             .reply(200, data);
@@ -83,6 +89,9 @@ describe('MinetestService', () => {
         const mock = new MockAdapter(axios);
         const data = {response: true};
         const world: IWorld = {
+            myRights: {},
+            owner: {displayName: "name", userId: "111"},
+            shared: [],
             owner_id: "111",
             owner_name: "name",
             owner_login: "111",

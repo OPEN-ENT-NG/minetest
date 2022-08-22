@@ -4,6 +4,9 @@
             <!-- properties -->
             <properties-world world="vm.world" on-update-world="vm.onUpdateWorld()"></properties-world>
 
+            <!-- share -->
+            <share-world world="vm.world" on-share-world="vm.onShareWorld()"></share-world>
+
             <!-- invitation -->
             <invitation-world world="vm.world" eventer="vm.$emitChildren"></invitation-world>
 
