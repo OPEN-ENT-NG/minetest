@@ -22,7 +22,6 @@
   "required": [
     "whitelist",
     "_id",
-    "port",
-    "subject"
+    "port"
   ]
 }

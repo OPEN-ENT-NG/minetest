@@ -1,10 +1,13 @@
 import {_, idiom, moment, ng, toasts} from "entcore";
 import {IScope} from "angular";
 import {RootsConst} from "../../core/constants/roots.const";
-import {IWorld} from "../../models";
+import {IWorld, Whitelist} from "../../models";
 import {minetestService} from "../../services";
 import {safeApply} from "../../utils/safe-apply.utils";
 import {DateUtils} from "../../utils/date.utils";
+import {Subject} from "rxjs";
+import {ToggleMenuAction} from "../toggle-menu/toggle-menu-action.model";
+import {TOGGLE_MENU_ACTION} from "../toggle-menu/toggle-menu-action.enum";
 
 declare let window: any;
 
@@ -19,12 +22,14 @@ interface IViewModel {
     mail: {
         subject: string,
         body: string,
-        invitees: string[]
+        invitees: Whitelist[]
     };
+
+    downloadLink: string;
 
     // props
     world: IWorld;
-    downloadLink: string;
+    eventer: Subject<ToggleMenuAction>;
 }
 
 class Controller implements ng.IController, IViewModel {
@@ -34,24 +39,28 @@ class Controller implements ng.IController, IViewModel {
     mail: {
         subject: string,
         body: string,
-        invitees: string[]
+        invitees: Whitelist[]
     };
+    eventer: Subject<ToggleMenuAction>;
 
     constructor(private $scope: IScope) {
-        {
-            this.lightbox = {
-                invitation: false,
-            };
-            this.mail = {
-                subject: "",
-                body: "",
-                invitees: [],
-            };
-        }
+        this.lightbox = {
+            invitation: false,
+        };
+        this.mail = {
+            subject: "",
+            body: "",
+            invitees: [],
+        };
     }
 
     $onInit() {
        this.downloadLink = window.minetestDownload;
+        this.eventer.asObservable().subscribe((action: ToggleMenuAction) => {
+            if (action && action.actionComponentType === TOGGLE_MENU_ACTION.INVITATION_WORLD) {
+                this.openInvitationLightbox();
+            }
+        });
     }
 
     $onDestroy() {
@@ -108,7 +117,8 @@ function directive() {
         restrict: 'E',
         templateUrl: `${RootsConst.directive}invitation-world/invitation-world.html`,
         scope: {
-            world: '='
+            world: '=',
+            eventer: '='
         },
         controllerAs: 'vm',
         bindToController: true,

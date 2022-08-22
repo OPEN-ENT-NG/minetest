@@ -131,7 +131,7 @@ public class MinetestController extends ControllerHelper {
     }
 
     @Put("/world/join")
-    @ApiDoc("Update status world")
+    @ApiDoc("Invite user to the world")
     @SecuredAction(value = "", type = ActionType.AUTHENTICATED)
     public void joinWorld(final HttpServerRequest request) {
         RequestUtils.bodyToJson(request, pathPrefix + Field.JOIN, body

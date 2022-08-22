@@ -26,7 +26,7 @@ export interface IMinetestService {
 
     getVisibleUsers(search: string): Promise<AxiosResponse>;
 
-    invite(worldBody: IWorld): Promise<IWorld>;
+    invite(worldBody: IWorld | IImportWorld): Promise<IWorld>;
 
     delete(world: IWorld): Promise<AxiosResponse>;
 

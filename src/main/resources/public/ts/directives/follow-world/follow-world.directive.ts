@@ -1,7 +1,10 @@
-import { ng } from "entcore";
+import {_, moment, ng, toasts} from "entcore";
 import {RootsConst} from "../../core/constants/roots.const";
 import {IScope} from "angular";
 import {IImportWorld, IWorld} from "../../models";
+import {DateUtils} from "../../utils/date.utils";
+import {minetestService} from "../../services";
+import {safeApply} from "../../utils/safe-apply.utils";
 
 interface IViewModel {
     lightbox: any;
@@ -9,7 +12,12 @@ interface IViewModel {
     // props
     world: IWorld | IImportWorld;
 
+    openFollowLightbox(): void;
+    closeFollowLightbox(): void;
     showTable(): boolean;
+    removeUser(login:string): Promise<void>;
+    openInvitation(): void;
+
 }
 
 class Controller implements ng.IController, IViewModel {
@@ -32,7 +40,6 @@ class Controller implements ng.IController, IViewModel {
 
     openFollowLightbox(): void {
         this.lightbox.follow = true;
-        this.$scope.$eval(this.$scope['vm']['onFollowWorld']);
     }
 
     closeFollowLightbox(): void {
@@ -42,6 +49,28 @@ class Controller implements ng.IController, IViewModel {
     showTable(): boolean {
         return this.world.whitelist && this.world.whitelist.length > 1;
     }
+
+    openInvitation(): void {
+        this.closeFollowLightbox();
+        this.$scope.$parent.$eval(this.$scope['vm']['onOpenPopUpInvitation']);
+    }
+
+    async removeUser(login:string): Promise<void> {
+        this.world.updated_at = DateUtils.format(moment().startOf('minute'),
+            DateUtils.FORMAT["DAY/MONTH/YEAR-HOUR-MIN"]);
+        this.world.whitelist = _.filter(this.world.whitelist, function (user) {
+            return user.login != login;
+        });
+        minetestService.invite(this.world)
+            .then((world: IWorld) => {
+                this.world.whitelist = world.whitelist;
+                toasts.confirm('minetest.world.invite.modify.confirm');
+                safeApply(this.$scope);
+            }).catch((err) => {
+                toasts.warning('minetest.world.invite.modify.error');
+                console.error(err);
+        });
+    }
 }
 
 function directive() {
@@ -50,7 +79,7 @@ function directive() {
         templateUrl: `${RootsConst.directive}follow-world/follow-world.html`,
         scope: {
             world: '=',
-            $onFollowWorld: '&'
+            onOpenPopUpInvitation: '&'
         },
         controllerAs: 'vm',
         bindToController: true,

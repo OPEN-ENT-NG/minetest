@@ -1,3 +1,18 @@
+export interface Whitelist {
+    id: string,
+    login?: string,
+    displayName?: string,
+    lastName?: string,
+    firstName?: string,
+    whitelist?: boolean,
+
+    groupDisplayName?: string,
+    isGroup?: boolean,
+    name?: string,
+    profile?: string,
+    structureName?: string
+}
+
 export interface IWorld {
     _id?: string;
     owner_id: string;
@@ -16,7 +31,7 @@ export interface IWorld {
     address: string;
     port?: number;
 
-    whitelist?: string[];
+    whitelist?: Whitelist[];
     subject?: string;
 }
 
@@ -36,7 +51,7 @@ export interface IImportWorld {
 
     isExternal: boolean;
 
-    whitelist?: string[];
+    whitelist?: Whitelist[];
     subject?: string;
 }
 
