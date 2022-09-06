@@ -131,7 +131,7 @@ public class MinetestController extends ControllerHelper {
                             .onFailure(err -> renderError(request))));
     }
 
-    @Put("/world/join")
+    @Put("/world/join/:id")
     @ApiDoc("Invite user to the world")
     @SecuredAction(value = Minetest.MANAGER_RESOURCE_RIGHT, type = ActionType.RESOURCE)
     public void joinWorld(final HttpServerRequest request) {

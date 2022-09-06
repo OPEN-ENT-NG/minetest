@@ -82,7 +82,7 @@ export const minetestService: IMinetestService = {
 
     invite: async (worldBody: IWorld): Promise<IWorld> => {
         try {
-            const {data} = await http.put(`/minetest/world/join`, worldBody);
+            const {data} = await http.put(`/minetest/world/join/${worldBody._id}`, worldBody);
             return data;
         } catch (err) {
             throw err;
