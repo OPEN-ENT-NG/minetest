@@ -9,3 +9,4 @@ export * from './recipient-list/recipient-list.directive';
 export * from './end-user-typing/end-user-typing.directive';
 export * from './follow-world/follow-world.directive';
 export * from './share-world/share-world.directive';
+export * from './loader/loader.directive';
