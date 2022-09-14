@@ -13,6 +13,8 @@ import io.vertx.core.eventbus.EventBus;
 import org.entcore.common.http.BaseServer;
 import org.entcore.common.http.filter.ShareAndOwner;
 import org.entcore.common.mongodb.MongoDbConf;
+import org.entcore.common.notification.TimelineHelper;
+import org.entcore.common.service.impl.MongoDbCrudService;
 import org.entcore.common.share.impl.MongoDbShareService;
 import org.entcore.common.storage.Storage;
 import org.entcore.common.storage.StorageFactory;
@@ -51,6 +53,7 @@ public class Minetest extends BaseServer {
 		addController(shareWorldController);
 
 		shareWorldController.setShareService(new MongoDbShareService(eb, MongoDb.getInstance(), Field.WORLD, securedActions, null));
+		shareWorldController.setCrudService(new MongoDbCrudService(Field.WORLD));
 
 		try {
 			new CronTrigger(vertx, config.getString(Field.MINETEST_SHUTTING_DOWN_CRON)).schedule(
