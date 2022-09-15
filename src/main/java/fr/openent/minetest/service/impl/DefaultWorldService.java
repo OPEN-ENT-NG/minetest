@@ -492,6 +492,9 @@ public class DefaultWorldService implements WorldService {
                 worldData.put(Field.PORT, body.getInteger(Field.PORT));
             }
         }
+        if (body.getBoolean(Field.SHUTTINGDOWN) != null) {
+            worldData.put(Field.SHUTTINGDOWN, body.getBoolean(Field.SHUTTINGDOWN));
+        }
 
         JsonObject world = new JsonObject().put("$set", worldData);
 

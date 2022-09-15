@@ -6,6 +6,7 @@ import fr.openent.minetest.service.WorldService;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import io.vertx.core.Promise;
+import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import io.vertx.core.logging.Logger;
@@ -16,9 +17,12 @@ public class ShuttingDownWorld extends ControllerHelper implements Handler<Long>
     private static final Logger log = LoggerFactory.getLogger(ShuttingDownWorld.class);
     private final WorldService worldService;
     private final long TIMER = 500;
+    private final Vertx vertx;
+
 
     public ShuttingDownWorld(ServiceFactory serviceFactory) {
         this.worldService = serviceFactory.worldService();
+        this.vertx = serviceFactory.vertx();
     }
 
     @Override
