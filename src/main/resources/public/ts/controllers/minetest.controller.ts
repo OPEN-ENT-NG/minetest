@@ -22,7 +22,7 @@ interface IViewModel {
 
 class Controller implements ng.IController, IViewModel {
     currentWorld: IWorld;
-    display: { allowPassword: boolean };
+    display: { allowPassword: boolean, loading: boolean };
     filter: { creation_date: Date; up_date: Date; guests: any; shared: boolean; title: string };
     user_id: string;
     user_name: string;
@@ -47,7 +47,7 @@ class Controller implements ng.IController, IViewModel {
             title: ""
         };
 
-        this.display = { allowPassword: false };
+        this.display = { allowPassword: false, loading: true };
         this.worlds = new Worlds();
         this.worlds.all = [];
         this.initData();
@@ -62,6 +62,7 @@ class Controller implements ng.IController, IViewModel {
     }
 
     async getWorld(world?: IWorld): Promise<void> {
+        this.display.loading = true;
         this.worlds.all = await minetestService.get(this.user_id, this.user_name);
         this.worlds.all.forEach( (world: IWorld) => {
             if (!_.isEmpty(world)) {
@@ -75,7 +76,10 @@ class Controller implements ng.IController, IViewModel {
         if (world) {
             let currentWorld: IWorld = this.worlds.all.find(w => w._id === world._id)
             currentWorld ? this.setCurrentWorld(currentWorld) : this.setCurrentWorld();
-        } else this.setCurrentWorld();
+        } else {
+            this.setCurrentWorld();
+        }
+        this.display.loading = false;
     }
 
     setCurrentWorld(world?: IWorld): void {

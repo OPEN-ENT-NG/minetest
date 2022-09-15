@@ -28,7 +28,7 @@
     </div>
 
     <!-- Search bar -->
-    <div class="two cell">
+    <div class="two cell" data-ng-show="vm.worlds.all.length > 0">
         <input class="twelve"
                type="text"
                translate attr="placeholder"
@@ -38,7 +38,7 @@
     </div>
 
     <!-- Empty state -->
-    <div class="empty-content" data-ng-show="vm.worlds.all.length === 0">
+    <div class="empty-content" data-ng-show="vm.worlds.all.length === 0 && !vm.display.loading">
         <img data-ng-src="/minetest/public/img/illustration_sans_monde.svg" class="two" alt="">
         <div class="download-description">
             <i18n>minetest.download.software.link.description</i18n>
@@ -54,6 +54,8 @@
             <create-world on-create-world="vm.refreshWorldList()"></create-world>
         </div>
     </div>
+
+    <loader ng-show="vm.display.loading" min-height="'250px'"></loader>
 
     <!-- Display worlds -->
     <div class="cards-view twelve">
