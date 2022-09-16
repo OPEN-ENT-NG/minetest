@@ -57,7 +57,7 @@
   "minetest.reset.password.explanation": "Vous pourrez publiposter de nouveau le monde pour faire part du nouveau mot de passe aux utilisateurs",
   "minetest.share": "Partager",
   "minetest.shutting.world.automatically": "Fermeture automatique du monde",
-  "minetest.shutting.world.infos": "Les mondes se ferme automatiquement le soir à partir d’une heure définie par la collectivité",
+  "minetest.shutting.world.infos": "Les mondes se ferment automatiquement le soir à partir d’une heure définie par la collectivité",
   "minetest.the": "le",
   "minetest.title": "Minetest",
   "minetest.title.world": "Titre du monde",

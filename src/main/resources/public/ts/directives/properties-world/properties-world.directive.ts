@@ -45,8 +45,8 @@ class Controller implements ng.IController, IViewModel {
         this.showInputPassword = false;
         let world: IWorld = this.world;
         this.worldForm = Object.assign({}, world);
-        if (this.world.shuttingDown == undefined) {
-            this.world.shuttingDown = true;
+        if (this.worldForm.shuttingDown == undefined) {
+            this.worldForm.shuttingDown = true;
         }
     }
 

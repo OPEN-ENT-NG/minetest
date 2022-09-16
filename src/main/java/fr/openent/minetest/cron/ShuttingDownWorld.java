@@ -15,7 +15,7 @@ import org.entcore.common.controller.ControllerHelper;
 public class ShuttingDownWorld extends ControllerHelper implements Handler<Long>   {
     private static final Logger log = LoggerFactory.getLogger(ShuttingDownWorld.class);
     private final WorldService worldService;
-    private final long TIMER = 500;
+
 
     public ShuttingDownWorld(ServiceFactory serviceFactory) {
         this.worldService = serviceFactory.worldService();
@@ -42,7 +42,11 @@ public class ShuttingDownWorld extends ControllerHelper implements Handler<Long>
             Future<JsonObject> current = Future.succeededFuture();
             for (int i = 0; i < worlds.size(); i++) {
                 int finalI = i;
-                current = current.compose(v -> shutDownWorld(worlds.getJsonObject(finalI)).onComplete(Future.succeededFuture()));
+                current = current.compose(v -> {
+                    JsonObject world = worlds.getJsonObject(finalI);
+                    world.put(Field.STATUS, false);
+                    return worldService.updateStatus(world);
+                });
             }
             current.onSuccess(res -> promise.complete())
                     .onFailure(err -> {
@@ -51,22 +55,6 @@ public class ShuttingDownWorld extends ControllerHelper implements Handler<Long>
                         promise.fail(err.getMessage());
                     });
         }
-        return promise.future();
-    }
-    private Future<JsonObject> shutDownWorld(JsonObject world) {
-        // update status of the world by closing the port
-        Promise<JsonObject> promise = Promise.promise();
-        world.put(Field.STATUS, false);
-        //Wait 0,5 second in order to not crash the Minetest server by multiple request
-        vertx.setTimer(TIMER, timer ->
-                worldService.updateStatus(world)
-                        .onSuccess(promise::complete)
-                        .onFailure(err -> {
-                            log.error("[Minetest@shutDownWorld] Failed to update status of the world in cron, world : " + world);
-                            log.error("[Minetest@shutDownWorld] Failed to update status of the world in cron, error : " + err.getMessage());
-                            err.printStackTrace();
-                            promise.fail(err.getMessage());
-                        }));
         return promise.future();
     }
 }
