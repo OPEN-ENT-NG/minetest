@@ -96,13 +96,15 @@ class Controller implements ng.IController, IViewModel {
         let created: string = lang.translate('minetest.created');
 
         if (world.created_at == world.updated_at) {
-            return created
-        } else {
-            if (world.password) {
-                if (world.status) {
-                    return open;
-                } else return close;
-            } else return added;
+            return created;
+        }
+        
+        // check if world has defined password and check its status to set status type
+        if (world.password) {
+            return world.status ? open : close;
+        }
+        
+        return added;
         }
     }
 
