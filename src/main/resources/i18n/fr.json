@@ -117,5 +117,6 @@
   "group.school.Student": "Élèves de l'{0}.",
   "group.school.Teacher": "Enseignants de l'{0}.",
   "group.school.Guest": "Invités de l'{0}.",
-  "minetest.shared.push.notif.body": "a partagé avec vous un nouveau monde"
+  "minetest.shared.push.notif.body": "a partagé avec vous un nouveau monde",
+  "minetest.created": "Créé"
 }

@@ -169,9 +169,14 @@ public class DefaultWorldService implements WorldService {
         Promise<JsonObject> promise = Promise.promise();
 
         JsonObject worldId = new JsonObject().put(Field._ID, body.getString(Field._ID));
-        JsonObject status = new JsonObject().put("$set", new JsonObject().put(Field.STATUS, body.getBoolean(Field.STATUS)));
+        JsonObject updateData = new JsonObject().put(Field.STATUS, body.getBoolean(Field.STATUS));
+        if (body.getString(Field.UPDATED_AT) != null) {
+            updateData.put(Field.UPDATED_AT, body.getString(Field.UPDATED_AT));
+        }
+        JsonObject set = new JsonObject().put("$set", updateData);
 
-        updateStatusMongo(worldId, status)
+
+        updateStatusMongo(worldId, set)
                 .compose(res -> {
                     JsonObject bodyToUpdateStatus = new JsonObject()
                             .put(Field.ID,body.getString(Field._ID))
