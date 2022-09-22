@@ -93,13 +93,17 @@ class Controller implements ng.IController, IViewModel {
         let open: string = lang.translate('minetest.open');
         let close: string = lang.translate('minetest.close');
         let added: string = lang.translate('minetest.added');
+        let created: string = lang.translate('minetest.created');
 
-        if (world.password) {
-            if (world.status) {
-                return open;
-            } else return close;
+        if (world.created_at == world.updated_at) {
+            return created
+        } else {
+            if (world.password) {
+                if (world.status) {
+                    return open;
+                } else return close;
+            } else return added;
         }
-        else return added;
     }
 
     getLink(): string {
