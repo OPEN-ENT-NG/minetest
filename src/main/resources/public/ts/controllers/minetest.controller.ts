@@ -105,7 +105,6 @@ class Controller implements ng.IController, IViewModel {
         }
         
         return added;
-        }
     }
 
     getLink(): string {
