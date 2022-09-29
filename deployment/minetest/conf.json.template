@@ -1,5 +1,5 @@
     {
-      "name": "fr.openent~minetest~1.1-SNAPSHOT",
+      "name": "fr.openent~minetest~1.2.0",
       "config": {
         "main" : "fr.openent.minetest.Minetest",
         "port" : 8055,
@@ -14,7 +14,7 @@
         "app-registry.port" : 8012,
         "mode" : "${mode}",
         "entcore.port" : 8009,
-        "shutting-down-cron": "0 0 22 ? * * *",
+        "shutting-down-cron": "${minetestShuttingDownCron}",
         "minetest-download": "${minetestDownload}",
         "minetest-link": "${minetestLink}",
         "minetest-wiki": "${minetestWiki}",
