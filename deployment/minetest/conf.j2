@@ -21,7 +21,12 @@
         "minetest-port-range" : "{{ minetestPortRange | default('30000-30100') }}",
         "minetest-link": "{{ minetestLink | default('https://www.minetest.net/downloads/') }}",
         "minetest-wiki": "{{ minetestWiki | default('https://wiki.minetest.net/Privileges/fr') }}",
-		"minetest-messaging": "{{ minetestMessaging | default('') }}",
+	"minetest-messaging": "{{ minetestMessaging | default('') }}",
+	{% if ha and item != 'jobs' %}
+            "shutting-down-cron": "0 0 22 ? * * 2099",
+        {% else %}
+            "shutting-down-cron": "{{ minetestShuttingDownCron | default('0 0 22 ? * * *') }}",
+        {% endif %}
         "publicConf": {
             "xiti": {
                 "LIBELLE_SERVICE": {
