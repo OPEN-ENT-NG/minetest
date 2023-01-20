@@ -4,6 +4,7 @@ import {IScope} from "angular";
 import {IWorld} from "../../models";
 import {minetestService} from "../../services";
 import {DateUtils} from "../../utils/date.utils";
+import {safeApply} from "../../utils/safe-apply.utils";
 
 interface IViewModel {
     openPropertiesLightbox(): void;
@@ -52,6 +53,7 @@ class Controller implements ng.IController, IViewModel {
 
     closePropertiesLightbox(): void {
         this.lightbox.properties = false;
+        safeApply(this.$scope);
     }
 
     async updateWorld(): Promise<void> {
@@ -61,7 +63,7 @@ class Controller implements ng.IController, IViewModel {
             .then(() => {
                 toasts.confirm('minetest.world.update.confirm');
                 this.closePropertiesLightbox();
-                this.$scope.$eval(this.$scope['vm']['onUpdateWorld']());
+                this.$scope.$parent.$eval(this.$scope['vm']['onUpdateWorld'](this.worldForm));
             }).catch(() => {
             toasts.warning('minetest.world.update.error');
             this.closePropertiesLightbox();
@@ -92,7 +94,7 @@ class Controller implements ng.IController, IViewModel {
             .then(() => {
                 toasts.confirm('minetest.world.update.confirm');
                 this.closePropertiesLightbox();
-                this.$scope.$eval(this.$scope['vm']['onUpdateWorld']);
+                this.$scope.$parent.$eval(this.$scope['vm']['onUpdateWorld'](this.worldForm));
             }).catch(() => {
             toasts.warning('minetest.world.update.error');
             this.closePropertiesLightbox();
