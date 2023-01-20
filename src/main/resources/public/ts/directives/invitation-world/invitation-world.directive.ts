@@ -56,11 +56,11 @@ class Controller implements ng.IController, IViewModel {
 
     $onInit() {
        this.downloadLink = window.minetestDownload;
-        this.eventer.asObservable().subscribe((action: ToggleMenuAction) => {
-            if (action && action.actionComponentType === TOGGLE_MENU_ACTION.INVITATION_WORLD) {
-                this.openInvitationLightbox();
-            }
-        });
+       this.eventer.asObservable().subscribe((action: ToggleMenuAction) => {
+           if (action && action.actionComponentType === TOGGLE_MENU_ACTION.INVITATION_WORLD) {
+               this.openInvitationLightbox();
+           }
+       });
     }
 
     $onDestroy() {
@@ -72,6 +72,9 @@ class Controller implements ng.IController, IViewModel {
     }
 
     closeInvitationLightbox(): void {
+        //scroll the lightbox to the top
+        document.getElementById('invitation-world')
+            .getElementsByClassName('content')[0].scrollTop = 0;
         this.lightbox.invitation = false;
     }
 
