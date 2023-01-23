@@ -80,6 +80,7 @@ class Controller implements ng.IController, IViewModel {
             this.setCurrentWorld();
         }
         this.display.loading = false;
+        safeApply(this.$scope);
     }
 
     setCurrentWorld(world?: IWorld): void {
