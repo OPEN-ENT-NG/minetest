@@ -1,9 +1,8 @@
-import {idiom, moment, ng, toasts} from "entcore";
+import {idiom, ng, toasts} from "entcore";
 import {RootsConst} from "../../core/constants/roots.const";
 import {IScope} from "angular";
 import {IWorld} from "../../models";
 import {minetestService} from "../../services";
-import {DateUtils} from "../../utils/date.utils";
 import {safeApply} from "../../utils/safe-apply.utils";
 
 interface IViewModel {
@@ -57,8 +56,6 @@ class Controller implements ng.IController, IViewModel {
     }
 
     async updateWorld(): Promise<void> {
-        this.worldForm.updated_at = DateUtils.format(moment().startOf('minute'),
-            DateUtils.FORMAT["DAY/MONTH/YEAR-HOUR-MIN"]);
         minetestService.update(this.worldForm)
             .then(() => {
                 toasts.confirm('minetest.world.update.confirm');
@@ -87,8 +84,6 @@ class Controller implements ng.IController, IViewModel {
 
 
     async updateImportWorld(): Promise<void> {
-        this.worldForm.updated_at = DateUtils.format(moment().startOf('minute'),
-            DateUtils.FORMAT["DAY/MONTH/YEAR-HOUR-MIN"]);
         this.worldForm.port = parseInt(String(this.worldForm.port));
         minetestService.updateImportWorld(this.worldForm)
             .then(() => {

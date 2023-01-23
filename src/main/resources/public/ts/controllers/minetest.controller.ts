@@ -93,7 +93,6 @@ class Controller implements ng.IController, IViewModel {
     setStatus(world: IWorld): string {
         let open: string = lang.translate('minetest.open');
         let close: string = lang.translate('minetest.close');
-        let added: string = lang.translate('minetest.added');
         let created: string = lang.translate('minetest.created');
 
         if (world.created_at == world.updated_at) {
@@ -105,7 +104,7 @@ class Controller implements ng.IController, IViewModel {
             return world.status ? open : close;
         }
         
-        return added;
+        return created;
     }
 
     getLink(): string {
