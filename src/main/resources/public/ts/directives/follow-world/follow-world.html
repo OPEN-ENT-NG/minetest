@@ -18,10 +18,11 @@
         <section class="minetest-lightbox-content-table">
             <!-- Content -->
             <div class="minetest-lightbox-content-title">
-                <i18n>minetest.follow.users.can.access.world</i18n>
+                <i18n ng-show="!vm.world.isExternal">minetest.follow.users.can.access.world</i18n>
+                <i18n ng-show="vm.world.isExternal">minetest.follow.users.invitate.world</i18n>
                 <span class="bold">[[vm.world.title]]</span>
             </div>
-            <div class="minetest-lightbox-content-title">
+            <div class="minetest-lightbox-content-title" ng-show="!vm.world.isExternal">
                 <i18n>minetest.follow.users.infos</i18n>
             </div>
 

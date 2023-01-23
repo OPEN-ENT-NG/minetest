@@ -23,6 +23,7 @@
   "minetest.follow.invitation": "Suivi des invitations",
   "minetest.follow.user.empty": "Aucun utilisateur n'a été invité pour le moment.",
   "minetest.follow.users.can.access.world": "Utilisateurs qui ont accès au monde : ",
+  "minetest.follow.users.invitate.world": "Utilisateurs qui ont été invités au monde : ",
   "minetest.follow.users.infos": "La modification de la liste des utilisateurs entrainera la fermeture du monde.<br>Les utilisateurs déjà connectés devront se reconnecter.",
   "minetest.follow.world": "Suivi",
   "minetest.login": "Identifiant",
