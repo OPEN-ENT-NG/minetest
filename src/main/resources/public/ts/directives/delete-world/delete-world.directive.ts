@@ -1,24 +1,22 @@
 import {ng, toasts} from "entcore";
 import {RootsConst} from "../../core/constants/roots.const";
 import {IScope} from "angular";
-import {IWorld} from "../../models";
+import {IWorld, Worlds} from "../../models";
 import {minetestService} from "../../services";
 
 interface IViewModel {
     openDeleteLightbox(): void;
     closeDeleteLightbox(): void;
     deleteWorld(): Promise<void>;
-    deleteImportWorld(): Promise<void>;
-
     lightbox: any;
 
     // props
-    world: IWorld;
+    worlds: Worlds;
 }
 
 class Controller implements ng.IController, IViewModel {
     lightbox: any;
-    world: IWorld;
+    worlds: Worlds;
 
     constructor(private $scope: IScope) {
         this.lightbox = {
@@ -41,29 +39,19 @@ class Controller implements ng.IController, IViewModel {
     }
 
     async deleteWorld(): Promise<void> {
-        minetestService.delete(this.world)
-            .then(() => {
-                toasts.confirm('minetest.world.delete.confirm');
-                this.closeDeleteLightbox();
-                this.$scope.$parent.$eval(this.$scope['vm']['onDeleteWorld'])(this.world);
-            })
-            .catch(e => {
-                toasts.warning('minetest.world.delete.error');
-                console.error(e);
-                this.closeDeleteLightbox();
-            })
-    }
-
-    async deleteImportWorld(): Promise<void> {
-        minetestService.deleteImportWorld(this.world)
-            .then(() => {
-                toasts.confirm('minetest.world.delete.confirm');
-                this.closeDeleteLightbox();
-                this.$scope.$parent.$eval(this.$scope['vm']['onDeleteWorld'])(this.world);
-            }).catch(() => {
-            toasts.warning('minetest.world.delete.error');
-            this.closeDeleteLightbox();
-        })
+        this.worlds.all.forEach((world: IWorld) => {
+            (world['isExternal'])? minetestService.deleteImportWorld(world) : minetestService.delete(world)
+                .then(() => {
+                    toasts.confirm('minetest.world.delete.confirm');
+                    this.closeDeleteLightbox();
+                    this.$scope.$parent.$eval(this.$scope['vm']['onDeleteWorld'])(this.worlds);
+                })
+                .catch(e => {
+                    toasts.warning('minetest.world.delete.error');
+                    console.error(e);
+                    this.closeDeleteLightbox();
+                })
+        });
     }
 }
 
@@ -72,7 +60,7 @@ function directive() {
         restrict: 'E',
         templateUrl: `${RootsConst.directive}delete-world/delete-world.html`,
         scope: {
-            world: '=',
+            worlds: '=',
             onDeleteWorld: '&'
         },
         controllerAs: 'vm',

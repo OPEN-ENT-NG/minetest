@@ -90,15 +90,6 @@ export const minetestService: IMinetestService = {
     },
 
     delete: (world: IWorld): Promise<AxiosResponse> => {
-
-        //TODO keep logic for later (multidelete)
-        // let idParams: string = '';
-        // if (worlds.length > 0) {
-        //     worlds.forEach((_id: string) => {
-        //         idParams += `&id=${_id}`;
-        //     });
-        // }
-
         return http.delete(`/minetest/worlds?id=${world._id}&port=${world.port}`);
     },
 

@@ -1,7 +1,7 @@
 import {ng} from "entcore";
 import {RootsConst} from "../../core/constants/roots.const";
 import {IScope} from "angular";
-import {IWorld} from "../../models";
+import {Worlds} from "../../models";
 import {Subject} from "rxjs";
 import {ToggleMenuAction} from "./toggle-menu-action.model";
 import {TOGGLE_MENU_ACTION} from "./toggle-menu-action.enum";
@@ -9,14 +9,14 @@ import {TOGGLE_MENU_ACTION} from "./toggle-menu-action.enum";
 interface IViewModel {
 
     // props
-    world: IWorld;
+    worlds: Worlds;
     $emitChildren: Subject<ToggleMenuAction>;
 
     openInvitationLightbox(): void;
 }
 
 class Controller implements ng.IController, IViewModel {
-    world: IWorld;
+    worlds: Worlds;
     $emitChildren: Subject<ToggleMenuAction> = new Subject<ToggleMenuAction>();
 
     constructor(private $scope: IScope) {
@@ -40,7 +40,7 @@ function directive() {
         restrict: 'E',
         templateUrl: `${RootsConst.directive}toggle-menu/toggle-menu.html`,
         scope: {
-            world: '=',
+            worlds: '=',
             onDeleteWorld: '&',
             onUpdateWorld: '&'
         },
