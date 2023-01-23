@@ -429,8 +429,9 @@ public class DefaultWorldService implements WorldService {
                     loginBody = i18n.translate("minetest.invitation.default.body.name", host, acceptLanguage) + user.getString(Field.LOGIN);
                 }
 
-                String mailBody = i18n.translate("minetest.invitation.default.body.1", host, acceptLanguage)
-                        .replace("<mettre lien>", this.minetestConfig.minetestDownload()) +
+                String mailBody = i18n.translate("minetest.invitation.default.body.1", host, acceptLanguage) + body.getString(Field.TITLE) +
+                        i18n.translate("minetest.invitation.default.body.2", host, acceptLanguage)
+                                .replace("<mettre lien>", this.minetestConfig.minetestDownload()) +
                         i18n.translate("minetest.invitation.default.body.address", host, acceptLanguage) + path +
                         i18n.translate("minetest.invitation.default.body.port", host, acceptLanguage) + body.getInteger(Field.PORT) +
                         loginBody + passwordBody + i18n.translate("minetest.invitation.default.body.end", host, acceptLanguage);

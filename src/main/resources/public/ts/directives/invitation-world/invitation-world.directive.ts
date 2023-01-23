@@ -97,14 +97,14 @@ class Controller implements ng.IController, IViewModel {
     initMail(): void {
         this.mail.subject = idiom.translate('minetest.invitation.default.subject');
         if (!this.world.password) {
-            this.mail.body = idiom.translate('minetest.invitation.default.body.1')
-                    .replaceAll("<mettre lien>", this.downloadLink) +
+            this.mail.body = idiom.translate('minetest.invitation.default.body.1') + this.world.title +
+                idiom.translate('minetest.invitation.default.body.2').replaceAll("<mettre lien>", this.downloadLink) +
                 idiom.translate('minetest.invitation.default.body.address') + this.world.address +
                 idiom.translate('minetest.invitation.default.body.port') + this.world.port +
                 idiom.translate('minetest.invitation.default.body.end');
         } else
-            this.mail.body = idiom.translate('minetest.invitation.default.body.1')
-                    .replaceAll("<mettre lien>", this.downloadLink) +
+            this.mail.body = idiom.translate('minetest.invitation.default.body.1') + this.world.title +
+                idiom.translate('minetest.invitation.default.body.2').replaceAll("<mettre lien>", this.downloadLink) +
                 idiom.translate('minetest.invitation.default.body.address') + this.world.address +
                 idiom.translate('minetest.invitation.default.body.port') + this.world.port +
                 idiom.translate('minetest.invitation.default.body.name') + "user_login" +
