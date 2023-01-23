@@ -45,7 +45,7 @@ class Controller implements ng.IController, IViewModel {
             .then(() => {
                 toasts.confirm('minetest.world.delete.confirm');
                 this.closeDeleteLightbox();
-                this.$scope.$eval(this.$scope['vm']['onDeleteWorld']());
+                this.$scope.$parent.$eval(this.$scope['vm']['onDeleteWorld'])(this.world);
             })
             .catch(e => {
                 toasts.warning('minetest.world.delete.error');
@@ -59,8 +59,7 @@ class Controller implements ng.IController, IViewModel {
             .then(() => {
                 toasts.confirm('minetest.world.delete.confirm');
                 this.closeDeleteLightbox();
-                if (this.$scope.$parent.$eval(this.$scope['vm']['onDeleteWorld'])(this.world))
-                    this.$scope.$parent.$eval(this.$scope['vm']['onDeleteWorld'])(this.world);
+                this.$scope.$parent.$eval(this.$scope['vm']['onDeleteWorld'])(this.world);
             }).catch(() => {
             toasts.warning('minetest.world.delete.error');
             this.closeDeleteLightbox();
