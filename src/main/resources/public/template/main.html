@@ -61,7 +61,7 @@
     <div class="cards-view twelve">
         <div class="row" ng-show="vm.worlds.all.length > 0">
             <!-- display current world -->
-            <current-world world="vm.currentWorld" on-current-world="vm.onCurrentWorld()"></current-world>
+            <current-world ng-show="!vm.display.loading" world="vm.currentWorld" on-current-world="vm.onCurrentWorld()"></current-world>
             <div class="grid">
                 <div class="flex-card card cell f-row flex-row twelve-mobile"
                      data-ng-click="vm.currentWorld = world"
