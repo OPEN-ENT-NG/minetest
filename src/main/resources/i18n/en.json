@@ -69,6 +69,7 @@
   "minetest.world.delete.error": "An error occurred while deleting the world",
   "minetest.world.delete.selected": "Delete the selected world",
   "minetest.world.empty.state": "You haven't created a world yet",
+  "minetest.world.empty.search": "No world matches with your research",
   "minetest.world.external": "World outside ENT",
   "minetest.world.close": "Close the world",
   "minetest.world.close.confirm": "World closed successfully",
