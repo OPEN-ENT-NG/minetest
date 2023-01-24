@@ -1,13 +1,16 @@
-import {model, ng} from "entcore";
+import {idiom, model, ng, toasts} from "entcore";
 import {RootsConst} from "../../core/constants/roots.const";
 import {IScope} from "angular";
-import {IWorld, Worlds} from "../../models";
+import {IWorld, Worlds, Whitelist} from "../../models";
+import {minetestService} from "../../services";
+import {safeApply} from "../../utils/safe-apply.utils";
 
 interface IViewModel {
     openShareLightbox(): void;
     closeShareLightbox(): void;
-    canEditShareItem(args: any) : boolean;
-    onShareFeed(data: any, resource: IWorld, actions: any[]) : void;
+    canEditShareItem(args: any): boolean;
+    onShareFeed(data: any, resource: IWorld, actions: any[]): void;
+    onSubmit(shared: any): Promise<void>;
 
     lightbox: any;
 
@@ -79,6 +82,29 @@ class Controller implements ng.IController, IViewModel {
             username: userName,
             type: "user"
         })
+    }
+
+    async onSubmit(shared: any): Promise<void> {
+        let invitees: Whitelist[] = [];
+        Object.keys(shared.users).forEach(function (userId: string) {
+            invitees.push({id: userId})
+        });
+        Object.keys(shared.bookmarks).forEach(function (groupId: string) {
+            invitees.push({id: groupId, isGroup: true})
+        });
+        Object.keys(shared.groups).forEach(function (groupId: string) {
+            invitees.push({id: groupId, isGroup: true})
+        });
+        this.world.whitelist = this.world.whitelist ? this.world.whitelist.concat(invitees) : invitees;
+        this.world.subject = idiom.translate('minetest.invitation.default.subject');
+        minetestService.invite(this.world)
+            .then((world:IWorld) => {
+                this.world.whitelist = world.whitelist;
+                toasts.confirm('minetest.world.invite.confirm');
+                safeApply(this.$scope);
+            }).catch(() => {
+            toasts.warning('minetest.world.invite.error');
+        });
     }
 }
 
