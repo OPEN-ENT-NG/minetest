@@ -1,10 +1,9 @@
-import {_, idiom, moment, ng, toasts} from "entcore";
+import {idiom, ng, toasts} from "entcore";
 import {IScope} from "angular";
 import {RootsConst} from "../../core/constants/roots.const";
 import {IWorld, Whitelist} from "../../models";
 import {minetestService} from "../../services";
 import {safeApply} from "../../utils/safe-apply.utils";
-import {DateUtils} from "../../utils/date.utils";
 import {Subject} from "rxjs";
 import {ToggleMenuAction} from "../toggle-menu/toggle-menu-action.model";
 import {TOGGLE_MENU_ACTION} from "../toggle-menu/toggle-menu-action.enum";
@@ -79,8 +78,6 @@ class Controller implements ng.IController, IViewModel {
     }
 
     async sendInvitation(): Promise<void> {
-        this.world.updated_at = DateUtils.format(moment().startOf('minute'),
-            DateUtils.FORMAT["DAY/MONTH/YEAR-HOUR-MIN"]);
         this.world.whitelist = this.world.whitelist ? this.world.whitelist.concat(this.mail.invitees) : this.mail.invitees;
         this.world.subject = this.mail.subject;
         this.closeInvitationLightbox();

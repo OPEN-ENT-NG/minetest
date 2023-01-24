@@ -1,8 +1,7 @@
-import {_, moment, ng, toasts} from "entcore";
+import {_, ng, toasts} from "entcore";
 import {RootsConst} from "../../core/constants/roots.const";
 import {IScope} from "angular";
 import {IImportWorld, IWorld} from "../../models";
-import {DateUtils} from "../../utils/date.utils";
 import {minetestService} from "../../services";
 import {safeApply} from "../../utils/safe-apply.utils";
 
@@ -56,8 +55,6 @@ class Controller implements ng.IController, IViewModel {
     }
 
     async removeUser(login:string): Promise<void> {
-        this.world.updated_at = DateUtils.format(moment().startOf('minute'),
-            DateUtils.FORMAT["DAY/MONTH/YEAR-HOUR-MIN"]);
         this.world.whitelist = _.filter(this.world.whitelist, function (user) {
             return user.login != login;
         });
