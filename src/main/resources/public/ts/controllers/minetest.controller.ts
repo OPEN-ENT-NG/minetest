@@ -80,7 +80,7 @@ class Controller implements ng.IController, IViewModel {
             }
         });
         if (world) {
-            let currentWorld: IWorld = this.worlds.all.find(w => w._id === world._id)
+            let currentWorld: IWorld = this.worlds.all.find((w: IWorld) => w._id === world._id)
             currentWorld ? this.setCurrentWorld(currentWorld) : this.setCurrentWorld();
         } else {
             this.setCurrentWorld();
@@ -94,7 +94,7 @@ class Controller implements ng.IController, IViewModel {
 
     setCurrentWorld(world?: IWorld): void {
         this.currentWorld = world || this.currentWorld;
-        if (this.currentWorld) this.currentWorld = this.filterWorlds(this.filter.title).find(w => w._id === this.currentWorld._id);
+        if (this.currentWorld) this.currentWorld = this.filterWorlds(this.filter.title).find((w: IWorld) => w._id === this.currentWorld._id);
         this.currentWorld = this.currentWorld || this.filterWorlds(this.filter.title)[0];
         safeApply(this.$scope);
     }
@@ -151,12 +151,12 @@ class Controller implements ng.IController, IViewModel {
             this.selectedWorlds.all.push(world);
             this.setCurrentWorld(world);
         } else {
-            if (this.selectedWorlds.all.find(w => w._id === world._id) && this.selectedWorlds.all.length > 1) {
+            if (this.selectedWorlds.all.find((w: IWorld) => w._id === world._id) && this.selectedWorlds.all.length > 1) {
                 this.selectedWorlds.all = this.selectedWorlds.all.filter(w => w._id != world._id);
                 if (this.selectedWorlds.all.length === 1) {
                     this.setCurrentWorld(this.selectedWorlds.all[0]);
                 }
-            } else if (!this.selectedWorlds.all.find(w => w._id === world._id)) {
+            } else if (!this.selectedWorlds.all.find((w: IWorld) => w._id === world._id)) {
                 this.selectedWorlds.all.push(world);
                 this.currentWorld = undefined;
             }
@@ -164,11 +164,11 @@ class Controller implements ng.IController, IViewModel {
     }
 
     worldIsSelected(world: IWorld): boolean {
-        return this.selectedWorlds.all.find(w => w._id === world._id) !== undefined;
+        return this.selectedWorlds.all.find((w: IWorld) => w._id === world._id) !== undefined;
     }
 
     hasManagerRightOnSelectedWorlds(): boolean {
-        return this.selectedWorlds.all.filter(w => w.myRights.manager).length == this.selectedWorlds.all.length;
+        return this.selectedWorlds.all.filter((w: IWorld) => w.myRights.manager).length == this.selectedWorlds.all.length;
     }
 }
 

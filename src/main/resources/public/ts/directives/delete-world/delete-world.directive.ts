@@ -3,6 +3,7 @@ import {RootsConst} from "../../core/constants/roots.const";
 import {IScope} from "angular";
 import {IWorld, Worlds} from "../../models";
 import {minetestService} from "../../services";
+import {AxiosResponse} from "axios";
 
 interface IViewModel {
     openDeleteLightbox(): void;
@@ -40,7 +41,8 @@ class Controller implements ng.IController, IViewModel {
 
     async deleteWorld(): Promise<void> {
         this.worlds.all.forEach((world: IWorld) => {
-            (world['isExternal'])? minetestService.deleteImportWorld(world) : minetestService.delete(world)
+            let response: Promise<AxiosResponse> = (world['isExternal']) ? minetestService.deleteImportWorld(world) : minetestService.delete(world);
+            response
                 .then(() => {
                     toasts.confirm('minetest.world.delete.confirm');
                     this.closeDeleteLightbox();
