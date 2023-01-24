@@ -85,8 +85,8 @@ class Controller implements ng.IController, IViewModel {
 
     setCurrentWorld(world?: IWorld): void {
         this.currentWorld = world || this.currentWorld;
-        if (this.currentWorld) this.currentWorld = this.worlds.all.find(w => w._id === this.currentWorld._id);
-        this.currentWorld = this.currentWorld || this.worlds.all[0];
+        if (this.currentWorld) this.currentWorld = this.filterWorlds(this.filter.title).find(w => w._id === this.currentWorld._id);
+        this.currentWorld = this.currentWorld || this.filterWorlds(this.filter.title)[0];
         safeApply(this.$scope);
     }
 

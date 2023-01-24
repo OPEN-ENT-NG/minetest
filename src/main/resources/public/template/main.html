@@ -34,24 +34,30 @@
                translate attr="placeholder"
                ng-model="vm.filter.title"
                placeholder="search"
+               ng-change="vm.currentWorld = undefined; vm.setCurrentWorld()"
         />
     </div>
 
     <!-- Empty state -->
-    <div class="empty-content" data-ng-show="vm.worlds.all.length === 0 && !vm.display.loading">
+    <div class="row empty-content" data-ng-show="vm.filterWorlds(vm.filter.title).length === 0 && !vm.display.loading">
         <img data-ng-src="/minetest/public/img/illustration_sans_monde.svg" class="two" alt="">
-        <div class="download-description">
-            <i18n>minetest.download.software.link.description</i18n>
-            <a href=[[vm.getLink()]] target=_blank>[[vm.getLink()]]</a>
+        <div class="empty-content" data-ng-show="vm.worlds.all.length === 0">
+            <div class="download-description">
+                <i18n>minetest.download.software.link.description</i18n>
+                <a href=[[vm.getLink()]] target=_blank>[[vm.getLink()]]</a>
+            </div>
+            <div class="empty-state">
+                <i18n>minetest.world.empty.state</i18n>
+            </div>
+            <div class="empty-state-button">
+                <!-- button import first world -->
+                <import-world on-import-world="vm.refreshWorldList()"></import-world>
+                <!-- button create first world -->
+                <create-world on-create-world="vm.refreshWorldList()"></create-world>
+            </div>
         </div>
-        <div class="empty-state">
-            <i18n>minetest.world.empty.state</i18n>
-        </div>
-        <div class="empty-state-button">
-            <!-- button import first world -->
-            <import-world on-import-world="vm.refreshWorldList()"></import-world>
-            <!-- button create first world -->
-            <create-world on-create-world="vm.refreshWorldList()"></create-world>
+        <div class="empty-state" data-ng-show="vm.worlds.all.length > 0">
+            <i18n>minetest.world.empty.search</i18n>
         </div>
     </div>
 

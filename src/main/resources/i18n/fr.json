@@ -71,6 +71,7 @@
   "minetest.world.delete.error": "Une erreur est survenue lors de la suppression du monde",
   "minetest.world.delete.selected": "Supprimer le monde sélectionné",
   "minetest.world.empty.state": "Vous n'avez pas encore créé de monde",
+  "minetest.world.empty.search": "Aucun résultat ne correspond à votre recherche",
   "minetest.world.external": "Monde externe à l'ENT",
   "minetest.world.close": "Fermer le monde",
   "minetest.world.close.confirm": "Fermeture du monde effectée avec succès",
