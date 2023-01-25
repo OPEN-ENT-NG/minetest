@@ -1,4 +1,4 @@
-import {model, ng, idiom as lang, _, Rights, Behaviours} from 'entcore';
+import {model, ng, idiom as lang, _, Behaviours} from 'entcore';
 import {IWorld, Worlds} from "../models";
 import {minetestService} from "../services";
 import {IScope} from "angular";
@@ -16,12 +16,16 @@ interface IViewModel {
     getDownload(): string;
     refreshWorldList(world?: IWorld): void;
     filterWorlds(searching: string): IWorld[];
+    clickOnWorld(world: IWorld): void;
+    worldIsSelected(world: IWorld): boolean;
+    hasManagerRightOnSelectedWorlds(): boolean;
 
     world: IWorld;
 }
 
 class Controller implements ng.IController, IViewModel {
     currentWorld: IWorld;
+    selectedWorlds: Worlds;
     display: { allowPassword: boolean, loading: boolean };
     filter: { creation_date: Date; up_date: Date; guests: any; shared: boolean; title: string };
     user_id: string;
@@ -50,6 +54,8 @@ class Controller implements ng.IController, IViewModel {
         this.display = { allowPassword: false, loading: true };
         this.worlds = new Worlds();
         this.worlds.all = [];
+        this.selectedWorlds = new Worlds();
+        this.selectedWorlds.all = [];
         this.initData();
     }
 
@@ -74,10 +80,13 @@ class Controller implements ng.IController, IViewModel {
             }
         });
         if (world) {
-            let currentWorld: IWorld = this.worlds.all.find(w => w._id === world._id)
+            let currentWorld: IWorld = this.worlds.all.find((w: IWorld) => w._id === world._id)
             currentWorld ? this.setCurrentWorld(currentWorld) : this.setCurrentWorld();
         } else {
             this.setCurrentWorld();
+        }
+        if (this.selectedWorlds.all.length === 0) {
+            this.selectedWorlds.all.push(this.currentWorld);
         }
         this.display.loading = false;
         safeApply(this.$scope);
@@ -85,7 +94,7 @@ class Controller implements ng.IController, IViewModel {
 
     setCurrentWorld(world?: IWorld): void {
         this.currentWorld = world || this.currentWorld;
-        if (this.currentWorld) this.currentWorld = this.filterWorlds(this.filter.title).find(w => w._id === this.currentWorld._id);
+        if (this.currentWorld) this.currentWorld = this.filterWorlds(this.filter.title).find((w: IWorld) => w._id === this.currentWorld._id);
         this.currentWorld = this.currentWorld || this.filterWorlds(this.filter.title)[0];
         safeApply(this.$scope);
     }
@@ -126,7 +135,7 @@ class Controller implements ng.IController, IViewModel {
         }
     }
 
-    filterWorlds(searching:string): IWorld[] {
+    filterWorlds(searching: string): IWorld[] {
         if(searching){
             return _.filter(this.worlds.all, (world) =>
                 world.owner_name.toLowerCase().includes(searching.toLowerCase()) ||
@@ -135,6 +144,31 @@ class Controller implements ng.IController, IViewModel {
         } else {
             return this.worlds.all;
         }
+    }
+
+    clickOnWorld(world: IWorld): void {
+        if (this.selectedWorlds.all.length === 0) {
+            this.selectedWorlds.all.push(world);
+            this.setCurrentWorld(world);
+        } else {
+            if (this.selectedWorlds.all.find((w: IWorld) => w._id === world._id) && this.selectedWorlds.all.length > 1) {
+                this.selectedWorlds.all = this.selectedWorlds.all.filter(w => w._id != world._id);
+                if (this.selectedWorlds.all.length === 1) {
+                    this.setCurrentWorld(this.selectedWorlds.all[0]);
+                }
+            } else if (!this.selectedWorlds.all.find((w: IWorld) => w._id === world._id)) {
+                this.selectedWorlds.all.push(world);
+                this.currentWorld = undefined;
+            }
+        }
+    }
+
+    worldIsSelected(world: IWorld): boolean {
+        return this.selectedWorlds.all.find((w: IWorld) => w._id === world._id) !== undefined;
+    }
+
+    hasManagerRightOnSelectedWorlds(): boolean {
+        return this.selectedWorlds.all.filter((w: IWorld) => w.myRights.manager).length == this.selectedWorlds.all.length;
     }
 }
 

@@ -67,11 +67,11 @@
     <div class="cards-view twelve">
         <div class="row" ng-show="vm.worlds.all.length > 0">
             <!-- display current world -->
-            <current-world ng-show="!vm.display.loading" world="vm.currentWorld" on-current-world="vm.onCurrentWorld()"></current-world>
+            <current-world ng-show="vm.currentWorld && !vm.display.loading" world="vm.currentWorld" on-current-world="vm.onCurrentWorld()"></current-world>
             <div class="grid">
                 <div class="flex-card card cell f-row flex-row twelve-mobile"
-                     data-ng-click="vm.currentWorld = world"
-                     ng-class="vm.currentWorld == world ? 'active' : ''"
+                     data-ng-click="vm.clickOnWorld(world)"
+                     ng-class="vm.worldIsSelected(world) ? 'active' : ''"
                      ng-repeat="world in vm.filterWorlds(vm.filter.title)">
                     <div class="four icon">
                         <img data-ng-src="/minetest/public/img/pages-default.png"
@@ -94,7 +94,7 @@
         </div>
 
         <!-- toggle menu -->
-        <toggle-menu ng-if="vm.currentWorld && vm.currentWorld.myRights.manager" world="vm.currentWorld"
+        <toggle-menu ng-if="vm.hasManagerRightOnSelectedWorlds()" worlds="vm.selectedWorlds"
                      on-update-world="vm.refreshWorldList()" on-delete-world="vm.refreshWorldList()">
         </toggle-menu>
     </div>

@@ -29,20 +29,20 @@
 
                             <!-- Contents -->
                             <tbody>
-                            <tr>
+                            <tr ng-repeat="world in vm.worlds.all">
                                 <td>
                                     <label>
-                                        <span>[[vm.world.title]]</span>
+                                        <span>[[world.title]]</span>
                                     </label>
                                 </td>
                                 <td>
                                     <label>
-                                        <span>[[vm.world.owner_name]]</span>
+                                        <span>[[world.owner_name]]</span>
                                     </label>
                                 </td>
                                 <td>
                                     <label>
-                                        <span><i18n>minetest.modify</i18n> [[vm.world.updated_at]]</span>
+                                        <span><i18n>minetest.modify</i18n> [[world.updated_at]]</span>
                                     </label>
                                 </td>
                             </tr>
@@ -56,10 +56,7 @@
         </div>
 
         <!-- button action delete -->
-        <button ng-show="!vm.world.isExternal" class="custom-button right-magnet" ng-click="vm.deleteWorld()">
-            <i18n>minetest.delete</i18n>
-        </button>
-        <button ng-show="vm.world.isExternal" class="custom-button right-magnet" ng-click="vm.deleteImportWorld()">
+        <button class="custom-button right-magnet" ng-click="vm.deleteWorld()">
             <i18n>minetest.delete</i18n>
         </button>
         <button class="custom-cancel right-magnet" ng-click="vm.closeDeleteLightbox()"><i18n>minetest.cancel</i18n></button>

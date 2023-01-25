@@ -1,23 +1,23 @@
 import {model, ng} from "entcore";
 import {RootsConst} from "../../core/constants/roots.const";
 import {IScope} from "angular";
-import {IImportWorld, IWorld} from "../../models";
+import {IWorld, Worlds} from "../../models";
 
 interface IViewModel {
     openShareLightbox(): void;
     closeShareLightbox(): void;
     canEditShareItem(args: any) : boolean;
-    onShareFeed(data: any, resource: IWorld | IImportWorld, actions: any[]) : void;
+    onShareFeed(data: any, resource: IWorld, actions: any[]) : void;
 
     lightbox: any;
 
     // props
-    world: IWorld | IImportWorld;
+    worlds: Worlds;
 }
 
 class Controller implements ng.IController, IViewModel {
     lightbox: any;
-    world: IWorld | IImportWorld;
+    worlds: Worlds;
 
     constructor(private $scope: IScope) {
         this.lightbox = {
@@ -42,7 +42,7 @@ class Controller implements ng.IController, IViewModel {
     //code duplicate from workspace
     canEditShareItem(args: any) : boolean {
         if (args.type == "user") {
-            const uniqOwnerIds : string[] = [this.world].map((sha: IWorld | IImportWorld) => sha.owner.userId)
+            const uniqOwnerIds : string[] = this.worlds.all.map((sha: IWorld) => sha.owner.userId)
                 .filter((elem : string, pos: number, arr: string[]) => {
                 return arr.indexOf(elem) == pos;
             });
@@ -55,7 +55,7 @@ class Controller implements ng.IController, IViewModel {
     }
 
     //code duplicate from workspace
-    onShareFeed(data: any, resource: IWorld | IImportWorld, actions: any[]) : void {
+    onShareFeed(data: any, resource: IWorld, actions: any[]) : void {
         const userId : string = resource.owner.userId;
         //if owner is current user => skip
         if (userId == model.me.userId) {
@@ -87,7 +87,7 @@ function directive() {
         restrict: 'E',
         templateUrl: `${RootsConst.directive}share-world/share-world.html`,
         scope: {
-            world: '=',
+            worlds: '=',
             onShareWorld: '&'
         },
         controllerAs: 'vm',
