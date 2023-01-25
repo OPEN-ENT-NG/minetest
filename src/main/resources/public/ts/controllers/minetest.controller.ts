@@ -79,13 +79,18 @@ class Controller implements ng.IController, IViewModel {
                 Behaviours.applicationsBehaviours.minetest.resource(world);
             }
         });
+        this.selectedWorlds.all.forEach((world: IWorld) => {
+            if (!this.worlds.all.find((w: IWorld) => w._id === world._id)) {
+                this.selectedWorlds.all = this.selectedWorlds.all.filter(w => w._id != world._id);
+            }
+        })
         if (world) {
             let currentWorld: IWorld = this.worlds.all.find((w: IWorld) => w._id === world._id)
             currentWorld ? this.setCurrentWorld(currentWorld) : this.setCurrentWorld();
         } else {
             this.setCurrentWorld();
         }
-        if (this.selectedWorlds.all.length === 0) {
+        if (this.selectedWorlds.all.length === 0 && this.currentWorld) {
             this.selectedWorlds.all.push(this.currentWorld);
         }
         this.display.loading = false;
@@ -168,7 +173,8 @@ class Controller implements ng.IController, IViewModel {
     }
 
     hasManagerRightOnSelectedWorlds(): boolean {
-        return this.selectedWorlds.all.filter((w: IWorld) => w.myRights.manager).length == this.selectedWorlds.all.length;
+        return this.selectedWorlds.all.length > 0 &&
+            this.selectedWorlds.all.filter((w: IWorld) => w.myRights.manager).length == this.selectedWorlds.all.length;
     }
 }
 
