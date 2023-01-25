@@ -95,15 +95,17 @@ class Controller implements ng.IController, IViewModel {
         Object.keys(shared.groups).forEach(function (groupId: string) {
             invitees.push({id: groupId, isGroup: true})
         });
-        this.world.whitelist = this.world.whitelist ? this.world.whitelist.concat(invitees) : invitees;
-        this.world.subject = idiom.translate('minetest.invitation.default.subject');
-        minetestService.invite(this.world)
-            .then((world:IWorld) => {
-                this.world.whitelist = world.whitelist;
-                toasts.confirm('minetest.world.invite.confirm');
-                safeApply(this.$scope);
-            }).catch(() => {
-            toasts.warning('minetest.world.invite.error');
+        this.worlds.all.forEach((world: IWorld) => {
+            world.whitelist = world.whitelist ? world.whitelist.concat(invitees) : invitees;
+            world.subject = idiom.translate('minetest.invitation.default.subject');
+            minetestService.invite(world)
+                .then((world: IWorld) => {
+                    world.whitelist = world.whitelist;
+                    toasts.confirm('minetest.world.invite.confirm');
+                    safeApply(this.$scope);
+                }).catch(() => {
+                toasts.warning('minetest.world.invite.error');
+            });
         });
     }
 }
