@@ -16,11 +16,13 @@
 			var minetestServer = "{{minetest-server}}";
 			var minetestMessaging = "{{minetest-messaging}}";
 		</script>
+		<script src="https://chatbot.lyceeconnecte.fr/backoffice/assets/scripts/embbed-chatbot.min.js?1622121421"></script>=
 	</head>
 
 	<body ng-controller="MainController as vm" class="minetest">
 		<portal>
 			<container template="main"></container>
+			<div id="webchat" style="z-index: 999999"></div>
 		</portal>
 	</body>
 

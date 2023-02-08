@@ -5,6 +5,7 @@ import {IScope} from "angular";
 import {safeApply} from "../utils/safe-apply.utils";
 
 declare let window: any;
+declare var Webchat: any;
 
 interface IViewModel {
     initData(): Promise<void>;
@@ -57,6 +58,17 @@ class Controller implements ng.IController, IViewModel {
         this.selectedWorlds = new Worlds();
         this.selectedWorlds.all = [];
         this.initData();
+        Webchat.init({
+            // Mandatory
+            botURL: 'https://chatbot.lyceeconnecte.fr/chatbot',
+            // Optionnal
+            chatWidth: '300px',
+            chatHeight: '500px',
+            buttonSize: '60px',
+            buttonColor: '#6e91f0',
+            iconSize: '30px',
+            iconColor: '#ffffff'
+        });
     }
 
     $onDestroy(): any {
