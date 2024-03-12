@@ -61,6 +61,7 @@ class Controller implements ng.IController, IViewModel {
                 toasts.confirm('minetest.world.update.confirm');
                 this.closePropertiesLightbox();
                 this.$scope.$parent.$eval(this.$scope['vm']['onUpdateWorld'](this.worldForm));
+                this.world = {...this.worldForm};
             }).catch(() => {
             toasts.warning('minetest.world.update.error');
             this.closePropertiesLightbox();
