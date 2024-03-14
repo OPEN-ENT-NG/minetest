@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="">
+<html with-theme-legacy>
 
 	<head>
 		<title>{{#i18n}}minetest.title{{/i18n}}</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 		<script src="/assets/js/entcore/ng-app.js?v=@@VERSION" type="text/javascript" id="context"></script>
 		<script src="/minetest/public/dist/application.js?v=@@VERSION" type="text/javascript"></script>
-		
+		<link rel="stylesheet" href="minetest/public/css/minetest.css?v=@@VERSION">
 		<script type="text/ng-template" id="empty"></script>
 
 		<script>
@@ -18,7 +18,7 @@
 		</script>
 	</head>
 
-	<body ng-controller="MainController as vm" class="minetest">
+	<body ng-controller="MainController as vm" class="minetest-module">
 		<portal>
 			<container template="main"></container>
 		</portal>
