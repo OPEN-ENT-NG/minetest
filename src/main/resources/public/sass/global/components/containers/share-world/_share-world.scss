@@ -5,6 +5,20 @@
       color: $minetest-white;
       font-size: 14px;
       margin: 0 2px 10px;
+      padding: 8px 18px 10px;
+    }
+
+    button.cancel {
+      background: $minetest-grey;
+      color: $minetest-orange;
+    }
+
+    button.cancel:hover {
+      background-color: $minetest-orange;
+      box-shadow: none;
+      color: $minetest-white;
+      font-size: 14px;
+      margin: 0 2px 10px;
     }
 
     button:hover {
