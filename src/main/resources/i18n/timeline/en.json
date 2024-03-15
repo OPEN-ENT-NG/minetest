@@ -1,5 +1,6 @@
 {
   "push.notif.minetest.share": "Minetest: Sharing a world",
   "timeline.minetest.shared": "gave you access to the world",
-  "minetest.share": "Sharing a world"
+  "minetest.share": "Sharing a world",
+  "minetest": "Minetest"
 }
