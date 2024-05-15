@@ -29,8 +29,8 @@
     </repositories>
 
     <properties>
-        <vertxVersion>3.9.5</vertxVersion>
-        <entCoreVersion>4.12.6</entCoreVersion>
+        <vertxVersion>4.4.5</vertxVersion>
+        <entCoreVersion>5.0-b2school-SNAPSHOT</entCoreVersion>
         <toolsVersion>2.0.0-final</toolsVersion>
         <junitVersion>5.1.0</junitVersion>
         <vertxCronTimerVersion>2.0.0</vertxCronTimerVersion>
@@ -50,6 +50,7 @@
             <groupId>org.entcore</groupId>
             <artifactId>common</artifactId>
             <version>${entCoreVersion}</version>
+            <classifier>fat</classifier>
             <scope>compile</scope>
         </dependency>
         <dependency>
