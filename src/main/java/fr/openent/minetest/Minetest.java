@@ -9,6 +9,7 @@ import fr.openent.minetest.cron.ShuttingDownWorld;
 import fr.openent.minetest.service.ServiceFactory;
 import fr.wseduc.cron.CronTrigger;
 import fr.wseduc.mongodb.MongoDb;
+import io.vertx.core.Promise;
 import io.vertx.core.eventbus.EventBus;
 import org.entcore.common.http.BaseServer;
 import org.entcore.common.http.filter.ShareAndOwner;
@@ -27,8 +28,8 @@ public class Minetest extends BaseServer {
 	public static final String MANAGER_RESOURCE_RIGHT = Right.MANAGER;
 
 	@Override
-	public void start() throws Exception {
-		super.start();
+	public void start(Promise<Void> startPromise) throws Exception {
+		super.start(startPromise);
 
 		Storage storage = new StorageFactory(vertx, config).getStorage();
 		MinetestConfig minetestConfig = new MinetestConfig(config);
@@ -60,6 +61,9 @@ public class Minetest extends BaseServer {
 			);
 		} catch (ParseException e) {
 			log.fatal("[Minetest@Minetest.java] Invalid shutting-down-cron cron expression" + e.getMessage());
+		}finally {
+			startPromise.tryComplete();
+			startPromise.tryFail("[Minetest@Minetest::start] Fail to start Minetest");
 		}
 	}
 
