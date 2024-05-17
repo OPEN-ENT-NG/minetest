@@ -1,4 +1,4 @@
-/build
+    /build
 /bin
 .DS_Store
 .classpath
@@ -32,3 +32,6 @@ module-starting-pack/src/main/resources/public/font
 /src/main/resources/public/font
 /src/main/resources/public/css/*
 yarn.lock
+.env
+target
+dependency-reduced-pom.xml
