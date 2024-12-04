@@ -1,5 +1,5 @@
     {
-      "name": "fr.openent~minetest~2.0-b2school-SNAPSHOT",
+      "name": "fr.openent~minetest~${minetestVersion}",
       "config": {
         "main" : "fr.openent.minetest.Minetest",
         "port" : 8055,
