@@ -9,6 +9,7 @@ import fr.openent.minetest.cron.ShuttingDownWorld;
 import fr.openent.minetest.service.ServiceFactory;
 import fr.wseduc.cron.CronTrigger;
 import fr.wseduc.mongodb.MongoDb;
+import io.vertx.core.Future;
 import io.vertx.core.Promise;
 import io.vertx.core.eventbus.EventBus;
 import org.entcore.common.http.BaseServer;
@@ -16,8 +17,6 @@ import org.entcore.common.http.filter.ShareAndOwner;
 import org.entcore.common.mongodb.MongoDbConf;
 import org.entcore.common.service.impl.MongoDbCrudService;
 import org.entcore.common.share.impl.MongoDbShareService;
-import org.entcore.common.storage.Storage;
-import org.entcore.common.storage.StorageFactory;
 
 import java.text.ParseException;
 
@@ -29,11 +28,14 @@ public class Minetest extends BaseServer {
 
 	@Override
 	public void start(Promise<Void> startPromise) throws Exception {
-		super.start(startPromise);
-
-		Storage storage = new StorageFactory(vertx, config).getStorage();
+    final Promise<Void> promise = Promise.promise();
+    super.start(promise);
+    promise.future()
+      .compose(e -> this.initMineTest())
+      .onComplete(startPromise);
+  }
+  public Future<Void> initMineTest() {
 		MinetestConfig minetestConfig = new MinetestConfig(config);
-
 
 		final MongoDbConf conf = MongoDbConf.getInstance();
 		conf.setCollection(Field.WORLD);
@@ -61,10 +63,8 @@ public class Minetest extends BaseServer {
 			);
 		} catch (ParseException e) {
 			log.fatal("[Minetest@Minetest.java] Invalid shutting-down-cron cron expression" + e.getMessage());
-		}finally {
-			startPromise.tryComplete();
-			startPromise.tryFail("[Minetest@Minetest::start] Fail to start Minetest");
 		}
+    return Future.succeededFuture();
 	}
 
 }

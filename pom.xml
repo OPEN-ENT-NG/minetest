@@ -12,7 +12,7 @@
 
     <groupId>fr.openent</groupId>
     <artifactId>minetest</artifactId>
-    <version>2.0-SNAPSHOT</version>
+    <version>2.0-zookeeper-SNAPSHOT</version>
 
     <scm>
         <connection>scm:git:https://github.com/OPEN-ENT-NG/minetest.git</connection>
@@ -29,7 +29,7 @@
     </repositories>
 
     <properties>
-        <entCoreVersion>6.11-SNAPSHOT</entCoreVersion>
+        <entCoreVersion>6.10-zookeeper-SNAPSHOT</entCoreVersion>
         <toolsVersion>2.0.0-final</toolsVersion>
         <junitVersion>5.1.0</junitVersion>
         <vertxCronTimerVersion>3.0-SNAPSHOT</vertxCronTimerVersion>
@@ -98,12 +98,6 @@
             <groupId>io.vertx</groupId>
             <artifactId>testtools</artifactId>
             <version>${toolsVersion}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>io.gatling.highcharts</groupId>
-            <artifactId>gatling-charts-highcharts</artifactId>
-            <version>2.2.2</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

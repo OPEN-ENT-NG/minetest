@@ -21,33 +21,34 @@ case `uname -s` in
 esac
 
 init() {
-  me=`id -u`:`id -g` echo "DEFAULT_DOCKER_USER=$me" > .env
+  me=`id -u`:`id -g`
+  echo "DEFAULT_DOCKER_USER=$me" > .env
 }
 
 clean () {
-  docker-compose run --rm maven mvn $MVN_OPTS clean
+  docker compose run --rm maven mvn $MVN_OPTS clean
 }
 
 buildNode () {
   case `uname -s` in
     MINGW*)
-      docker-compose run --rm -u "$USER_UID:$GROUP_GID" node sh -c "yarn install --no-bin-links && node_modules/gulp/bin/gulp.js build && yarn run build:sass"
+      docker compose run --rm -u "$USER_UID:$GROUP_GID" node sh -c "yarn install --no-bin-links && node_modules/gulp/bin/gulp.js build && yarn run build:sass"
       ;;
     *)
-      docker-compose run --rm -u "$USER_UID:$GROUP_GID" node sh -c "yarn install && node_modules/gulp/bin/gulp.js build && yarn run build:sass"
+      docker compose run --rm -u "$USER_UID:$GROUP_GID" node sh -c "yarn install && node_modules/gulp/bin/gulp.js build && yarn run build:sass"
   esac
 }
 
 install() {
-    docker-compose run --rm maven mvn $MVN_OPTS install -DskipTests
+    docker compose run --rm maven mvn $MVN_OPTS install -DskipTests
 }
 
 buildGulp() {
-    docker-compose run --rm -u "$USER_UID:$GROUP_GID" node sh -c "yarn install --no-bin-links && node_modules/gulp/bin/gulp.js build"
+    docker compose run --rm -u "$USER_UID:$GROUP_GID" node sh -c "yarn install --no-bin-links && node_modules/gulp/bin/gulp.js build"
 }
 
 buildCss() {
-    docker-compose run --rm -u "$USER_UID:$GROUP_GID" node sh -c "yarn run build:sass"
+    docker compose run --rm -u "$USER_UID:$GROUP_GID" node sh -c "yarn run build:sass"
 }
 
 
@@ -56,10 +57,10 @@ testNode () {
   rm -rf */build
   case `uname -s` in
     MINGW*)
-      docker-compose run --rm -u "$USER_UID:$GROUP_GID" node sh -c "yarn install --no-bin-links && node_modules/gulp/bin/gulp.js drop-cache && yarn test"
+      docker compose run --rm -u "$USER_UID:$GROUP_GID" node sh -c "yarn install --no-bin-links && node_modules/gulp/bin/gulp.js drop-cache && yarn test"
       ;;
     *)
-      docker-compose run --rm -u "$USER_UID:$GROUP_GID" node sh -c "yarn install && node_modules/gulp/bin/gulp.js drop-cache && yarn test"
+      docker compose run --rm -u "$USER_UID:$GROUP_GID" node sh -c "yarn install && node_modules/gulp/bin/gulp.js drop-cache && yarn test"
   esac
 }
 
@@ -68,15 +69,15 @@ testNodeDev () {
   rm -rf */build
   case `uname -s` in
     MINGW*)
-      docker-compose run --rm -u "$USER_UID:$GROUP_GID" node sh -c "yarn install --no-bin-links && node_modules/gulp/bin/gulp.js drop-cache && yarn run test:dev"
+      docker compose run --rm -u "$USER_UID:$GROUP_GID" node sh -c "yarn install --no-bin-links && node_modules/gulp/bin/gulp.js drop-cache && yarn run test:dev"
       ;;
     *)
-      docker-compose run --rm -u "$USER_UID:$GROUP_GID" node sh -c "yarn install && node_modules/gulp/bin/gulp.js drop-cache && yarn run test:dev"
+      docker compose run --rm -u "$USER_UID:$GROUP_GID" node sh -c "yarn install && node_modules/gulp/bin/gulp.js drop-cache && yarn run test:dev"
   esac
 }
 
 test() {
-  docker-compose run --rm maven mvn $MVN_OPTS test
+  docker compose run --rm maven mvn $MVN_OPTS test
 }
 
 
@@ -107,6 +108,9 @@ publishNexus() {
 for param in "$@"
 do
   case $param in
+    init)
+      init
+      ;;
     clean)
       clean
       ;;
