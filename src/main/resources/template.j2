@@ -1,0 +1,35 @@
+{
+	"name": "fr.openent~minetest",
+	"config": {
+    "main" : "fr.openent.minetest.Minetest",
+    "port" : 8055,
+    "app-name" : "Minetest",
+  	"app-address" : "/minetest",
+  	"app-icon" : "Minetest-large",
+		"host": "https://{{ host }}",
+		"ssl" : true,
+    {% if overrideTheme %} "override-theme": {{ override2d }}, {% endif %}
+		"auto-redeploy": false,
+		"userbook-host": "https://{{ host }}",
+		"integration-mode": "{{ integration_mode|default('HTTP') }}",
+		"app-registry.port" : 8012,
+		"mode" : "prod",
+		"entcore.port" : 8009,
+		"minetest-download" : "{{ minetestDownload | default('https://www.minetest.net/downloads/') }}",
+		"minetest-server" : "{{ minetestServer | default('') }}",
+		"minetest-python-server-port" : "{{ minetestPythonServerPort | default('443') }}",
+		"minetest-port-range" : "{{ minetestPortRange | default('30000-31300') }}",
+    "minetest-link": "{{ minetestLink | default('https://www.minetest.net/downloads/') }}",
+    "minetest-wiki": "{{ minetestWiki | default('https://wiki.minetest.net/Privileges/fr') }}",
+  	{% if zimbraUri is defined %}
+    	"minetest-messaging": "zimbra",
+  	{% else %}
+    	"minetest-messaging" : "conversation",
+    {% endif %}
+    {% if ha is defined and ha and inventory_hostname_short is defined and inventory_hostname_short != 'jobs' %}
+        "shutting-down-cron": "0 0 22 ? * * 2099"
+    {% else %}
+        "shutting-down-cron": "{{ minetestShuttingDownCron | default('0 0 22 ? * * *') }}"
+    {% endif %} 
+	}
+}
