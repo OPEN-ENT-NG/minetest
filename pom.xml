@@ -12,7 +12,7 @@
 
     <groupId>fr.openent</groupId>
     <artifactId>minetest</artifactId>
-    <version>2.1-SNAPSHOT</version>
+    <version>2.1.1</version>
 
     <scm>
         <connection>scm:git:https://github.com/OPEN-ENT-NG/minetest.git</connection>
@@ -29,10 +29,10 @@
     </repositories>
 
     <properties>
-        <entCoreVersion>6.13-SNAPSHOT</entCoreVersion>
+        <entCoreVersion>6.13.2</entCoreVersion>
         <toolsVersion>2.0.0-final</toolsVersion>
         <junitVersion>5.1.0</junitVersion>
-        <vertxCronTimerVersion>3.0-SNAPSHOT</vertxCronTimerVersion>
+        <vertxCronTimerVersion>3.0.0</vertxCronTimerVersion>
         <powerMockVersion>2.0.2</powerMockVersion>
         <mockitoVersion>[2.0,3.0)</mockitoVersion>
     </properties>
