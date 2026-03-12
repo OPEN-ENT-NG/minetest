@@ -2,6 +2,8 @@ package fr.openent.minetest.controller;
 
 import fr.openent.minetest.cron.ShuttingDownWorld;
 import fr.wseduc.rs.Post;
+import fr.wseduc.security.ActionType;
+import fr.wseduc.security.SecuredAction;
 import fr.wseduc.webutils.http.BaseController;
 import io.vertx.core.http.HttpServerRequest;
 import io.vertx.core.logging.Logger;
@@ -18,6 +20,7 @@ public class TaskController extends BaseController {
 	}
 
 	@Post("api/internal/shutting-down-world")
+	@SecuredAction(value = "", type = ActionType.RESOURCE)
 	public void shuttingDownWorld(HttpServerRequest request) {
 		log.info("Triggered shutting down world task");
 		shuttingDownWorld.handle(0L);
