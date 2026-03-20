@@ -2,6 +2,10 @@
 	"name": "fr.openent~minetest",
 	"config": {
     "main" : "fr.openent.minetest.Minetest",
+    "probes": [
+      "org.entcore.common.http.health.Neo4jProbe",
+      "org.entcore.common.http.health.MongoProbe"
+    ],
     "port" : 8055,
     "app-name" : "Minetest",
   	"app-address" : "/minetest",
