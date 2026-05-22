@@ -3,6 +3,7 @@ package fr.openent.minetest;
 import fr.openent.minetest.config.MinetestConfig;
 import fr.openent.minetest.controller.MinetestController;
 import fr.openent.minetest.controller.ShareWorldController;
+import fr.openent.minetest.controller.TaskController;
 import fr.openent.minetest.core.constants.Field;
 import fr.openent.minetest.core.constants.Right;
 import fr.openent.minetest.cron.ShuttingDownWorld;
@@ -57,10 +58,11 @@ public class Minetest extends BaseServer {
 		shareWorldController.setShareService(new MongoDbShareService(eb, MongoDb.getInstance(), Field.WORLD, securedActions, null));
 		shareWorldController.setCrudService(new MongoDbCrudService(Field.WORLD));
 
+
+	  final ShuttingDownWorld shuttingDownWorldTask = new ShuttingDownWorld(serviceFactory);
+	  addController(new TaskController(shuttingDownWorldTask));
 		try {
-			new CronTrigger(vertx, config.getString(Field.MINETEST_SHUTTING_DOWN_CRON)).schedule(
-					new ShuttingDownWorld(serviceFactory)
-			);
+			new CronTrigger(vertx, config.getString(Field.MINETEST_SHUTTING_DOWN_CRON)).schedule(shuttingDownWorldTask);
 		} catch (ParseException e) {
 			log.fatal("[Minetest@Minetest.java] Invalid shutting-down-cron cron expression" + e.getMessage());
 		}
