@@ -1,6 +1,6 @@
 {
   "name": "Minetest",
-  "version": "2.1.4-dev.0",
+  "version": "2.1.4-dev.1",
   "description": "Minetest",
   "main": "gulpfile.js",
   "scripts": {
