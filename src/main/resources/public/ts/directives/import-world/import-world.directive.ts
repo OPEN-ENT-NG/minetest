@@ -4,7 +4,7 @@ import {IScope} from "angular";
 import {IImportWorld} from "../../models";
 import {minetestService} from "../../services";
 import {DateUtils} from "../../utils/date.utils";
-import {AxiosResponse} from "axios";
+import {HttpResponse} from "entcore-toolkit";
 
 interface IViewModel {
     openImportLightbox(): void;
@@ -93,7 +93,7 @@ class Controller implements ng.IController, IViewModel {
             isExternal: true
         }
         minetestService.import(this.newImportWorld)
-            .then((world: AxiosResponse) => {
+            .then((world: HttpResponse) => {
                 toasts.confirm('minetest.world.import.confirm');
                 if (this.$scope.$parent.$eval(this.$scope['vm']['onImportWorld'])(world.data))
                     this.$scope.$parent.$eval(this.$scope['vm']['onImportWorld'])(world.data);
