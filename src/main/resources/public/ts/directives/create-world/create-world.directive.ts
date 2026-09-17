@@ -4,7 +4,7 @@ import {IScope} from "angular";
 import {IWorld} from "../../models";
 import {DateUtils} from "../../utils/date.utils";
 import {minetestService} from "../../services";
-import {AxiosResponse} from "axios";
+import {HttpResponse} from "entcore-toolkit";
 
 declare let window: any;
 
@@ -88,7 +88,7 @@ class Controller implements ng.IController, IViewModel {
             shuttingDown: this.world.shuttingDown
         }
         minetestService.create(this.newWorld)
-            .then((world: AxiosResponse) => {
+            .then((world: HttpResponse) => {
                 toasts.confirm('minetest.world.create.confirm');
                 if (this.$scope.$parent.$eval(this.$scope['vm']['onCreateWorld'])(world.data))
                     this.$scope.$parent.$eval(this.$scope['vm']['onCreateWorld'])(world.data);

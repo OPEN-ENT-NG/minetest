@@ -1,8 +1,7 @@
 ﻿import {idiom as lang, _, toasts} from "entcore";
 
-import { Mix, Selectable, Eventer } from "entcore-toolkit";
+import { Mix, Selectable, Eventer, HttpResponse } from "entcore-toolkit";
 import {minetestService} from "../services";
-import {AxiosResponse} from "axios";
 
 export class User implements Selectable {
     displayName: string;
@@ -36,7 +35,7 @@ export class Users {
         let newArr = [];
         let bookmarks = [];
         await minetestService.getSharebookmarks()
-            .then(async (sharebooks: AxiosResponse) => {
+            .then(async (sharebooks: HttpResponse) => {
                 bookmarks = _.map(sharebooks.data, function(bookmark) {
                     bookmark.type = 'sharebookmark';
                     return bookmark;
@@ -44,7 +43,7 @@ export class Users {
                 newArr = Mix.castArrayAs(User, bookmarks);
                 search = search.split(' ').join('');
                 await minetestService.getVisibleUsers(search)
-                    .then((users: AxiosResponse) => {
+                    .then((users: HttpResponse) => {
                         users.data.groups.forEach(group => {
                             group.isGroup = true;
                             newArr.push(Mix.castAs(User, group));
