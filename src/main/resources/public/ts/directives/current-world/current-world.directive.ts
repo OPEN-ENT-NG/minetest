@@ -4,7 +4,7 @@ import {IScope} from "angular";
 import {IWorld} from "../../models";
 import * as Clipboard from 'clipboard';
 import {minetestService} from "../../services";
-import {AxiosError} from "axios";
+import {HttpError} from "entcore-toolkit";
 import {DateUtils} from "../../utils/date.utils";
 
 interface IViewModel {
@@ -68,7 +68,7 @@ class Controller implements ng.IController, IViewModel {
                 else
                     toasts.confirm('minetest.world.close.confirm');
                 this.$scope.$eval(this.$scope['vm']['onCurrentWorld']());
-            }).catch((err: AxiosError) => {
+            }).catch((err: HttpError) => {
             toasts.warning('minetest.world.open.close.error');
         })
     }
