@@ -27,10 +27,10 @@ clean () {
 buildNode () {
   case `uname -s` in
     MINGW*)
-      docker compose run --rm -u "$USER_UID:$GROUP_GID" node sh -c "yarn install --no-bin-links && node_modules/gulp/bin/gulp.js build && yarn run build:sass"
+      docker compose run --rm -u "$USER_UID:$GROUP_GID" node sh -c "yarn install --no-bin-links --ignore-engines && node_modules/gulp/bin/gulp.js build && yarn run build:sass"
       ;;
     *)
-      docker compose run --rm -u "$USER_UID:$GROUP_GID" node sh -c "yarn install && node_modules/gulp/bin/gulp.js build && yarn run build:sass"
+      docker compose run --rm -u "$USER_UID:$GROUP_GID" node sh -c "yarn install --ignore-engines && node_modules/gulp/bin/gulp.js build && yarn run build:sass"
   esac
 }
 
@@ -39,7 +39,7 @@ install() {
 }
 
 buildGulp() {
-    docker compose run --rm -u "$USER_UID:$GROUP_GID" node sh -c "yarn install --no-bin-links && node_modules/gulp/bin/gulp.js build"
+    docker compose run --rm -u "$USER_UID:$GROUP_GID" node sh -c "yarn install --no-bin-links --ignore-engines && node_modules/gulp/bin/gulp.js build"
 }
 
 buildCss() {
@@ -52,10 +52,10 @@ testNode () {
   rm -rf */build
   case `uname -s` in
     MINGW*)
-      docker compose run --rm -u "$USER_UID:$GROUP_GID" node sh -c "yarn install --no-bin-links && node_modules/gulp/bin/gulp.js drop-cache && yarn test"
+      docker compose run --rm -u "$USER_UID:$GROUP_GID" node sh -c "yarn install --no-bin-links --ignore-engines && node_modules/gulp/bin/gulp.js drop-cache && yarn test"
       ;;
     *)
-      docker compose run --rm -u "$USER_UID:$GROUP_GID" node sh -c "yarn install && node_modules/gulp/bin/gulp.js drop-cache && yarn test"
+      docker compose run --rm -u "$USER_UID:$GROUP_GID" node sh -c "yarn install --ignore-engines && node_modules/gulp/bin/gulp.js drop-cache && yarn test"
   esac
 }
 
@@ -64,10 +64,10 @@ testNodeDev () {
   rm -rf */build
   case `uname -s` in
     MINGW*)
-      docker compose run --rm -u "$USER_UID:$GROUP_GID" node sh -c "yarn install --no-bin-links && node_modules/gulp/bin/gulp.js drop-cache && yarn run test:dev"
+      docker compose run --rm -u "$USER_UID:$GROUP_GID" node sh -c "yarn install --no-bin-links --ignore-engines && node_modules/gulp/bin/gulp.js drop-cache && yarn run test:dev"
       ;;
     *)
-      docker compose run --rm -u "$USER_UID:$GROUP_GID" node sh -c "yarn install && node_modules/gulp/bin/gulp.js drop-cache && yarn run test:dev"
+      docker compose run --rm -u "$USER_UID:$GROUP_GID" node sh -c "yarn install --ignore-engines && node_modules/gulp/bin/gulp.js drop-cache && yarn run test:dev"
   esac
 }
 
