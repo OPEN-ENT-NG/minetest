@@ -1,6 +1,6 @@
 {
   "name": "Minetest",
-  "version": "2.2.5",
+  "version": "2.2.5-dev.0",
   "description": "Minetest",
   "main": "gulpfile.js",
   "scripts": {
@@ -28,8 +28,8 @@
     "awesome-typescript-loader": "3.2.1",
     "clipboard": "^2.0.4",
     "core-js": "2.4.1",
-    "entcore": "4.8.20",
-    "entcore-toolkit": "2.0.0",
+    "entcore": "dev",
+    "entcore-toolkit": "dev",
     "gulp": "3.9.1",
     "gulp-clean": "^0.3.2",
     "merge2": "^1.1.0",
